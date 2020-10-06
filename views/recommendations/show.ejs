@@ -1,0 +1,45 @@
+<%- include("../partials/header") %>
+
+<% source = recommendation.url + "?autoplay=1" %>
+<% src1 = source.slice(32) %>
+<% sourceFinal = "https://www.youtube.com/embed/" + src1 %>
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-12 clock">
+      <p class="text">Welcome to Human Music</p>
+      <p class="text">A place for those who love music and all it means to our human experience</p>
+      <p class="text">A place for those who embrace the unknown</p>
+      <p class="text">A place to dis/<strong>connect with yourself</strong></p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center videoSquare">
+        <iframe id="ytplayer" type="text/html" width="640" height="360"
+        src="<%= sourceFinal %> >"
+        frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8 userinformation">
+      <p><strong>User:</strong> <a href="/users/<%= recommendation.author.username %>"><%= recommendation.author.username %></a></p>
+      <p><strong>Country of Identification:</strong><%= recommendation.author.country %></p>
+      <p><strong>Date of Recommendation:</strong> <%= recommendation.date %> </p>
+      <p><strong>Why did you recommend it?:</strong><%= recommendation.description %></p>
+    </div>
+    <div class="col-2"></div>
+  </div>
+
+  <a class="btn btn-primary" role="button" href="/past">Back to the Past</a>
+
+</div>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js'></script>
+
+<%- include("../partials/footer") %>

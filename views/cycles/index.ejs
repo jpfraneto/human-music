@@ -1,0 +1,49 @@
+<%- include("../partials/header") %>
+
+<div class="row">
+  <div class="col-1"></div>
+  <div class="col-10 title text-center"><p><strong>This are the Cycles that have existed</strong></p></div>
+  <div class="col-1"></div>
+</div>
+
+<div class="container text-center content">
+    <p> This project works as follows: each day starts at 8:08, wherever you are, with a recommendation of a movie. After that, we fill the rest of the day
+        with music recommendations that people from our community have shared, until we get to next day's movie. If you want to check out what happened in a certain
+        date, feel free to click on that day's movie name and you will be teleported to that day's schedule.
+    </p>
+    <br>
+    <p>
+        Enjoy our collective creation and the most diverse recommendation algorythm in the world.
+    </p>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <table class="table content">
+        <thead>
+          <tr>
+            <th scope="col">Cycle Index</th>
+            <th scope="col">Cycle Name</th>
+            <th scope="col">Cycle Duration</th>
+            <th scope="col">Cycle Status</th>
+            <th scope="col">Elapsed Days</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% cycles.forEach(function(cycle){ %>
+            <tr>
+              <td><%= cycle.cycleIndex %></td>
+              <td><a href="/cycles/<%=cycle._id%>"><%= cycle.cycleName %></a></td>
+              <td><%= cycle.cycleDuration %></td>
+              <td><%= cycle.status %></td>
+              <td><%= cycle.daysOfThisCycle.length %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include("../partials/footer") %>

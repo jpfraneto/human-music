@@ -1,0 +1,58 @@
+<%- include("../partials/header") %>
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-12 clock">
+      <p class="text">Welcome to Human Music</p>
+      <p class="text">A place for those who love music and all it means to our human experience</p>
+      <p class="text">A place for those who embrace the unknown</p>
+      <p class="text">A place to dis/<strong>connect with yourself</strong></p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center videoSquare">
+        <iframe id="ytplayer" type="text/html" width="640" height="360"
+        src="<%= presentRecommendation.url %> >"
+        frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8 userinformation">
+        <p><strong>User:</strong> <a href="/users/<%= presentRecommendation.author.username %>"><%= presentRecommendation.author.username %></a></p>
+        <p><strong>Country of Identification:</strong><%= presentRecommendation.author.country %></p>
+        <p><strong>Date of Recommendation:</strong> <%= presentRecommendation.date %> </p>
+        <p><strong>Why did you recommend it?:</strong><%= presentRecommendation.description %></p>
+    </div>
+    <div class="col-2"></div>
+  </div>
+
+</div>
+
+  <% if(currentUser && currentUser.username === "chocapec"){  %>
+    <div class="row">
+      <div class="col-4"></div>
+      <div class="col-4 text-center">
+        <a class="btn btn-success" href="/asd">Next Recommendation</a>
+        <a class="btn btn-success" href="/nextRecommendationGood">Next Recommendation Good</a>
+      </div>
+      <div class="col-4"></div>
+    </div>   
+  <% } %> 
+
+
+  <% if(!currentUser){ %>
+    <div class="container text-center">
+      <a href="/login" class="btn btn-primary entranceButton" role="button">Login</a>
+      <a href="/register" class="btn btn-primary entranceButton" role="button">Register</a>
+    </div>
+  <% } %>
+  
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js'></script>
+
+<%- include("../partials/footer") %>

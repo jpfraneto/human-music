@@ -1,0 +1,291 @@
+body {
+  height: 100%;
+  background: #0e2636;
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+body::after{
+  content:"";
+  display:block;
+  height: 60px;
+}
+
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.clock {
+  font-family: 'Share Tech Mono', monospace;
+  color: #ffffff;
+  text-align: center;
+  position: relative;
+  color: #daf6ff;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+
+#clock .text {
+  letter-spacing: 0.1em;
+  font-size: 13px;
+  padding: 0px 0 0;
+}
+
+.landingClock {
+  margin-top:5%;
+}
+
+.userinformation{
+  margin-top: 8px;
+  margin-bottom: 13px;
+  width: 100%;
+  font-family: 'Share Tech Mono', monospace;
+  color: #ffffff;
+  top: 88%;
+  color: #daf6ff;
+  font-size: 13px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+  text-align: center
+}
+
+.userDisplay {
+  padding-top: 3px;
+  font-family: 'Share Tech Mono', monospace;
+  color: #daf6ff;
+  font-size: 13px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+
+.entranceButton {
+  margin: 0 0 10px 10px;
+  width: 111px;
+}
+
+#loginForm {
+  text-align: center;
+}
+
+#signUpForm {
+  text-align: center;
+}
+
+h1 {
+  color: white;
+}
+
+h5 {
+  color:white;
+  margin-bottom: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  color: #ffffff;
+  color: #daf6ff;
+  font-size: 13px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+  text-align: center;
+}
+
+h4 {
+  color:white;
+  margin-bottom: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  color: #ffffff;
+  color: #daf6ff;
+  font-size: 23px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+  text-align: center;
+}
+
+.title {
+  width: 66%;
+  font-family: 'Share Tech Mono', monospace;
+  color: #ffffff;
+  color: #daf6ff;
+  font-size: 33px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+
+.content {
+  margin-bottom: 13px;
+  font-family: 'Share Tech Mono', monospace;
+  color: #ffffff;
+  top: 88%;
+  color: #daf6ff;
+  font-size: 13px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+
+.chiImageSquare {
+    margin-top: 88px;
+    width: 640px;
+    height: 360px;
+}
+
+.videoWrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+}
+
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+}
+
+.landingImage {
+  height: auto;
+  width: 66%;
+  margin: 44px;
+}
+
+.btn-margin {
+  margin-left: 44px;
+  margin-right: 44px;
+}
+
+.userButton{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.registerLoginButtons{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.navbar {
+  background-color: transparent !important;
+  font-family: 'Share Tech Mono', monospace;
+  color: rgb(35, 50, 189);
+  font-size: 28px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+  margin: 5px 0px;
+  padding: 0;
+  line-height: 0.7;
+}
+
+.navbarDropdown {
+  font-family: 'Share Tech Mono', monospace;
+  color: #ffffff;
+  color: #daf6ff;
+  font-size: 33px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+
+.footerContainer {
+  background-color: black;
+  height: 50px;
+  padding-top: 10px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin-bottom: 0px;
+  text-align: center;
+  position:fixed;
+}
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.horizontalRule {
+  border: 1px dashed #0aafe6;
+  width: 38%;
+}
+
+.col-12 {
+  width: 77%;
+}
+
+#bioBox {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.thumbnail img {
+  width: 77%;
+}
+
+.thumbnail {
+  padding: 0;
+}
+
+.thumbnail .caption-full {
+  padding: 9px;
+}
+
+.imgshow {
+  width: 88%;
+}
+
+.logoutButtons {
+  background-color: white;
+  position: absolute;
+}
+
+.tableImage {
+  width: 100px;
+  height: 100px;
+}
+
+.countdownClock {
+  font-family: 'Share Tech Mono', monospace;
+  color: rgb(113, 123, 211);
+  font-size: 23px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+
+.futureUL {
+  padding-inline-start: 0px;
+}
+
+.footerDiv {
+  background-color: beige;
+  width: 100%;
+  height: 50px;
+  position: fixed;
+  bottom: 0;
+}
+
+.mainDiv {
+  background-color: red;
+}
+
+.houseImage {
+  width: 600px;
+  height: 369px;
+}
+
+.goodbyeImage {
+  width:33%;
+}
+
+.commitmentLetter{
+  margin-bottom: 13px;
+  font-family: 'Share Tech Mono', monospace;
+  color: #ffffff;
+  top: 88%;
+  color: #daf6ff;
+  font-size: 13px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+  text-align:justify;
+  text-justify: inter-word;
+}
+
+.letterImage{
+  width: 88%;
+  position: relative;
+  border-radius: 10px;
+}

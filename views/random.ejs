@@ -1,0 +1,45 @@
+<%- include("./partials/header") %>
+
+<div class="container">
+
+    <div class="row">
+      <div class="col-12 clock">
+        <p class="text">Welcome to Human Music</p>
+        <p class="text">A place for those who love music and all it means to our human experience</p>
+        <p class="text">A place for those who embrace the unknown</p>
+        <p class="text">A place to dis/<strong>connect with yourself</strong></p>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-12">
+        <div class="text-center videoSquare">
+          <iframe id="ytplayer" type="text/html" width="640" height="360"
+          src="<%= randomRecommendation.url %> >"
+          frameborder="0"></iframe>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-8 userinformation">
+        <p><strong>User:</strong> <a href="/users/<%= randomRecommendation.author.username %>"><%= randomRecommendation.author.username %></a></p>
+        <p><strong>Country of Identification:</strong><%= randomRecommendation.author.Country %></p>
+        <p><strong>Date of Recommendation:</strong> <%= randomRecommendation.date %> </p>
+        <p><strong>Why did you recommend it?:</strong><%= randomRecommendation.description %></p>
+      </div>
+      <div class="col-2"></div>
+    </div>
+    
+  <div class="row text-center">
+    <div class="col-12">
+        <a class="btn btn-success" role="button" href="/random">New Random RecommendatioNNNn</a>
+    </div>
+  </div>
+
+</div>
+
+
+
+<%- include("./partials/footer") %>

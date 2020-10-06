@@ -1,0 +1,55 @@
+<%- include("../partials/header") %>
+<div class="container text-center title" style="margin-top: 8px">
+    <p><strong>Add a new recommendation to the future</strong></p>
+</div>
+<div class="container text-center">
+    <div class="row">
+        <div class="col-7">
+            <iframe id="newRecommendationIframe" 
+            width="395" height="222"
+            src="https://www.youtube.com/embed/SZxrMwtBZaY" 
+            allow="autoplay" autoplay="1"
+            frameborder="0"
+            style="border: solid 4px #37474F"
+            ></iframe>
+            <div class="userinformation">
+                <p><strong>User:</strong> <a href="/users/<%=user._id%>"><%= user.username %></a></p>
+                <p><strong>Country of Identification:</strong><%=user.country%></p>
+                <p><strong>Date of Recommendation:</strong> <%= today %></p>
+                <p><strong>Why did you recommend it?:</strong></p>
+                <div>
+                    <p id="recommendationDescription"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-5">
+            <form action="/recommendations" method="POST">
+                <div class="form-group">
+                    <label for="videoURL" class="clock">Youtube URL of your recommendation:</label>
+                    <input class="form-control" id="videoURL" type="text" name="url">
+                </div>
+
+                <div class="form-group">
+                    <label for="descriptionTextArea" class="clock">What does this piece mean to you?</label>
+                    <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
+                </div>
+
+                <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
+                <label for="userCheckbox" class="userInformation content">Was this content created by you?</label><br>    
+
+                <label for="typeOfRecommendation">Choose a type of recommendation:</label>
+
+                <select name="typeOfRecommendation" id="typeOfRecommendation">
+                    <option value="music">Music</option>
+                    <option value="film">Film</option>
+                </select>
+                
+                <div class="form-group">
+                    <button class="btn btn-success">Submit!</button>
+                    <a class="btn btn-primary" href="/recommendations"> Go Back</a>
+                </div>  
+            </form>   
+        </div>
+    </div>
+</div>
+<%- include("../partials/footer") %>
