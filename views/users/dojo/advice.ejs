@@ -1,0 +1,11 @@
+<%- include ("../../partials/users/userHeader") %>
+
+<div class="container text-center">
+    <h1>This is the advice page of <%=foundUser.username%></h1>
+</div>
+
+<div class="text-center dojoBackButton">
+    <a class="btn btn-success" role="button" href="/users/<%=foundUser.username%>/dojo">Back to the Dojo</a>
+</div>
+
+<%- include ("../../partials/users/userFooter") %>

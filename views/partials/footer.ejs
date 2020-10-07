@@ -21,7 +21,7 @@
         <div class="col"><a href="/about">About</a></div>
       <% } %>
       <% if (currentUser) { %>
-        <div class="col"><p><a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a></p></div>
+        <div class="col"><a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a></div>
         <div class="col"><a href="/recommendations/new">Add Recommendation</a></div>
         <div class="col"><a href="/logout">Log Out</a></div>
         <div class="col"><a href="/about">About</a></div>

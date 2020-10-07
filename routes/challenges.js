@@ -29,6 +29,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
     let challengeDate = theSource.changeDateFormat(now);
     let name = req.body.name;
     let description = req.body.description;
+    let nextCycleName = req.body.cycleName;
     let author = {
         id: req.user._id,
         username: req.user.username,
@@ -40,9 +41,12 @@ router.post("/", middleware.isLoggedIn, function(req,res){
         name: name,
         description: description,
         challengeDate: challengeDate,
-        challengeDuration: challengeDuration
+        challengeDuration: challengeDuration,
+        nextCycleName: nextCycleName
     });
-    newChallenge.save(console.log("A new challenge was created!"));
+    newChallenge.save(()=>{
+        console.log("A new challenge was created by the user @" + author.username)
+    });
     res.redirect("/future");
 });
 

@@ -47,8 +47,7 @@
 
   <div class="row">
     <div class="col-12">
-      <div class="text-center">
-        <% if ( presentRecommendation.type === "music" ) { %>
+      <div class="text-center recommendationFrame">
           <iframe id="existing-iframe-example" 
           width="640" height="360"
           src="<%=presentRecommendation.url%>&start=<%=elapsedTime%>&mute=0" 
@@ -56,10 +55,6 @@
           frameborder="0"
           style="border: solid 4px #37474F"
           ></iframe>
-        <% } else if (presentRecommendation.type === "film" ){ %>
-          <h1>This recommendation is a film!</h1>
-          <h1>The movie is: <%= presentRecommendation.name %> </h1>
-        <% } %>
       </div>
     </div>
   </div>
@@ -71,6 +66,8 @@
         <p><strong>User:</strong><a href="/users/<%= presentRecommendation.author.username %>"> <%= presentRecommendation.author.username %></a></p>
         <p><strong>Country of Identification:</strong> <%= presentRecommendation.author.country %></p>
         <p><strong>Date of Recommendation:</strong> <%= presentRecommendation.date %> </p>
+        <p><strong>Name:</strong> <%= presentRecommendation.name %> </p>
+        <br>
         <p><strong>Why did you recommend it?:</strong> <%= presentRecommendation.description %></p>
     </div>
     <div class="col-2"></div>

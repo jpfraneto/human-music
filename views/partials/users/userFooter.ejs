@@ -1,15 +1,34 @@
-<% if(currentUser){ %>
-    <div class="row text-center content" style="margin-top:8px">
-      <div class="col-3">
-      </div>
-      <div class="col-6">
-        <a class="btn btn-dark smallAnchor" href="#">Signed in as @<%= currentUser.username %></a>
-        <a class="btn btn-dark" href="/logout">Logout</a>
-      </div>
-      <div class="col-3"></div>
-    </div>
-<% } %>
 
+</div>
+
+<div class="footerDiv">
+  <div class="container text-center">
+    <p>This project is in memory of David Foster Wallace and all of those that have left us on the fight of their own demons.</p>
+    <div class="row">
+        <div class="col">
+          <form action="" class="language-picker__form">
+            <label for="language-picker-select">Language</label>
+        
+            <select name="language-picker-select" id="language-picker-select">
+              <option lang="de" value="deutsch">Deutsch</option>
+              <option lang="en" value="english" selected>English</option>
+              <option lang="fr" value="francais">Français</option>
+              <option lang="it" value="italiano">Italiano</option>
+            </select>
+          </form>
+        </div>
+      <% if (!currentUser){ %>
+        <div class="col"><a href="/login">Log In  </a>  /  <a href="/register">  Register</a></div>
+        <div class="col"><a href="/about">About</a></div>
+      <% } %>
+      <% if (currentUser) { %>
+        <div class="col"><a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a></div>
+        <div class="col"><a href="/recommendations/new">Add Recommendation</a></div>
+        <div class="col"><a href="/logout">Log Out</a></div>
+        <div class="col"><a href="/about">About</a></div>
+      <% } %>
+    </div>
+  </div>
 </div>
 
 <script src='/scripts/scripts.js'></script>

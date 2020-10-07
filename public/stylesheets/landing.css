@@ -164,17 +164,12 @@ h4 {
 .navbar {
   background-color: transparent !important;
   font-family: 'Share Tech Mono', monospace;
-  color: rgb(35, 50, 189);
-  font-size: 28px;
-  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
   margin: 5px 0px;
   padding: 0;
   line-height: 0.7;
 }
 
 .navbarDropdown {
-  font-family: 'Share Tech Mono', monospace;
-  color: #ffffff;
   color: #daf6ff;
   font-size: 33px;
   text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
@@ -288,4 +283,9 @@ hr {
   width: 88%;
   position: relative;
   border-radius: 10px;
+}
+
+.presentFilmImage {
+  height: 360px;
+  width: 640px;
 }

@@ -1,12 +1,12 @@
-// window.onload = function() {
-//   remainingRecommendationTime = updateCountdown();
-//   //For refreshing the present when the recommendation time is over:
-//   setTimeout(function() {
-//     location.reload();
-//   }, remainingRecommendationTime);
-//   //For updating the timer that shows how much time is left until the recommendation is changed:
-//   setInterval(updateCountdown, 1000);
-// }
+window.onload = function() {
+  remainingRecommendationTime = updateCountdown();
+  //For refreshing the present when the recommendation time is over:
+  setTimeout(function() {
+    location.reload();
+  }, remainingRecommendationTime);
+  //For updating the timer that shows how much time is left until the recommendation is changed:
+  setInterval(updateCountdown, 1000);
+}
 
 function updateCountdown () {
   let duration = parseInt(document.getElementById("recommendationDuration").innerHTML);

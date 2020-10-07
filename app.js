@@ -37,14 +37,14 @@ app.use(methodOverride("_method"));
 app.use(flash());
 
 /////////////////////SET FUNCTIONS////////////////////////////
-chiita.bigBang();
+// chiita.bigBang();
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
 //The following is the code that starts a new day every day at 8:08 PM
-let job = new CronJob("44 20 * * *", () => {
-    console.log("I'm inside the cronjob that is scheduled for every day at 20:08. It is supposed to send the present day to the past and create a new day which's status is present");
+let job = new CronJob("33 16 * * *", () => {
+    console.log("I'm inside the cronjob that started at 13:13. It is supposed to send the present day to the past and create a new day which's status is present");
     chiita.createNewDay();
 }, undefined, true, "UTC");
 
@@ -71,8 +71,6 @@ app.use("/recommendations", recommendationRoutes);
 app.use("/recommendations/:id/comments", commentRoutes);
 app.use("/users", userRoutes);
 app.use("/challenges", challengesRoutes);
-
-
 
 // The following will be the code that runs at the moment of the eclipse. Everything will start from scratch.
 // let eclipseTimestamp = 1607962479000;

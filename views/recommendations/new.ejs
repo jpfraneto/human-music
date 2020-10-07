@@ -34,16 +34,15 @@
                     <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
                 </div>
 
+                <label for="userCheckbox" class="userInformation content">Was this created by you?</label>    
                 <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
-                <label for="userCheckbox" class="userInformation content">Was this content created by you?</label><br>    
 
                 <label for="typeOfRecommendation">Choose a type of recommendation:</label>
-
                 <select name="typeOfRecommendation" id="typeOfRecommendation">
                     <option value="music">Music</option>
                     <option value="film">Film</option>
                 </select>
-                
+
                 <div class="form-group">
                     <button class="btn btn-success">Submit!</button>
                     <a class="btn btn-primary" href="/recommendations"> Go Back</a>

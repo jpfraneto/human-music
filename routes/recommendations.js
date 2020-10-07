@@ -48,7 +48,8 @@ router.post("/", middleware.isLoggedIn, function(req,res){
                 name = response.data.items[0].snippet.title;
                 duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
                 if (response.data.items.length > 0){
-                    let newRecommendation = {author:author, name:name, type:type, recommendationDate:recommendationDate, description:desc, author:author, dayID:dayID, url:url, status:"future", wasCreatedByUser:wasCreatedByUser, duration:duration,startingTimestamp:-1};
+                    let newRecommendation = {author:author, name:name, type:type, recommendationDate:recommendationDate, description:desc, author:author, 
+                        dayID:dayID, url:url, status:"future", wasCreatedByUser:wasCreatedByUser, duration:duration };
                     // create a new recommendation and save to DB
                     Recommendation.create(newRecommendation,function(err, newlyCreated){
                         if(err){
@@ -84,12 +85,6 @@ router.get("/new", middleware.isLoggedIn, function(req,res){
 router.get("/allRecommendations", middleware.isChocapec, function(req, res){
     Recommendation.find({})
     .then(foundRecommendations => {
-        // let x = 0;
-        // for (let i=0; i<foundRecommendations.length; i++){
-        //     x += foundRecommendations[i].duration;
-        // }
-        // let durationInDays = (x/(1000*60*60*24));
-        // console.log("The sum of durations is: " + durationInDays);
         if(foundRecommendations.length > 0 ){
             res.render("recommendations/allRecommendations", {recommendations:foundRecommendations});
         } else {
@@ -107,7 +102,6 @@ router.get("/:id", middleware.isLoggedIn, function(req,res){
             res.redirect("back");
         } else {
             // render show template with that recommendation
-            console.log(foundRecommendation);
             if(foundRecommendation.status === "future" && "a" === "the user doesn't match") {
                 res.render("recommendations/edit", {recommendation: foundRecommendation});
             } else if (foundRecommendation.status === "present"){

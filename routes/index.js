@@ -21,7 +21,6 @@ router.get("/", function(req,res){
                 let now = (new Date()).getTime();
                 let elapsedTime = now - presentRecommendation.startingRecommendationTimestamp; 
                 let elapsedSeconds = Math.floor(elapsedTime/1000);
-                console.log(presentRecommendation.type);
                 res.render("present", {elapsedTime:elapsedSeconds, presentRecommendation: presentRecommendation});
             }
         }
@@ -29,8 +28,9 @@ router.get("/", function(req,res){
 });
 
 router.get("/past", middleware.isLoggedIn, function(req,res){
-    Cycle.find({}, function(err, foundCycles){
-        res.render("past", {cycles:foundCycles}); 
+    Day.find({}).populate("recommendationsOfThisDay")
+    .then((foundDays) => {
+        res.render("past", {days:foundDays}); 
     });
 });
 
@@ -67,6 +67,17 @@ router.get("/days", middleware.isLoggedIn, function(req, res){
             console.log(err)
         } else {
             res.render("days/show", {thisDay: foundDay});
+        }
+    });
+ });
+
+ router.get("/presentday", function(req, res){
+    Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
+    .then((foundPresentDay) => {
+        if(foundPresentDay){
+            res.render("presentDay", {thisDay:foundPresentDay})
+        } else {
+            res.redirect("/");
         }
     });
  });
@@ -159,7 +170,7 @@ router.post("/register", function(req,res){
                 } else {
                     passport.authenticate("local")(req, res, function(){
                     req.flash("success", "Welcome to Human Music "+user.username);
-                    res.redirect("/recommendations/new");
+                    res.redirect("/");
                     });
                 }
             });

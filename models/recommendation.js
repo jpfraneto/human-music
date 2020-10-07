@@ -21,6 +21,7 @@ var recommendationSchema = new mongoose.Schema({
     duration: Number,
     wasCreatedByUser: Boolean,
     startingRecommendationTimestamp: Number,
+    image: String,
     dayID: String,
     comments: [
         {

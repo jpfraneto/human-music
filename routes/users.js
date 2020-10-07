@@ -17,17 +17,20 @@ router.get("/:username", middleware.isLoggedIn, function(req,res){
                     res.render("users/unknown", {username:req.params.username});
                 } else {
                     if(foundUser.recommendations[0]){
-                        res.render("users/show", {user: foundUser, recommendation:foundUser.recommendations[0]});
+                        res.render("users/show", {foundUser: foundUser, recommendation:foundUser.recommendations[0]});
                     } else {
-                        res.render("users/show", {user: foundUser, recommendation:{}});
+                        res.render("users/show", {foundUser: foundUser, recommendation:{}});
                     }
                 }
             }
         });
 });
 
-router.get("/:username/office", middleware.isLoggedIn, function(req, res){
-    res.render("users/office/office", {username:req.params.username});
+router.get("/:username/dojo", middleware.isLoggedIn, function(req, res){
+    User.findOne({username:req.params.username})
+    .then((foundUser)=>{
+        res.render("users/dojo/dojo", {foundUser:foundUser});
+    });
 });
 
 router.get("/:username/recommendations", middleware.isLoggedIn, function(req, res){
@@ -49,24 +52,39 @@ router.get("/:username/recommendations/:id", middleware.isLoggedIn, function(req
     });
 });
 
-router.get("/:username/office/introduction", middleware.isLoggedIn, function(req, res){
-    res.render("users/office/introduction", {username:req.params.username});
+router.get("/:username/dojo/introduction", middleware.isLoggedIn, function(req, res){
+    User.findOne({username:req.params.username})
+    .then((foundUser)=>{
+        res.render("users/dojo/introduction", {foundUser:foundUser});
+    });
 });
 
-router.get("/:username/office/quests", middleware.isLoggedIn, function(req, res){
-    res.render("users/office/quests", {username:req.params.username});
+router.get("/:username/dojo/quests", middleware.isLoggedIn, function(req, res){
+    User.findOne({username:req.params.username})
+    .then((foundUser)=>{
+        res.render("users/dojo/quests", {foundUser:foundUser});
+    });
 });
 
-router.get("/:username/office/ideas", middleware.isLoggedIn, function(req, res){
-    res.render("users/office/ideas", {username:req.params.username});
+router.get("/:username/dojo/ideas", middleware.isLoggedIn, function(req, res){
+    User.findOne({username:req.params.username})
+    .then((foundUser)=>{
+        res.render("users/dojo/ideas", {foundUser:foundUser});
+    });
 });
 
-router.get("/:username/office/dailies", middleware.isLoggedIn, function(req, res){
-    res.render("users/office/dailies", {username:req.params.username});
+router.get("/:username/dojo/dailies", middleware.isLoggedIn, function(req, res){
+    User.findOne({username:req.params.username})
+    .then((foundUser)=>{
+        res.render("users/dojo/dailies", {foundUser:foundUser});
+    });
 });
 
-router.get("/:username/office/advice", middleware.isLoggedIn, function(req, res){
-    res.render("users/office/advice", {username:req.params.username});
+router.get("/:username/dojo/advice", middleware.isLoggedIn, function(req, res){
+    User.findOne({username:req.params.username})
+    .then((foundUser)=>{
+        res.render("users/dojo/advice", {foundUser:foundUser});
+    });
 });
 
 module.exports = router;

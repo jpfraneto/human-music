@@ -20,12 +20,14 @@
         </thead>
         <tbody>
           <% thisDay.recommendationsOfThisDay.forEach(function(recommendation){ %>
-            <tr>
-              <td> <a href="/users/<%= recommendation.author.username %>"><%= recommendation.author.username %></a></td>
-              <td><%= recommendation.recommendationDate %></td>
-              <td><a href="/recommendations/<%=recommendation._id%>"><%= recommendation.name %></a></td>
-              <td><%= recommendation.startingRecommendationTimestamp %></td>
-            </tr>
+            <% if(recommendation.status !== "future"){ %>
+              <tr>
+                <td> <a href="/users/<%= recommendation.author.username %>"><%= recommendation.author.username %></a></td>
+                <td><%= recommendation.recommendationDate %></td>
+                <td><a href="/recommendations/<%=recommendation._id%>"><%= recommendation.name %></a></td>
+                <td><%= recommendation.startingRecommendationTimestamp %></td>
+              </tr>
+            <% } %>
           <% }) %>
         </tbody>
       </table>

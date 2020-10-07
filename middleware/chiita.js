@@ -1,8 +1,9 @@
 const axios = require("axios");
 const moment = require("moment");
-let Recommendation = require("../models/recommendation");
-let Day = require("../models/day");
-let Cycle = require("../models/cycle");
+const Recommendation = require("../models/recommendation");
+const Day = require("../models/day");
+const Cycle = require("../models/cycle");
+const User = require("../models/user");
 seedDB        = require("../seeds");
 let chiita = {};
 
@@ -57,10 +58,14 @@ chiita.bigBang = () => {
     Day.deleteMany({},function(err){if(err){console.log(err);}});  
     Cycle.deleteMany({},function(err){if(err){console.log(err);}});  
     Recommendation.deleteMany({},function(err){if(err){console.log(err);}});  
+    User.deleteMany({},function(err){if(err){console.log(err);}});  
     // seedDB();
     setTimeout(function(){
         console.log("' .     .    .              .'... The big bang happened. Emptyness. Void. Action");
     }, 1000);
+    // setTimeout(()=>{
+    //     chiita.createNewDay();
+    // }, 2000)
 }
 
 //For managing everything related to building the presents
@@ -80,12 +85,12 @@ chiita.theDarkSideOfTheMoon = () => {
 }
 
 let timeInDay = 86400000;
+// let timeInDay = 33333000;
 
 chiita.createNewDay = async () => {
     Day.findOne({status:"present"})
     .then((presentDay)=>{
         if (presentDay){
-            console.log("Inside the if");
             presentDay.status = "past"
             presentDay.save(()=>{
                 console.log("The day that was in the present was sent to the past");
@@ -123,11 +128,24 @@ chiita.createNewDay = async () => {
             recommendationsOfThisDay : recommendationsOfThisDay,
             recommendationDurationsOfThisDay : recommendationDurationsOfThisDay
         })  
+        chiita.addTimestampsToRecommendations(newDay);
         newDay.save(() => {
+            console.log("A new day was created!")
             setTimeout(chiita.changeRecommendation, todaysFilm.duration)
             // setTimeout(chiita.changeRecommendation, 6000); //change the recommendation that is in the present after the film is over
         });
     });
+}
+
+chiita.addTimestampsToRecommendations = (newDay) => {
+    console.log("inside the function addTimestampsToRecommendations");
+    let elapsedDayTimestamp = newDay.startingDayTimestamp;
+    newDay.recommendationsOfThisDay.forEach((recommendation)=>{
+        recommendation.startingRecommendationTimestamp = elapsedDayTimestamp;
+        recommendation.save();
+        elapsedDayTimestamp += recommendation.duration + newDay.chiDurationForThisDay;
+    });
+    console.log("All the recommendations timestamps have been updated!");
 }
 
 chiita.changeRecommendation = () => {
@@ -153,28 +171,6 @@ chiita.changeRecommendation = () => {
         });
     });
 }
-
-// chiita.changeRecommendation = () => {
-//     Day.findOne({status:"present"})
-//     .then((presentDay) => {
-//         console.log("The present day is: ");
-//         console.log(presentDay);
-
-//         chiita.sendRecommendationToPast(presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations])
-//         presentDay.elapsedRecommendations ++;
-
-//         if(presentDay.elapsedRecommendations === presentDay.totalRecommendationsOfThisDay){
-//             setTimeout(chiita.createNewDay, presentDay.chiDurationForThisDay);
-//         } else {
-//             setTimeout(chiita.bringRecommendationToPresent, presentDay.chiDurationForThisDay, 
-//                 presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations])
-//             Recommendation.findById(presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations])
-//             .then((foundRecommendation) => {
-//                 setTimeout(chiita.changeRecommendation, presentDay.chiDurationForThisDay + foundRecommendation.duration)
-//             });
-//         }
-//     });
-// }
 
 chiita.sendRecommendationToPast = (recommendationID) => {
     Recommendation.findById(recommendationID)
