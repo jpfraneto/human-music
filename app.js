@@ -37,14 +37,15 @@ app.use(methodOverride("_method"));
 app.use(flash());
 
 /////////////////////SET FUNCTIONS////////////////////////////
-// chiita.bigBang();
+chiita.bigBangTwo();
+// setTimeout(chiita.createNewDay, 3000);
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
 //The following is the code that starts a new day every day at 8:08 PM
-let job = new CronJob("33 16 * * *", () => {
-    console.log("I'm inside the cronjob that started at 13:13. It is supposed to send the present day to the past and create a new day which's status is present");
+let job = new CronJob("33 20 * * *", () => {
+    console.log("I'm inside the cronjob that started at 17:33. It is supposed to send the present day to the past and create a new day which's status is present");
     chiita.createNewDay();
 }, undefined, true, "UTC");
 

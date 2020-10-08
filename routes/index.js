@@ -15,7 +15,10 @@ router.get("/", function(req,res){
         if(err){console.log(err)}
         else {
             if (!presentRecommendation){
-                res.render("theVoid");
+                Day.findOne({status:"present"})
+                .then((presentDay) => {
+                    res.render("theVoid", {chiDuration:Math.round(presentDay.chiDurationForThisDay/1000)});
+                });
             } else {
                 presentRecommendation.url = theSource.getSourceURL(presentRecommendation.url);
                 let now = (new Date()).getTime();
