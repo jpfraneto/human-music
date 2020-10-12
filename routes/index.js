@@ -15,16 +15,21 @@ router.get("/", function(req,res){
         if(err){console.log(err)}
         else {
             if (!presentRecommendation){
-                Day.findOne({status:"present"})
-                .then((presentDay) => {
-                    res.render("theVoid", {chiDuration:Math.round(presentDay.chiDurationForThisDay/1000)});
+                Day.findOne({status:"present"}).populate("recommendationsOfThisDay").exec(function(err, presentDay){
+                    if(err){
+                        console.log(err)
+                    } else {
+                        let nextRecommendationIndex = presentDay.elapsedRecommendations;
+                        let nextRecommendationTimestamp = presentDay.recommendationsOfThisDay[nextRecommendationIndex].startingRecommendationTimestamp;
+                        res.render("theVoid", {nextRecommendationTimestamp: nextRecommendationTimestamp, chiDuration:Math.round(presentDay.chiDurationForThisDay/1000)});
+                    }
                 });
             } else {
                 presentRecommendation.url = theSource.getSourceURL(presentRecommendation.url);
                 let now = (new Date()).getTime();
                 let elapsedTime = now - presentRecommendation.startingRecommendationTimestamp; 
                 let elapsedSeconds = Math.floor(elapsedTime/1000);
-                res.render("present", {elapsedTime:elapsedSeconds, presentRecommendation: presentRecommendation});
+                res.render("present", {elapsedSeconds:elapsedSeconds, presentRecommendation: presentRecommendation});
             }
         }
     });
@@ -49,10 +54,6 @@ router.get("/register", function(req, res){
 router.get("/about", function(req, res){
    res.render("about"); 
 });
-
-router.get("/future/history", middleware.isLoggedIn, function(req, res){
-    res.render("history"); 
- });
 
 router.get("/days", middleware.isLoggedIn, function(req, res){
     Day.find({status:"past"}).populate("recommendationsOfThisDay").exec(function(err, foundDays){
@@ -106,17 +107,13 @@ router.get("/days", middleware.isLoggedIn, function(req, res){
     res.render("goodbye"); 
  });
 
- router.get("/feedback", middleware.isLoggedIn, function(req, res){
-    res.render("feedback"); 
- });
-
  router.get("/random", middleware.isLoggedIn, function(req, res){
     Recommendation.find({status:"past", type:"music"}, function(err, allPastRecommendations){
         if(err){
             console.log(err);
         } else {
-            if (allPastRecommendations.length === 0){
-                res.render("theVoid");
+            if(allPastRecommendations.length === 0){
+                res.redirect("/")
             } else {
                 let randomRecommendation = allPastRecommendations[Math.floor(Math.random() * allPastRecommendations.length)];
                 randomRecommendation.url = theSource.getSourceURL(randomRecommendation.url);
@@ -185,11 +182,14 @@ router.post("/register", function(req,res){
 
 // show login form
 router.get("/login", function(req, res){
-    res.render("login");
+    if(req.isAuthenticated()) {
+        res.redirect("/");
+    } else {
+        res.render("login")
+    }
 });
 
 // handling login logic
-// app.post("/login", middleware, callback)
 router.post("/login", passport.authenticate("local",
     {
         successRedirect: "/",
@@ -203,6 +203,10 @@ router.get("/logout", function(req, res){
     req.flash("success", "Logged you out!");
     res.redirect("/goodbye");
 });
+
+router.get("/:anything", function(req, res) {
+    res.render("nonExisting");
+})
 
 
 module.exports = router;

@@ -16,7 +16,8 @@ var challengeSchema = new mongoose.Schema({
         default: Date.now.toString(),
     },
     challengeDuration: Number,
-    nextCycleName: String
+    nextCycleName: String,
+    forCycleIndex: Number
 });
 
 module.exports = mongoose.model("Challenge", challengeSchema);

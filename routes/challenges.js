@@ -7,7 +7,7 @@ let Recommendation = require("../models/recommendation");
 let Day = require("../models/day");
 let User = require("../models/user");
 let Cycle = require("../models/cycle");
-let Challenge = require("../models/challenge");
+let Challenge = require("../models/userModels/challenge");
 let middleware = require("../middleware");
 let theSource = require("../middleware/theSource");
 
@@ -21,14 +21,14 @@ router.get("/", middleware.isLoggedIn, function(req,res){
 //NEW - show form to create a new challenge
 router.get("/new", middleware.isLoggedIn, function(req,res){
         res.render("challenges/new", {user:req.user});
-    });
+});
 
 //CREATE - add new recommendation to db
 router.post("/", middleware.isLoggedIn, function(req,res){
     let now = new Date();
     let challengeDate = theSource.changeDateFormat(now);
     let name = req.body.name;
-    let description = req.body.description;
+    let description = req.body.challengeDescription;
     let nextCycleName = req.body.cycleName;
     let author = {
         id: req.user._id,
@@ -47,6 +47,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
     newChallenge.save(()=>{
         console.log("A new challenge was created by the user @" + author.username)
     });
+    console.log("The author's id is: " + author.id);
     res.redirect("/future");
 });
 

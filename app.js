@@ -36,18 +36,30 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
 
+//Global Variables
+let dimension88cCurrentTimestamp;
+
 /////////////////////SET FUNCTIONS////////////////////////////
-chiita.bigBangTwo();
-// setTimeout(chiita.createNewDay, 3000);
+
+//For starting from scratch
+// chiita.bigBang();
+//For sending the recommendations to the future
+// chiita.bigBangTwo();
+// chiita.createNewDay();
+
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
-//The following is the code that starts a new day every day at 8:08 PM
-let job = new CronJob("33 20 * * *", () => {
-    console.log("I'm inside the cronjob that started at 17:33. It is supposed to send the present day to the past and create a new day which's status is present");
+let job1 = new CronJob("52 12 * * *", () => {
+    chiita.timeWarp();
+}, undefined, true, "UTC");
+
+let job = new CronJob("54 12 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
+
+//The following is the code that starts a new cycle when this one is over
 
 app.use(require("express-session")({
     secret: "Music to nourish your soul and activate your mind",

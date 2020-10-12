@@ -77,3 +77,9 @@
     position: fixed;
     bottom: 0;
   }
+
+  .userRecommendationsTableBody {
+    display: block;
+    height: 350px;
+    overflow-y: scroll;
+  }

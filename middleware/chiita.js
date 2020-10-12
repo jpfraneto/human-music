@@ -9,6 +9,7 @@ let chiita = {};
 
 let eclipseTimestamp = 1607962479000;
 let eclipseDateObject = new Date(eclipseTimestamp);
+let nowTime = new Date()
 
 // FOR GETTING THE VIDEO INFORMATION
 chiita.youtube_parser = function(url){
@@ -81,6 +82,97 @@ chiita.bigBangTwo = () => {
     })
 }
 
+//This is a backup function that is helpful for when the thread of setTimeouts was cut in the middle.
+chiita.timeWarp = async () => {
+    console.log("Inside the timewarp function")
+    let j = 0;
+    let startingTimestamp, recommendationDuration, thisRecommendation, now;
+    Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
+    .then((presentDay) => {
+        if(presentDay){
+            for(i=0; i<presentDay.totalRecommendationsOfThisDay;i++){
+                now = (new Date).getTime();
+                thisRecommendation = presentDay.recommendationsOfThisDay[i];
+                startingTimestamp = thisRecommendation.startingRecommendationTimestamp;
+                recommendationDuration = thisRecommendation.duration;
+                if(thisRecommendation.status === "present" || thisRecommendation.status === "future"){
+                    if (now>startingTimestamp){
+                        if (now-startingTimestamp < recommendationDuration){
+                            let remainingTimeForNextInterval = startingTimestamp + recommendationDuration - now;
+                            thisRecommendation.status = "present"
+                            thisRecommendation.save(()=>{
+                                console.log("A setTimeout will start now and it will be triggered in: " + remainingTimeForNextInterval);
+                                setTimeout(()=>{
+                                    chiita.sendRecommendationToPast(thisRecommendation._id);
+                                }, remainingTimeForNextInterval);
+                            });
+                            j++;
+                            presentDay.elapsedRecommendations = i;
+                        } else {
+                            thisRecommendation.status = "past"
+                            thisRecommendation.save(()=>{
+                                "The recommendation was sent to the past"
+                            });
+                            j++;
+                        }
+                    } else {
+                        break
+                    }
+                }
+            }
+            presentDay.save( ()=> {
+                console.log("The timewarp updated " + j + " recommendation's status");
+            });
+        }
+    })
+    .catch(()=>{
+        console.log("There was an error in the timeWarp function"); 
+    })
+    dimension88cCurrentTimestamp = (new Date).getTime();
+}
+
+//For managing how days get changed
+chiita.sendRecommendationToPast = (presentRecommendation) => {
+    presentRecommendation.status = "past";
+    presentRecommendation.save(()=>{
+        console.log("The recommendation was sent to the past");
+    })
+}
+
+chiita.bringRecommendationToPresent = (futureRecommendation) => {
+    futureRecommendation.status = "present";
+    futureRecommendation.save(()=>{
+        console.log("The recommendation was brought to the present");
+        console.log("The setTimeout starts now and lasts " + futureRecommendation.duration + " milliseconds, which is the duration of the recommendation that was brought to the present")
+        setTimeout(()=>{
+            chiita.startRecommendationInterval();
+        }, futureRecommendation.duration)
+    })
+}
+
+chiita.startRecommendationInterval = () => {
+    console.log("The startRecommendationInterval started at: " + nowTime);
+    Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
+    .then((presentDay)=>{
+        chiita.sendRecommendationToPast(presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations])
+        presentDay.elapsedRecommendations ++;
+        presentDay.save(()=>{
+            console.log("The setTimeout of the interval will start now and the duration is (chi): " + presentDay.chiDurationForThisDay);
+            let timer = setTimeout(() => {
+                if ( presentDay.elapsedRecommendations === presentDay.totalRecommendationsOfThisDay ) {
+                    console.log("All the recommendations went through. A new day will be created now with the cron at 8:08")
+                    clearTimeout(timer);
+                } else {
+                    chiita.bringRecommendationToPresent(presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations])
+                }
+            }, presentDay.chiDurationForThisDay);
+        });
+    })
+    .catch(()=>{
+        console.log("There was an error in the startRecommendationIntervalFunction!")
+    })
+}
+
 //For managing everything related to building the presents
 
 chiita.sendDayToPast = () => {
@@ -91,10 +183,9 @@ chiita.sendDayToPast = () => {
             console.log("The day "+ foundDay.daySKU +" was sent to the past")
         })
     })
-}
-
-chiita.theDarkSideOfTheMoon = () => {
-    //Start everything from the beginning. This will happen for the eclipse, at the timestamp XXXXXXXXXX. Create the first day of all.
+    .catch(()=>{
+        console.log("There was an error in the sendDayToPast function")
+    })
 }
 
 let timeInDay = 86400000;
@@ -102,14 +193,28 @@ let timeInDay = 86400000;
 
 chiita.createNewDay = async () => {
     Day.findOne({status:"present"})
-    .then((presentDay)=>{
+    .then((presentDay) => {
         if (presentDay){
-            presentDay.status = "past"
+            presentDay.status = "past";
             presentDay.save(()=>{
                 console.log("The day that was in the present was sent to the past");
             })
         }
+        Cycle.findOne({status:"present"})
+        .then((foundCycle) => {
+            if(foundCycle){
+                foundCycle.daysOfThisCycle.push(presentDay);
+                foundCycle.elapsedDaysOfThisCycle ++;
+                foundCycle.save(()=>{
+                    console.log("The day was added to the present cycle")
+                })
+            }
+        })
     })
+    .catch(()=>{
+        console.log("There was an error sending the day to the past in the createNewDay function")
+    })
+    
     let information = await chiita.bringMusicFromTheFuture();
     let dayIndex = await chiita.getPresentDay();
     let totalRecommendationsOfThisDay = information.numberOfMusicVideos + 1;
@@ -143,8 +248,10 @@ chiita.createNewDay = async () => {
         })  
         chiita.addTimestampsToRecommendations(newDay);
         newDay.save(() => {
-            console.log("A new day was created");
+            console.log("A new day was created, the time of creation is: " + nowTime);
+            console.log("In " + todaysFilm.duration + " milliseconds the startRecommendationInterval will start after the movie.")
             setTimeout(chiita.startRecommendationInterval, todaysFilm.duration);
+            // setTimeout(chiita.startRecommendationInterval, 3333); //This line is for testing the code
         });
     });
 }
@@ -155,44 +262,6 @@ chiita.addTimestampsToRecommendations = (newDay) => {
         recommendation.startingRecommendationTimestamp = elapsedDayTimestamp;
         recommendation.save();
         elapsedDayTimestamp += recommendation.duration + newDay.chiDurationForThisDay;
-    });
-}
-
-chiita.startRecommendationInterval = () => {
-    Day.findOne({status:"present"})
-    .then((presentDay) =>{
-        chiita.sendRecommendationToPast(presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations]._id);
-        presentDay.elapsedRecommendations ++;
-        presentDay.save(()=> {
-            if(presentDay.elapsedRecommendations === presentDay.totalRecommendationsOfThisDay){
-                console.log("The last recommendation of the day went through. Now a new day will be created with the cron in " + presentDay.chiDurationForThisDay + " miliseconds");
-                // setTimeout(chiita.createNewDay, presentDay.chiDurationForThisDay);
-            } else {
-                let nextRecommendationID = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations]._id;
-                setTimeout(chiita.bringRecommendationToPresent, presentDay.chiDurationForThisDay, nextRecommendationID);
-            }
-        })
-    });
-}
-
-chiita.bringRecommendationToPresent = (recommendationID) => {
-    Recommendation.findById(recommendationID)
-    .then((newPresentRecommendation)=> {
-        newPresentRecommendation.status = "present";
-        newPresentRecommendation.save(()=>{
-            console.log("The recommendation " + recommendationID + " was brought to the present");
-            setTimeout(chiita.startRecommendationInterval, newPresentRecommendation.duration);
-        })
-    });
-}
-
-chiita.sendRecommendationToPast = (recommendationID) => {
-    Recommendation.findById(recommendationID)
-    .then((newPastRecommendation)=> {
-        newPastRecommendation.status = "past";
-        newPastRecommendation.save(()=>{
-            console.log("The recommendation " + recommendationID + " was sent to the past");
-        })
     });
 }
 

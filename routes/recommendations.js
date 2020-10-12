@@ -13,11 +13,6 @@ let theSource = require("../middleware/theSource");
 
 var today = new Date();
 
-//INDEX - show all recommendations
-router.get("/", function(req,res){
-    res.redirect("/");
-});
-
 //CREATE - add new recommendation to db
 router.post("/", middleware.isLoggedIn, function(req,res){
     Recommendation.find({}, function(err, allRecommendations){
