@@ -45,17 +45,18 @@ let dimension88cCurrentTimestamp;
 // chiita.bigBang();
 //For sending the recommendations to the future
 // chiita.bigBangTwo();
-// chiita.createNewDay();
+
+// chiita.bigBang();
+// setTimeout(chiita.createNewDay, 2000);
+
+//If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
+chiita.timeWarp();
 
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
-let job1 = new CronJob("52 12 * * *", () => {
-    chiita.timeWarp();
-}, undefined, true, "UTC");
-
-let job = new CronJob("54 12 * * *", () => {
+let job = new CronJob("45 21 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 

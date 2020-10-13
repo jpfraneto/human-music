@@ -7,10 +7,12 @@
 <table class="table userRecommendationsTableBody">
     <thead>
         <tr>
-            <th scope="col">Recommendation Date</th>
+            <th scope="col">Date</th>
             <th scope="col">Status</th>
             <th scope="col">Name</th>
             <th scope="col">Duration</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +22,16 @@
                 <td><%=recommendation.status%></td>
                 <td> <a class="recommendationAnchorTag" href="/users/<%=username%>/recommendations/<%=recommendation._id%>"><%=recommendation.name%></a></td>
                 <td><%=recommendation.duration%></td>
+                <% if(recommendation.status === "future") { %>
+                    <td><a href="/recommendations/<%=recommendation._id%>/edit"><i class="fas fa-edit"></i></a></td>
+                    <form class="delete-form" id="delete-form" action="/users/<%=username%>/<%=recommendation._id%>?_method=DELETE" method="POST">
+                        <td><i class="fas fa-trash-alt"></i></td>
+                    </form>
+
+                <% } else { %>
+                    <td> <i class="fas fa-edit"></i></td>
+                    <td><i class="fas fa-trash-alt"></i></td>
+                <% } %>
             </tr>
         <% }); %>
     </tbody>

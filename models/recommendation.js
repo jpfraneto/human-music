@@ -22,7 +22,7 @@ var recommendationSchema = new mongoose.Schema({
     wasCreatedByUser: Boolean,
     startingRecommendationTimestamp: Number,
     image: String,
-    dayID: String,
+    daySKU: String,
     comments: [
         {
             type: mongoose.Schema.Types.ObjectId,

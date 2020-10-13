@@ -31,12 +31,17 @@
       <p><strong>User:</strong> <a href="/users/<%= recommendation.author.username %>"><%= recommendation.author.username %></a></p>
       <p><strong>Country of Identification:</strong><%= recommendation.author.country %></p>
       <p><strong>Date of Recommendation:</strong> <%= recommendation.date %> </p>
+      <p><strong>Date when it was played:</strong> <%= recommendation.datePlayed %> </p>
+      <br>
       <p><strong>Why did you recommend it?:</strong><%= recommendation.description %></p>
+
+
+      <a class="btn btn-primary" role="button" href="/days/<%= recommendation.daySKU %>">Back to this recommendation's day</a>
     </div>
     <div class="col-2"></div>
   </div>
 
-  <a class="btn btn-primary" role="button" href="/past">Back to the Past</a>
+  
 
 </div>
 

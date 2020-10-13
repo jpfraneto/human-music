@@ -1,0 +1,34 @@
+<%- include ("../../../partials/users/userHeader") %>
+
+<div class="container text-center">
+    <h1>This is the missions page of <%=username%></h1>
+    <p>The idea for this place is that the user can come and write down what needs to be done in order to make progress</p>
+</div>
+
+<div>
+    <table class="table userRecommendationsTableBody">
+        <thead>
+            <tr>
+                <th scope="col">Mission Date</th>
+                <th scope="col">Name</th>
+                <th scope="col">Completed?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% foundMissions.forEach((mission) => { %>
+                <tr>
+                    <td scope="row"><%=mission.date%></td>
+                    <td><a href="/users/<%=username%>/dojo/missions/<%=mission._id%>"><%=mission.name%></a></td>
+                    <td><%=mission.isReady%></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center dojoBackButton">
+    <a class="btn btn-success" role="button" href="/users/<%=username%>/dojo/missions/new">Add new mission</a>
+    <a class="btn btn-success" role="button" href="/users/<%=username%>/dojo">Back to the Dojo</a>
+</div>
+
+<%- include ("../../../partials/users/userFooter") %>

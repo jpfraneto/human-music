@@ -9,40 +9,60 @@
         </div>
     </div>
     <hr id="horizontalRule">
-    <div class="row">
-        <div class="col-7 videoWrapper">
-            <% source = recommendation.url + "?autoplay=1" %>
-            <% src1 = source.slice(32) %>
-            <% sourceFinal = "https://www.youtube.com/embed/" + src1 %>
 
-            <div class="text-center">
-                <iframe src="<%= sourceFinal %> >"></iframe>
+    <% source = recommendation.url + "?autoplay=1" %>
+    <% src1 = source.slice(32) %>
+    <% sourceFinal = "https://www.youtube.com/embed/" + src1 %>
+
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-7">
+                <iframe id="newRecommendationIframe" 
+                width="395" height="222"
+                src="<%= sourceFinal %>" 
+                allow="autoplay" autoplay="1"
+                frameborder="0"
+                style="border: solid 4px #37474F"
+                ></iframe>
+                <div class="userinformation">
+                    <p><strong>User: </strong><a href="/users/<%=user._id%>"><%= user.username %></a></p>
+                    <p><strong>Country of Identification: </strong><%=user.country%></p>
+                    <p><strong>Date of Recommendation: </strong> <%= recommendation.daySKU %></p>
+                    <p><strong>Why did you recommend it?: </strong></p>
+                    <div>
+                        <p id="recommendationDescription"><%= recommendation.description%></p>
+                    </div>
+                </div>
             </div>
-
-            <p><strong>Name:</strong><%= recommendation.name %></p>
-            <p><strong>Why did you recommend it?:</strong><%= recommendation.description %></p>
-        </div>
-        <div class="col-5">
-            <div>
+            <div class="col-5">
                 <form action="/recommendations/<%= recommendation._id %>?_method=PUT" method="POST">
-                    
                     <div class="form-group">
-                        <p class="content">URL</p>
-                        <input class="form-control" type="text" value="<%= recommendation.url %>" name="recommendation[url]">
+                        <label for="videoURL" class="clock">Youtube URL of your recommendation:</label>
+                        <input class="form-control" value="<%= recommendation.url %>" id="videoURL" type="text" name="url">
                     </div>
     
                     <div class="form-group">
-                        <p class="content">Description</p>
-                        <textarea class="form-control" rows="7" cols="33" name="recommendation[description]"><%= recommendation.description %></textarea>
+                        <label for="descriptionTextArea" class="clock">What does this piece mean to you?</label>
+                        <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"><%= recommendation.description %></textarea>
                     </div>
-                    
+    
+                    <label for="userCheckbox" class="userInformation content">Was this created by you?</label>    
+                    <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
+                    <br>
+    
+                    <label for="typeOfRecommendation" class="userInformation content">Choose a type of recommendation (music/film):</label>
+                    <select name="typeOfRecommendation" id="typeOfRecommendation">
+                        <option value="music">Music</option>
+                        <option value="film">Film</option>
+                    </select>
+    
                     <div class="form-group">
-                        <button class="btn btn-success">Submit</button>
-                        <a href="/recommendations" class="btn btn-primary">Go Back</a>
+                        <button class="btn btn-success">Submit!</button>
+                        <a class="btn btn-primary" href="/users/<%=user.username%>/recommendations"> Go Back</a>
                     </div>  
-                </form>
+                </form>   
             </div>
         </div>
     </div>
-</div>
+
 <%- include("../partials/footer") %>

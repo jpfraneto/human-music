@@ -40,7 +40,7 @@
               <td><%= day.dayIndex %></td>
               <td><%= day.daySKU %></td>
               <td><%= day.status %></td>
-              <td><a href="/days/<%= day._id %>"><%= day.recommendationsOfThisDay[0].name %></a></td>
+              <td><a href="/days/<%= day.daySKU %>"><%= day.recommendationsOfThisDay[0].name %></a></td>
               <td><%= day.totalRecommendationsOfThisDay %></td>
             </tr>
           <% }) %>

@@ -34,7 +34,7 @@
           <% pastDays.forEach(function(element){ %>
             <tr>
               <td><%= element.dayIndex %></td>
-              <td><a href="/days/<%=element._id%>"><%= element.daySKU %></a></td>
+              <td><a href="/days/<%=element.daySKU%>"><%= element.daySKU %></a></td>
               <td><%= element.recommendationsOfThisDay[0].name %></td>
               <td><%= element.totalRecommendationsOfThisDay %></td>
             </tr>

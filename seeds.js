@@ -183,20 +183,6 @@ var dataRecs = [
             language: "Spanish"
         },
         type: "music",
-        name: "Grateful Dead - Full Concert - 06/19/76 - Capitol Theatre (OFFICIAL)",
-        recommendationDate: "042020IX",
-        url: "https://www.youtube.com/watch?v=z_bXHbUqOd0",
-        description:"This is the vortex if Dead shows in Youtube. No matter where you start, you will always end here",
-        status: "future",
-        duration: 11134000,
-    },
-    {
-        author: { 
-            username: "chocapec",
-            country: "Chile",
-            language: "Spanish"
-        },
-        type: "music",
         name: "Pink Floyd - Live In Venice - 1989 - Full Concert - HD 60 FPS",
         recommendationDate: "042020IX",
         url: "https://www.youtube.com/watch?v=cZbns6cg4Mg",

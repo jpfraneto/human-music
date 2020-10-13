@@ -28,10 +28,10 @@ var dojoSchema = new mongoose.Schema({
             ref: "Dailie"
         }
     ],
-    advice: [
+    missions: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Advice"
+            ref: "Mission"
         }
     ]
 });

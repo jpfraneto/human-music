@@ -65,8 +65,8 @@ router.get("/days", middleware.isLoggedIn, function(req, res){
     })
  });
 
- router.get("/days/:id", middleware.isLoggedIn, function(req, res){
-    Day.findById(req.params.id).populate("recommendationsOfThisDay").exec(function(err, foundDay){
+ router.get("/days/:daySKU", middleware.isLoggedIn, function(req, res){
+    Day.findOne({daySKU : req.params.daySKU}).populate("recommendationsOfThisDay").exec(function(err, foundDay){
         if(err){
             console.log(err)
         } else {

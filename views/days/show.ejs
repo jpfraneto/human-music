@@ -12,9 +12,9 @@
       <table class="table content">
         <thead>
           <tr>
-            <th scope="col">Author</th>
+            <th scope="col">User</th>
             <th scope="col">Date of Recommendation</th>
-            <th scope="col">Name [With the URL inside]</th>
+            <th scope="col">Name</th>
             <th scope="col">Date Played</th>
           </tr>
         </thead>
@@ -22,7 +22,7 @@
           <% thisDay.recommendationsOfThisDay.forEach(function(recommendation){ %>
             <% if(recommendation.status !== "future"){ %>
               <tr>
-                <td> <a href="/users/<%= recommendation.author.username %>"><%= recommendation.author.username %></a></td>
+                <td> <a href="/users/<%= recommendation.author.username %>">@<%= recommendation.author.username %></a></td>
                 <td><%= recommendation.recommendationDate %></td>
                 <td><a href="/recommendations/<%=recommendation._id%>"><%= recommendation.name %></a></td>
                 <td><%= recommendation.startingRecommendationTimestamp %></td>

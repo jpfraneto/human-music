@@ -1,28 +1,33 @@
 <%- include ("../../partials/users/userHeader") %>
 
-<div class="container text-center">
+<div class="container text-center ">
     <div class="row">
         <div class="col-12">
           <div class="text-center videoSquare">
-            <iframe id="ytplayer" type="text/html" width="640" height="360"
+            <iframe id="ytplayer" type="text/html" width="395" height="222"
             src="<%= recommendation.url%> >"
             frameborder="0"></iframe>
           </div>
         </div>
       </div>
     
-      <div class="row">
-        <div class="col-2"></div>
-        <div class="col-8 userInformation">
-            <p><strong>Status: </strong><%= recommendation.status %></p>
-            <p><strong>Date of Recommendation: </strong> <%= recommendation.date %> </p>
-            <p><strong>Why did you recommend it?: </strong><%= recommendation.description %></p>
+        <div class="row">
+          <div class="col-2"></div>
+          <div class="col-8 userInformation">
+            <div class="recommendationInformationDiv">
+              <p><strong>Name: </strong><%= recommendation.name %></p>
+              <p><strong>Status: </strong><%= recommendation.status %></p>
+              <p><strong>Date of Recommendation: </strong> <%= recommendation.date %> </p>
+              <p><strong>Why did you recommend it?: </strong><%= recommendation.description %></p>
+              <a class="btn btn-success" role="button" href="/users/<%=username%>/recommendations">Back to <%=username%>'s recommendations page</a>
+            </div>
+          </div>
+          <div class="col-2"></div>
         </div>
-        <div class="col-2"></div>
-      </div>
-
+      
+        
 </div>
 
-<a class="btn btn-success" role="button" href="/users/<%=username%>/recommendations">Back to <%=username%>'s recommendations page</a>
+
 
 <%- include ("../../partials/users/userFooter") %>

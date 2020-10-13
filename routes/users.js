@@ -5,7 +5,9 @@ var passport = require("passport");
 var middleware = require("../middleware");
 var User = require("../models/user");
 var Comment = require("../models/comment");
+let Mission = require("../models/userModels/mission");
 let theSource = require("../middleware/theSource");
+let chiita = require("../middleware/chiita");
 
 router.get("/:username", middleware.isLoggedIn, function(req,res){
     User.findOne({username:req.params.username}).populate("recommendations").exec(function(err, foundUser){
@@ -59,11 +61,42 @@ router.get("/:username/dojo/introduction", middleware.isLoggedIn, function(req, 
     });
 });
 
-router.get("/:username/dojo/quests", middleware.isLoggedIn, function(req, res){
+router.get("/:username/dojo/missions", middleware.isLoggedIn, function(req, res){
+    Mission.find({username:req.params.username})
+    .then((foundMissions) => {
+        res.render("users/dojo/missions/index", {foundMissions:foundMissions, username:req.params.username});
+    })
+});
+
+router.get("/:username/dojo/missions/new", middleware.isLoggedIn, function(req, res){
     User.findOne({username:req.params.username})
     .then((foundUser)=>{
-        res.render("users/dojo/quests", {foundUser:foundUser});
+        res.render("users/dojo/missions/new", {foundUser:foundUser});
     });
+});
+
+router.post("/:username/dojo/missions", middleware.isLoggedIn, function(req, res){
+    let newMission = new Mission({
+        username: req.user.username,
+        date : chiita.changeDateFormat(new Date()),
+        isReady : false,
+        name : req.body.name,
+        description : req.body.description
+    })
+    newMission.save(()=> {
+        console.log("The mission was saved to the DB");
+        Mission.find({username:req.params.username})
+        .then((foundMissions) => {
+            res.render("users/dojo/missions/index", {foundMissions:foundMissions, username:req.params.username});
+        })
+    })
+});
+
+router.get("/:username/dojo/missions/:id", middleware.isLoggedIn, function(req, res){
+    Mission.findById(req.params.id)
+    .then((foundMission)=>{
+        res.render("users/dojo/missions/show", {username:req.params.username, mission:foundMission})
+    })
 });
 
 router.get("/:username/dojo/ideas", middleware.isLoggedIn, function(req, res){
@@ -86,5 +119,9 @@ router.get("/:username/dojo/advice", middleware.isLoggedIn, function(req, res){
         res.render("users/dojo/advice", {foundUser:foundUser});
     });
 });
+
+router.post("/:username/dojo/advice", function(req,res) {
+    
+})
 
 module.exports = router;

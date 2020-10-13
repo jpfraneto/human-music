@@ -1,0 +1,16 @@
+<%- include ("../../../partials/users/userHeader") %>
+
+<div class="container text-center">
+    <h1><%=mission.name%></h1>
+    <p><%=mission.date%></p>
+    <br>
+    <p><%=mission.description%></p>
+    <h1>Add the edit/delete buttons</h1>
+</div>
+
+<div class="text-center dojoBackButton">
+    <a class="btn btn-success" role="button" href="/users/<%=username%>/dojo/missions/new">Add new mission</a>
+    <a class="btn btn-success" role="button" href="/users/<%=username%>/dojo">Back to the Dojo</a>
+</div>
+
+<%- include ("../../../partials/users/userFooter") %>

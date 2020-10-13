@@ -19,14 +19,13 @@ router.post("/", middleware.isLoggedIn, function(req,res){
         if(err){
             console.log(err);
         } else {
-            var recommendationDate = theSource.changeDateFormat(today);
+            var recommendationDate = chiita.changeDateFormat(today);
             var author = {
                 id: req.user._id,
                 username: req.user.username,
                 country: req.user.country
             };
             var desc = req.body.description;
-            var dayID = "";
             if(req.body.wasCreatedByUser){
                 var wasCreatedByUser = req.body.wasCreatedByUser;
             } else {
@@ -44,7 +43,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
                 duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
                 if (response.data.items.length > 0){
                     let newRecommendation = {author:author, name:name, type:type, recommendationDate:recommendationDate, description:desc, author:author, 
-                        dayID:dayID, url:url, status:"future", wasCreatedByUser:wasCreatedByUser, duration:duration };
+                        url:url, status:"future", wasCreatedByUser:wasCreatedByUser, duration:duration };
                     // create a new recommendation and save to DB
                     Recommendation.create(newRecommendation,function(err, newlyCreated){
                         if(err){
@@ -91,56 +90,49 @@ router.get("/allRecommendations", middleware.isChocapec, function(req, res){
 //SHOW - shows more info about one recommendation
 router.get("/:id", middleware.isLoggedIn, function(req,res){
     // find the recommendation with the provided id
-    Recommendation.findById(req.params.id).populate("comments").exec(function(err, foundRecommendation){
-        if(err || !foundRecommendation){
-            req.flash("error", "recommendation not found");
-            res.redirect("back");
-        } else {
-            // render show template with that recommendation
-            if(foundRecommendation.status === "future" && "a" === "the user doesn't match") {
-                res.render("recommendations/edit", {recommendation: foundRecommendation});
-            } else if (foundRecommendation.status === "present"){
-                res.redirect("/recommendations");
-            } else {
-                res.render("recommendations/show", {recommendation: foundRecommendation});
-            }
-        }
-    });
+    Recommendation.findById(req.params.id)
+    .then((foundRecommendation) => {
+        res.render("recommendations/show", {recommendation : foundRecommendation});
+    })
+    .catch(()=>{
+        console.log("The process crashed while getting the recommendation")
+    })
 });
 
 // EDIT recommendation ROUTE
-router.get("/:id/edit", middleware.checkRecommendationOwnership, function(req, res){
+router.get("/:id/edit", function(req, res){
+    console.log("I'm in here!");
     Recommendation.findById(req.params.id, function(err, foundRecommendation){
         if(foundRecommendation.status === "future"){
-            res.render("recommendations/edit", {recommendation: foundRecommendation});
+            res.render("recommendations/edit", {recommendation: foundRecommendation, user:req.user});
         } else {
             console.log("You can't edit a recommendation that already went through!");
-            res.redirect("/recommendations");
+            res.redirect("/");
         }
         });
 });
 
 // UPDATE recommendation ROUTE
-router.put("/:id", middleware.checkRecommendationOwnership, function(req, res){
+router.put("/:id", function(req, res){
     // find and update the correct recommendation
     Recommendation.findByIdAndUpdate(req.params.id, req.body.recommendation, function(err, updatedRecommendation){
         if(err){
-            res.redirect("/recommendations");
+            res.redirect("/");
         } else {
             //redirect somewhere (show page)
-            res.redirect("/recommendations");
+            res.redirect("/");
         }
     });
 });
 
 
 // DESTROY recommendation ROUTE
-router.delete("/:id", middleware.checkRecommendationOwnership, function(req,res){
+router.delete("/:id", function(req,res){
     Recommendation.findByIdAndRemove(req.params.id, function(err){
         if(err){
-            res.redirect("/recommendations");
+            res.redirect("/");
         } else {
-            res.redirect("/recommendations");
+            res.redirect("/");
         }
     });
 });

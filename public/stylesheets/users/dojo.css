@@ -78,8 +78,14 @@
     bottom: 0;
   }
 
+  .recommendationInformationDiv {
+    display: block;
+    height: 188px;
+    overflow-y: scroll;
+  }
+
   .userRecommendationsTableBody {
     display: block;
-    height: 350px;
+    height: 355px;
     overflow-y: scroll;
   }
