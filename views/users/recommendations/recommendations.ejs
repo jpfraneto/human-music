@@ -1,41 +1,43 @@
-<%- include ("../../partials/users/userHeader") %>
+<%- include ("../../partials/header") %>
 
 <div class="container text-center">
     <h1>This is the recommendations page of <%=username%></h1>
 </div>
 
-<table class="table userRecommendationsTableBody">
-    <thead>
-        <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Name</th>
-            <th scope="col">Duration</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% userRecommendations.forEach((recommendation) => { %>
+<div class="container">
+    <table class="table content">
+        <thead>
             <tr>
-                <td scope="row"><%=recommendation.recommendationDate%></td>
-                <td><%=recommendation.status%></td>
-                <td> <a class="recommendationAnchorTag" href="/users/<%=username%>/recommendations/<%=recommendation._id%>"><%=recommendation.name%></a></td>
-                <td><%=recommendation.duration%></td>
-                <% if(recommendation.status === "future") { %>
-                    <td><a class="btn-xs btn-success" role="button" href="/recommendations/<%=recommendation._id%>/edit"><i class="fas fa-edit"></i></a></td>
-                    <form class="delete-form" id="delete-form" action="/recommendations/<%=recommendation._id%>?_method=DELETE" method="POST">
-                        <td><button type="submit" class="btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash-alt"></i></button></td>
-                    </form>
-
-                <% } else { %>
-                    <td><a class="btn-xs btn-success" role="button" href=""><i class="fas fa-edit"></i></a></td>
-                    <td><button type="submit" class="btn-xs btn-danger"><i class="fas fa-trash-alt"></i></button></td>
-                <% } %>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Name</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
             </tr>
-        <% }); %>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <% userRecommendations.forEach((recommendation) => { %>
+                <tr>
+                    <td scope="row"><%=recommendation.recommendationDate%></td>
+                    <td><%=recommendation.status%></td>
+                    <td> <a class="recommendationAnchorTag" href="/users/<%=username%>/recommendations/<%=recommendation._id%>"><%=recommendation.name%></a></td>
+                    <td><%=recommendation.duration%></td>
+                    <% if(recommendation.status === "future") { %>
+                        <td><a class="btn-xs btn-success" role="button" href="/recommendations/<%=recommendation._id%>/edit"><i class="fas fa-edit"></i></a></td>
+                        <form class="delete-form" id="delete-form" action="/recommendations/<%=recommendation._id%>?_method=DELETE" method="POST">
+                            <td><button type="submit" class="btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash-alt"></i></button></td>
+                        </form>
+    
+                    <% } else { %>
+                        <td><a class="btn-xs btn-success" role="button" href=""><i class="fas fa-edit"></i></a></td>
+                        <td><button type="submit" class="btn-xs btn-danger"><i class="fas fa-trash-alt"></i></button></td>
+                    <% } %>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
 
 <div class="text-center">
     <a class="btn btn-info" href="/recommendations/new">Add Recommendation</a>
@@ -43,4 +45,4 @@
 </div>
 
 
-<%- include ("../../partials/users/userFooter") %>
+<%- include ("../../partials/footer") %>
