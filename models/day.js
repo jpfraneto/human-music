@@ -13,6 +13,11 @@ var daySchema = new mongoose.Schema({
             type:Number
         }
     ],
+    startingTimestampsOfThisDay: [
+        {
+            type:Number
+        }
+    ],
     recommendationsOfThisDay: [
         {
             type: mongoose.Schema.Types.ObjectId,

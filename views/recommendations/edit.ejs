@@ -38,23 +38,17 @@
                 <form action="/recommendations/<%= recommendation._id %>?_method=PUT" method="POST">
                     <div class="form-group">
                         <label for="videoURL" class="clock">Youtube URL of your recommendation:</label>
-                        <input class="form-control" value="<%= recommendation.url %>" id="videoURL" type="text" name="url">
+                        <input class="form-control" value="<%= recommendation.url %>" id="videoURL" type="text" name="url" required>
                     </div>
     
                     <div class="form-group">
                         <label for="descriptionTextArea" class="clock">What does this piece mean to you?</label>
-                        <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"><%= recommendation.description %></textarea>
+                        <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description" required><%= recommendation.description %></textarea>
                     </div>
     
                     <label for="userCheckbox" class="userInformation content">Was this created by you?</label>    
                     <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
                     <br>
-    
-                    <label for="typeOfRecommendation" class="userInformation content">Choose a type of recommendation (music/film):</label>
-                    <select name="typeOfRecommendation" id="typeOfRecommendation">
-                        <option value="music">Music</option>
-                        <option value="film">Film</option>
-                    </select>
     
                     <div class="form-group">
                         <button class="btn btn-success">Submit!</button>

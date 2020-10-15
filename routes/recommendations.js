@@ -101,12 +101,11 @@ router.get("/:id", middleware.isLoggedIn, function(req,res){
 
 // EDIT recommendation ROUTE
 router.get("/:id/edit", function(req, res){
-    console.log("I'm in here!");
     Recommendation.findById(req.params.id, function(err, foundRecommendation){
         if(foundRecommendation.status === "future"){
             res.render("recommendations/edit", {recommendation: foundRecommendation, user:req.user});
         } else {
-            console.log("You can't edit a recommendation that already went through!");
+            console.log("You can't edit a recommendation that is not in the future. It is already carved in stone.");
             res.redirect("/");
         }
         });
@@ -114,14 +113,30 @@ router.get("/:id/edit", function(req, res){
 
 // UPDATE recommendation ROUTE
 router.put("/:id", function(req, res){
-    // find and update the correct recommendation
-    Recommendation.findByIdAndUpdate(req.params.id, req.body.recommendation, function(err, updatedRecommendation){
-        if(err){
-            res.redirect("/");
-        } else {
-            //redirect somewhere (show page)
-            res.redirect("/");
-        }
+    Recommendation.findById(req.params.id)
+    .then((recommendationForUpdate) => {
+        recommendationForUpdate.description = req.body.description;
+
+        let videoID = theSource.youtube_parser(req.body.url);
+        let apiKey = process.env.YOUTUBE_APIKEY;
+        let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
+        axios.get(getRequestURL)
+        .then(function(response){
+            let durationISO = response.data.items[0].contentDetails.duration;
+            name = response.data.items[0].snippet.title;
+            duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
+            if (response.data.items.length > 0){
+                recommendationForUpdate.name = name;
+                recommendationForUpdate.duration = duration;        
+                recommendationForUpdate.save(()=> {
+                    console.log("The recommendation was updated");
+                    res.redirect("/users/"+ req.user.username +"/recommendations");
+                });
+            } else {
+                console.log("The video does not exist");
+                res.redirect("/users/"+ req.user.username +"/recommendations");
+            }
+        })
     });
 });
 
@@ -130,9 +145,10 @@ router.put("/:id", function(req, res){
 router.delete("/:id", function(req,res){
     Recommendation.findByIdAndRemove(req.params.id, function(err){
         if(err){
-            res.redirect("/");
+            res.redirect("/users/"+ req.user.username +"/recommendations");
         } else {
-            res.redirect("/");
+            console.log("The recommendation was deleted");
+            res.redirect("/users/"+ req.user.username +"/recommendations");
         }
     });
 });

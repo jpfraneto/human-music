@@ -89,3 +89,12 @@
     height: 355px;
     overflow-y: scroll;
   }
+
+  .navbar-nav{
+    margin-left: 28px
+  }
+
+  .missionsTableDiv {
+    height: 355px;
+    overflow-y: scroll;
+  }

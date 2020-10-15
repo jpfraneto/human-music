@@ -1,0 +1,26 @@
+<%- include ("../../../partials/users/userHeader") %>
+
+<div class="container text-center">
+    <h1>This is the page for adding a new dailie</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-6">
+            <form action="/users/<%=foundUser.username%>/dojo/dailies" method="POST"> 
+                <div class="form-group">
+                  <label for="dailieDescription">What is the progress that you made today?</label>
+                  <textarea class="form-control" id="dailieDescription" name="description" rows="6"></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a class="btn btn-success" role="button" href="/users/<%=foundUser.username%>/dojo/dailies">Go back</a>
+                </div>
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+
+<%- include ("../../../partials/users/userFooter") %>

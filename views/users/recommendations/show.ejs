@@ -19,7 +19,13 @@
               <p><strong>Status: </strong><%= recommendation.status %></p>
               <p><strong>Date of Recommendation: </strong> <%= recommendation.date %> </p>
               <p><strong>Why did you recommend it?: </strong><%= recommendation.description %></p>
-              <a class="btn btn-success" role="button" href="/users/<%=username%>/recommendations">Back to <%=username%>'s recommendations page</a>
+              <div class="text-center">
+                <form class="delete-form" id="delete-form" action="/recommendations/<%=recommendation._id%>?_method=DELETE" method="POST">
+                  <a class="btn btn-success" role="button" href="/recommendations/<%=recommendation._id%>/edit"><i class="fas fa-edit"></i></a>
+                  <a class="btn btn-success" role="button" href="/users/<%=username%>/recommendations">Back to your recommendations page</a>
+                  <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash-alt"></i></button>
+                </form>
+              </div>
             </div>
           </div>
           <div class="col-2"></div>

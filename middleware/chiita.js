@@ -118,7 +118,7 @@ chiita.timeWarp = async () => {
                         } else {
                             thisRecommendation.status = "past"
                             thisRecommendation.save(()=>{
-                                "The recommendation was sent to the past"
+                                console.log("The recommendation was sent to the past")
                             });
                             let nextRecommendation = presentDay.recommendationsOfThisDay[i+1]
                             if (now < nextRecommendation.startingRecommendationTimestamp){
@@ -152,14 +152,18 @@ chiita.timeWarp = async () => {
 chiita.sendRecommendationToPast = (presentRecommendation) => {
     presentRecommendation.status = "past";
     presentRecommendation.save(()=>{
-        console.log("The recommendation was sent to the past");
+        let nowTimestamp = (new Date).getTime()
+        let difference = nowTimestamp - (presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration);
+        console.log("The recommendation was sent to the past, and the difference between the supposed timestamp and the actual is: " + difference);
     })
 }
 
 chiita.bringRecommendationToPresent = (futureRecommendation) => {
     futureRecommendation.status = "present";
     futureRecommendation.save(()=>{
-        console.log("The recommendation was brought to the present");
+        let nowTimestamp = (new Date).getTime()
+        let difference = nowTimestamp - futureRecommendation.startingRecommendationTimestamp;
+        console.log("The recommendation was brought to the present, and the difference between the suposed timestamp and the actual one is: " + difference);
         console.log("The setTimeout starts now and lasts " + futureRecommendation.duration + " milliseconds, which is the duration of the recommendation that was brought to the present")
         setTimeout(()=>{
             chiita.startRecommendationInterval();
@@ -264,10 +268,12 @@ chiita.createNewDay = async () => {
             recommendationsOfThisDay : recommendationsOfThisDay,
             recommendationDurationsOfThisDay : recommendationDurationsOfThisDay
         })  
-        chiita.addTimestampsToRecommendations(newDay);
+        let recommendationTimestamps = chiita.addTimestampsToRecommendations(newDay);
+        newDay.startingTimestampsOfThisDay = recommendationTimestamps;
         newDay.save(() => {
             nowTime = new Date();
-            console.log("A new day was created, the time of creation is: " + nowTime);
+            console.log("This new day was created, the time of creation is: " + nowTime);
+            console.log(newDay);
             console.log("In " + todaysFilm.duration + " milliseconds the startRecommendationInterval will start after the movie.")
             setTimeout(chiita.startRecommendationInterval, todaysFilm.duration);
             // setTimeout(chiita.startRecommendationInterval, 3333); //This line is for testing the code
@@ -277,12 +283,15 @@ chiita.createNewDay = async () => {
 
 chiita.addTimestampsToRecommendations = (newDay) => {
     let elapsedDayTimestamp = newDay.startingDayTimestamp;
+    let dayTimestamps = [];
     newDay.recommendationsOfThisDay.forEach((recommendation)=>{
         recommendation.startingRecommendationTimestamp = elapsedDayTimestamp;
+        dayTimestamps.push(elapsedDayTimestamp);
         recommendation.daySKU = newDay.daySKU;
         recommendation.save();
         elapsedDayTimestamp += recommendation.duration + newDay.chiDurationForThisDay;
     });
+    return dayTimestamps;
 }
 
 //////////////////////////
@@ -334,6 +343,24 @@ chiita.getPresentDay = async () => {
     .then ((foundDays) => {
         return foundDays.length
     });
+}
+
+
+//For troubleshooting and understanding if it works properly or not
+chiita.evaluateTimestamps = () => {
+    Day.findOne({status:"present"})
+    .then((foundDay) => {
+        let sum = foundDay.startingDayTimestamp
+        for (i=0; i<foundDay.startingTimestampsOfThisDay.length;i++){
+            if (sum === foundDay.startingTimestampsOfThisDay[i]){
+                console.log("This one matches " + i);
+            } else {
+                console.log("This one doesn't match: " + i);
+            }
+            sum += foundDay.recommendationDurationsOfThisDay[i] + foundDay.chiDurationForThisDay;
+        }
+        console.log("At the end, the sum is: " + sum);
+    })
 }
 
 //Functions for date format for the new day

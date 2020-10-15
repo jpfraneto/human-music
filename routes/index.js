@@ -19,9 +19,13 @@ router.get("/", function(req,res){
                     if(err){
                         console.log(err)
                     } else {
-                        let nextRecommendationIndex = presentDay.elapsedRecommendations;
-                        let nextRecommendationTimestamp = presentDay.recommendationsOfThisDay[nextRecommendationIndex].startingRecommendationTimestamp;
-                        res.render("theVoid", {nextRecommendationTimestamp: nextRecommendationTimestamp, chiDuration:Math.round(presentDay.chiDurationForThisDay/1000)});
+                        if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
+                            let nextRecommendationIndex = presentDay.elapsedRecommendations;
+                            let nextRecommendationTimestamp = presentDay.recommendationsOfThisDay[nextRecommendationIndex].startingRecommendationTimestamp;
+                            res.render("theVoid", {nextRecommendationTimestamp: nextRecommendationTimestamp, chiDuration:Math.round(presentDay.chiDurationForThisDay/1000)});
+                        } else {
+                            res.render("endOfDay");
+                        }  
                     }
                 });
             } else {
