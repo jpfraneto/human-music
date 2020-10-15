@@ -49,7 +49,7 @@ router.get("/:username/recommendations/:id", middleware.isLoggedIn, function(req
     Recommendation.findById(req.params.id, function(err, foundRecommendation){
         if(err){console.log(err)}
         else{
-            foundRecommendation.url = theSource.getSourceURL(foundRecommendation.url);
+            foundRecommendation.url = chiita.getSourceURL(foundRecommendation.url);
             res.render("users/recommendations/show", {username:req.params.username, recommendation:foundRecommendation});
         }
     });
