@@ -7,7 +7,7 @@ let Day = require("../models/day");
 let Cycle = require("../models/cycle");
 let RetreatForm = require("../models/retreatForm");
 const middleware = require("../middleware");
-let theSource = require("../middleware/theSource");
+let chiita = require("../middleware/chiita");
 
 // Root Route
 router.get("/", function(req,res){
@@ -29,7 +29,7 @@ router.get("/", function(req,res){
                     }
                 });
             } else {
-                presentRecommendation.url = theSource.getSourceURL(presentRecommendation.url);
+                presentRecommendation.url = chiita.getSourceURL(presentRecommendation.url);
                 let now = (new Date()).getTime();
                 let elapsedTime = now - presentRecommendation.startingRecommendationTimestamp; 
                 let elapsedSeconds = Math.floor(elapsedTime/1000);
@@ -100,9 +100,9 @@ router.get("/days", middleware.isLoggedIn, function(req, res){
     Cycle.findById(req.params.id).populate("daysOfThisCycle").exec(function(err, foundCycle){
         let startingTimestamp = foundCycle.cycleStartingTimestamp;
         let date = new Date(startingTimestamp);
-        let startingDate = theSource.changeDateFormat(date);
+        let startingDate = chiita.changeDateFormat(date);
         let endingMoment = new Date(startingTimestamp + 1000*60*60*24*foundCycle.cycleDuration);
-        let endingDate = theSource.changeDateFormat(endingMoment);
+        let endingDate = chiita.changeDateFormat(endingMoment);
         res.render("cycles/show", {cycle:foundCycle, days:foundCycle.daysOfThisCycle, startingDate:startingDate, endingDate:endingDate}); 
     });
  });
@@ -120,7 +120,7 @@ router.get("/days", middleware.isLoggedIn, function(req, res){
                 res.redirect("/")
             } else {
                 let randomRecommendation = allPastRecommendations[Math.floor(Math.random() * allPastRecommendations.length)];
-                randomRecommendation.url = theSource.getSourceURL(randomRecommendation.url);
+                randomRecommendation.url = chiita.getSourceURL(randomRecommendation.url);
                 res.render("random", {randomRecommendation:randomRecommendation});
             }
         }

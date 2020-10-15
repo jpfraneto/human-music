@@ -9,7 +9,7 @@ var User = require("../models/user");
 let Cycle = require("../models/cycle");
 var middleware = require("../middleware");
 // var functions = require("../middleware/functions");
-let theSource = require("../middleware/theSource");
+let chiita = require("../middleware/chiita");
 
 var today = new Date();
 
@@ -33,7 +33,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
             }
             let url = req.body.url;
             let type = req.body.typeOfRecommendation;
-            let videoID = theSource.youtube_parser(url);
+            let videoID = chiita.youtube_parser(url);
             let apiKey = process.env.YOUTUBE_APIKEY;
             let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
             axios.get(getRequestURL)
@@ -72,7 +72,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
 //NEW - show form to create a new recommendation
 router.get("/new", middleware.isLoggedIn, function(req,res){
 // router.get("/new", function(req,res){
-    let formatedDate = theSource.changeDateFormat(today);
+    let formatedDate = chiita.changeDateFormat(today);
     res.render("recommendations/new", {user:req.user, today:formatedDate});
 });
 
@@ -117,7 +117,7 @@ router.put("/:id", function(req, res){
     .then((recommendationForUpdate) => {
         recommendationForUpdate.description = req.body.description;
 
-        let videoID = theSource.youtube_parser(req.body.url);
+        let videoID = chiita.youtube_parser(req.body.url);
         let apiKey = process.env.YOUTUBE_APIKEY;
         let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
         axios.get(getRequestURL)
