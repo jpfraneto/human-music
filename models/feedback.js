@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var challengeSchema = new mongoose.Schema({
+var feedbackSchema = new mongoose.Schema({
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -9,15 +9,11 @@ var challengeSchema = new mongoose.Schema({
         username: String,
         country: String
     },
-    name: String,
-    description: String,
-    challengeDate: {
+    message: String,
+    messageDate: {
         type: String,
         default: Date.now.toString(),
     },
-    challengeDuration: Number,
-    nextCycleName: String,
-    forCycleIndex: Number
 });
 
-module.exports = mongoose.model("Challenge", challengeSchema);
+module.exports = mongoose.model("Feedback", feedbackSchema);

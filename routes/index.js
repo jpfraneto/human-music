@@ -1,10 +1,12 @@
+const axios = require("axios");
+const moment = require("moment");
 let express = require("express");
 let router = express.Router();
 let passport = require("passport");
 let Recommendation = require("../models/recommendation");
 let User = require("../models/user");
 let Day = require("../models/day");
-let Cycle = require("../models/cycle");
+let Feedback = require("../models/feedback");
 let RetreatForm = require("../models/retreatForm");
 const middleware = require("../middleware");
 let chiita = require("../middleware/chiita");
@@ -39,14 +41,105 @@ router.get("/", function(req,res){
     });
 });
 
-router.get("/past", middleware.isLoggedIn, function(req,res){
+let today = new Date();
+
+//CREATE - add new recommendation to db
+router.post("/", function(req,res){
+    let author;
+    let type = "music";
+    if(req.user){
+        author = {
+            id: req.user._id,
+            username: req.user.username,
+            country: req.user.country
+        }
+        if(req.user.username === "chocapec") {
+            type = req.body.typeOfRecommendation;
+        }
+    } else {
+        author = {
+            username: "unknown",
+            country: "unknown"
+        }
+    };
+    if(req.body.wasCreatedByUser){
+        var wasCreatedByUser = req.body.wasCreatedByUser;
+    } else {
+        var wasCreatedByUser = false;
+    }
+    
+    let url, imageURL, duration, name;
+    if(type === "music"){
+        imageURL = undefined;
+        url = req.body.url;
+        let videoID = chiita.youtube_parser(url);
+        let apiKey = process.env.YOUTUBE_APIKEY;
+        let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
+        axios.get(getRequestURL)
+        .then(function(response){
+            let durationISO = response.data.items[0].contentDetails.duration;
+            name = response.data.items[0].snippet.title;
+            duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
+            if (response.data.items.length > 0){
+                newRecommendation = new Recommendation({
+                    author : author,
+                    name : name,
+                    type : type,
+                    recommendationDate : chiita.changeDateFormat(today),
+                    url : url,
+                    description : req.body.description,
+                    status : "future",
+                    duration : duration,
+                    wasCreatedByUser : wasCreatedByUser
+                });
+                newRecommendation.save(()=>{
+                    console.log("The new recommendation was added to the DB");
+                    if(req.user){
+                        req.user.recommendations.push(newRecommendation);
+                        req.user.save(()=>{
+                            console.log("The user was updated with the new recommendation")
+                        });
+                    }
+                    res.redirect("/");
+                });
+            }
+        })
+        .catch(()=>{
+            console.log("There was an error saving the recommendation to the database");
+        });
+    } else if (type === "film"){
+        newRecommendation = new Recommendation({
+            author : author,
+            name : req.body.filmName,
+            type : type,
+            recommendationDate : chiita.changeDateFormat(today),
+            url : undefined,
+            description : req.body.description,
+            status : "future",
+            duration : req.body.filmDuration,
+            wasCreatedByUser : wasCreatedByUser,
+            imageURL : req.body.url,
+        });
+        newRecommendation.save(()=>{
+            if(req.user){
+                req.user.recommendations.push(newRecommendation);
+                req.user.save(()=>{
+                    console.log("The user was updated with the new recommendation")
+                })
+            }
+            res.redirect("/");
+        });
+    }
+});
+
+router.get("/past", function(req,res){
     Day.find({}).populate("recommendationsOfThisDay")
     .then((foundDays) => {
         res.render("past", {days:foundDays}); 
     });
 });
 
-router.get("/future", middleware.isLoggedIn, function(req,res){
+router.get("/future", function(req,res){
     res.render("future"); 
 });
 
@@ -59,7 +152,7 @@ router.get("/about", function(req, res){
    res.render("about"); 
 });
 
-router.get("/days", middleware.isLoggedIn, function(req, res){
+router.get("/days", function(req, res){
     Day.find({status:"past"}).populate("recommendationsOfThisDay").exec(function(err, foundDays){
         if(err){
             console.log(err); 
@@ -69,7 +162,7 @@ router.get("/days", middleware.isLoggedIn, function(req, res){
     })
  });
 
- router.get("/days/:daySKU", middleware.isLoggedIn, function(req, res){
+ router.get("/days/:daySKU", function(req, res){
     Day.findOne({daySKU : req.params.daySKU}).populate("recommendationsOfThisDay").exec(function(err, foundDay){
         if(err){
             console.log(err)
@@ -90,77 +183,112 @@ router.get("/days", middleware.isLoggedIn, function(req, res){
     });
  });
 
- router.get("/cycles", middleware.isLoggedIn, function(req, res){
-    Cycle.find({}, function(err, foundCycles){
-        res.render("cycles/index", {cycles:foundCycles}); 
-    });
- });
-
- router.get("/cycles/:id", middleware.isLoggedIn, function(req, res){
-    Cycle.findById(req.params.id).populate("daysOfThisCycle").exec(function(err, foundCycle){
-        let startingTimestamp = foundCycle.cycleStartingTimestamp;
-        let date = new Date(startingTimestamp);
-        let startingDate = chiita.changeDateFormat(date);
-        let endingMoment = new Date(startingTimestamp + 1000*60*60*24*foundCycle.cycleDuration);
-        let endingDate = chiita.changeDateFormat(endingMoment);
-        res.render("cycles/show", {cycle:foundCycle, days:foundCycle.daysOfThisCycle, startingDate:startingDate, endingDate:endingDate}); 
-    });
- });
-
  router.get("/goodbye", function(req, res){
     res.render("goodbye"); 
  });
 
- router.get("/random", middleware.isLoggedIn, function(req, res){
-    Recommendation.find({status:"past", type:"music"}, function(err, allPastRecommendations){
-        if(err){
-            console.log(err);
+ router.get("/random", function(req, res){
+    Recommendation.find({status:"past", type:"music"})
+    .then((allPastRecommendations) => {
+        if(allPastRecommendations.length === 0){
+            res.redirect("/")
         } else {
-            if(allPastRecommendations.length === 0){
-                res.redirect("/")
-            } else {
-                let randomRecommendation = allPastRecommendations[Math.floor(Math.random() * allPastRecommendations.length)];
-                randomRecommendation.url = chiita.getSourceURL(randomRecommendation.url);
-                res.render("random", {randomRecommendation:randomRecommendation});
-            }
+            let randomRecommendation = allPastRecommendations[Math.floor(Math.random() * allPastRecommendations.length)];
+            randomRecommendation.url = chiita.getSourceURL(randomRecommendation.url);
+            res.render("random", {randomRecommendation:randomRecommendation});
         }
-    });
+    })
+    .catch(()=>{
+        console.log("There was an error displaying the random page")
+    })
  });
 
  //Future routes
- router.get("/future/challenges", middleware.isLoggedIn, function(req, res){
-    res.render("future/challenges"); 
- });
 
- router.get("/future/community", middleware.isLoggedIn, function(req, res){
+ router.get("/future/community", function(req, res){
     res.render("future/community"); 
  });
 
- router.get("/future/retreats", middleware.isLoggedIn, function(req, res){
-    res.render("future/intenseRetreat"); 
+ router.get("/future/podcast", function(req, res){
+    res.render("future/podcast"); 
  });
 
- router.get("/future/retreats/new", middleware.isLoggedIn,  function(req, res){
-     res.render("retreats/new");
- })
+ router.get("/future/feedback", function(req, res){
+    Feedback.find()
+    .then((foundFeedbacks) => {
+        console.log(foundFeedbacks);
+        res.render("feedbacks/index", {foundFeedbacks:foundFeedbacks});
+    })
+});
 
- router.post("/future/retreats", function(req,res){
-    let newRetreatForm = new RetreatForm({
-        author : {
+router.get("/future/feedback/new", function(req, res){
+    if(req.user){
+        User.findOne({username:req.user.username})
+        .then((foundUser)=>{
+            res.render("feedbacks/new", {foundUser:foundUser});
+        });
+    } else {
+        res.render("feedbacks/new", {foundUser:undefined});
+    }
+});
+
+router.post("/future/feedback", function(req, res){
+    let author;
+    if(req.user){
+        author = {
             id: req.user._id,
             username: req.user.username,
             country: req.user.country
-        },
-        message: req.body.message,
-        messageDate: new Date()
+        }
+    } else {
+        author = {
+            username: req.body.usernameInput,
+            country: req.body.userCountry
+        }
+    };
+    let newFeedback = new Feedback({
+        author : author,
+        messageDate : chiita.changeDateFormat(new Date()),
+        message : req.body.message
+    })
+    newFeedback.save(() => {
+        console.log("The feedback was saved to the DB");
+        res.redirect("/future/feedback");
     });
-    newRetreatForm.save(console.log("The new retreat form was saved"));
-    res.redirect("/future/retreats")
- });
+});
 
- router.get("/future/podcast", middleware.isLoggedIn, function(req, res){
-    res.render("future/podcast"); 
- });
+router.get("/future/feedback/:id", function(req, res){
+    Feedback.findById(req.params.id)
+    .then((foundFeedack)=>{
+        res.render("feedbacks/show", {username:req.params.username, feedback:foundFeedack})
+    })
+});
+
+router.get("/future/feedback/:id/edit", function(req, res){
+    Feedback.findById(req.params.id)
+    .then((foundFeedback)=>{
+        res.render("feedbacks/edit", {username:req.params.username, feedback:foundFeedback})
+    })
+});
+
+router.put("/future/feedback/:id", function(req, res){
+    Feedback.findById(req.params.id)
+    .then((feedbackForUpdating) => {
+        feedbackForUpdating.message = req.body.message;
+        feedbackForUpdating.save(() => {
+            console.log("The feedback was updated!")
+            res.redirect("/future/feedback");
+        });
+    });
+});
+
+router.delete("/future/feedback/:id", function(req, res){
+    Feedback.findByIdAndRemove(req.params.id)
+    .then((deletedFeedback)=>{
+        console.log("The feedback was deleted");
+        res.redirect("/future/feedback");
+    })
+});
 
 //handle sign up logic
 router.post("/register", function(req,res){

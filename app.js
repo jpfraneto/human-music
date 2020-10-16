@@ -10,20 +10,14 @@ let express       = require("express"),
     LocalStrategy = require("passport-local"),
     methodOverride = require("method-override"),
     Recommendation = require("./models/recommendation"),
-    Comment       = require("./models/comment"),
     User          = require("./models/user"),
     Day           = require("./models/day"),
-    theSource     = require("./middleware/theSource"),
     chiita        = require("./middleware/chiita"),
     seedDB        = require("./seeds");
 
-const commentRoutes        = require("./routes/comments"),
-    recommendationRoutes = require("./routes/recommendations"),
-    indexRoutes          = require("./routes/index"),
-    userRoutes           = require("./routes/users"),
-    challengesRoutes     = require("./routes/challenges");
-
-// const { createNewDay } = require("./middleware/theSource");
+const recommendationRoutes = require("./routes/recommendations"),
+      indexRoutes          = require("./routes/index"),
+      userRoutes           = require("./routes/users");
 
 mongoose.set('useUnifiedTopology', true);
 // mongoose.connect("mongodb://localhost/humanMusic", { useNewUrlParser: true, useFindAndModify: false });
@@ -50,13 +44,14 @@ let dimension88cCurrentTimestamp;
 // setTimeout(chiita.createNewDay, 2000);
 
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
-chiita.timeWarp();
+// chiita.timeWarp();
+// chiita.createNewDay();
 
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
-let job = new CronJob("45 21 * * *", () => {
+let job = new CronJob("39 20 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 
@@ -82,16 +77,7 @@ app.use(function(req, res, next){
 
 app.use("/", indexRoutes);
 app.use("/recommendations", recommendationRoutes);
-app.use("/recommendations/:id/comments", commentRoutes);
 app.use("/users", userRoutes);
-app.use("/challenges", challengesRoutes);
-
-// The following will be the code that runs at the moment of the eclipse. Everything will start from scratch.
-// let eclipseTimestamp = 1607962479000;
-// let eclipseDateObject = new Date(eclipseTimestamp);
-// let eclipse = new CronJob(eclipseDateObject, () => {
-//     chiita.bigBang();
-// }, undefined, true);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {

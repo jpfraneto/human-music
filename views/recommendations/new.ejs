@@ -1,6 +1,6 @@
 <%- include("../partials/header") %>
 <div class="container text-center title" style="margin-top: 8px">
-    <p><strong>Add a new recommendation to the future</strong></p>
+    <p><strong>Add new music to the future</strong></p>
 </div>
 <div class="container text-center">
     <div class="row">
@@ -13,8 +13,13 @@
             style="border: solid 4px #37474F"
             ></iframe>
             <div class="userinformation">
-                <p><strong>User:</strong> <a href="/users/<%=user._id%>"><%= user.username %></a></p>
-                <p><strong>Country of Identification:</strong><%=user.country%></p>
+                <% if(user){ %>
+                    <p><strong>User:</strong> <a href="/users/<%=user._id%>"><%= user.username %></a></p>
+                    <p><strong>Country of Identification:</strong><%=user.country%></p>
+                <% } else { %>
+                    <p><strong>User:</strong><span > Unknown</span></p>
+                    <p><strong>Country of Identification:</strong><span > Unknown</span></p>
+                <% } %>
                 <p><strong>Date of Recommendation:</strong> <%= today %></p>
                 <p><strong>Why did you recommend it?:</strong></p>
                 <div>
@@ -23,29 +28,37 @@
             </div>
         </div>
         <div class="col-5">
-            <form action="/recommendations" method="POST">
+            <form action="/" method="POST">
+
                 <div class="form-group">
-                    <label for="videoURL" class="clock">Youtube URL of your recommendation:</label>
+                    <label for="videoURL" class="content">Youtube URL of your recommendation:</label>
                     <input class="form-control" id="videoURL" type="text" name="url">
                 </div>
 
                 <div class="form-group">
-                    <label for="descriptionTextArea" class="clock">What does this piece mean to you?</label>
+                    <label for="descriptionTextArea" class="content">What does this piece mean to you?</label>
                     <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
                 </div>
 
                 <label for="userCheckbox" class="userInformation content">Was this created by you?</label>    
                 <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
-                <br>
 
-                <label for="typeOfRecommendation" class="userInformation content">Choose a type of recommendation (music/film):</label>
-                <select name="typeOfRecommendation" id="typeOfRecommendation">
-                    <option value="music">Music</option>
-                    <option value="film">Film</option>
-                </select>
+                <% if(user){ %>
+                    <% if(user.username === "chocapec") { %>
+                        <label for="typeOfRecommendation" class="userInformation content">Choose a type of recommendation (music/film):</label>
+                        <select name="typeOfRecommendation" id="typeOfRecommendation">
+                            <option value="music" selected="selected">Music</option>
+                            <option value="film">Film</option>
+                        </select>
+                        <label for="filmDurationInput" class="content">Film duration in miliseconds:</label>
+                        <input class="form-control" id="filmDurationInput" type="number" name="filmDuration">
+                        <label for="filmName" class="content">Film name:</label>
+                        <input class="form-control" id="filmName" type="string" name="filmName">
+                    <% } %>
+                <% } %>
 
                 <div class="form-group">
-                    <button class="btn btn-success">Submit!</button>
+                    <button type="submit" class="btn btn-success">Submit!</button>
                     <a class="btn btn-primary" href="/"> Go Back</a>
                 </div>  
             </form>   

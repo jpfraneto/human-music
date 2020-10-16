@@ -1,0 +1,42 @@
+<%- include ("../partials/header") %>
+
+<div class="container text-center title" style="margin-top: 8px">
+    <p><strong>Feedback / Advice</strong></p>
+
+    <div class="container text-center content">
+        <p>If you want to make this platform a better place, this is where to say what you think will be valuable for it to evolve</p>
+    </div>
+</div>
+
+  
+<div class="container">
+    <div class="row">
+      <div class="col-12">
+        <table class="table content">
+          <thead>
+            <tr>
+              <th scope="col">User</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% foundFeedbacks.reverse().forEach(function(feedback){ %>
+              <tr>
+                <td><%= feedback.author.username %></td>
+                <td><a href="/future/feedback/<%=feedback._id%>"><%= feedback.messageDate %></a></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<div class="text-center dojoBackButton">
+    <a class="btn btn-primary" role="button" href="/future/feedback/new">Add new feedback</a>
+    <a class="btn btn-success" role="button" href="/future">Back to the future</a>
+</div>
+
+
+
+<%- include ("../partials/footer") %>

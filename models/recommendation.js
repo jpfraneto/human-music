@@ -21,14 +21,8 @@ var recommendationSchema = new mongoose.Schema({
     duration: Number,
     wasCreatedByUser: Boolean,
     startingRecommendationTimestamp: Number,
-    image: String,
+    imageURL: String,
     daySKU: String,
-    comments: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Comment"
-        }
-    ]
 });
 
 module.exports = mongoose.model("Recommendation", recommendationSchema);

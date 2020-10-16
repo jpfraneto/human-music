@@ -1,4 +1,4 @@
-function iFrameLoaded () {
+window.onload = () => {
   remainingRecommendationTime = updateCountdown();
   timer = setInterval(updateCountdown, 1000);
   setTimeout (() => {

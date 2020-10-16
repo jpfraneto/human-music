@@ -2,13 +2,10 @@ const axios = require("axios");
 const moment = require("moment");
 const Recommendation = require("../models/recommendation");
 const Day = require("../models/day");
-const Cycle = require("../models/cycle");
 const User = require("../models/user");
 seedDB        = require("../seeds");
 let chiita = {};
 
-let eclipseTimestamp = 1607962479000;
-let eclipseDateObject = new Date(eclipseTimestamp);
 let nowTime;
 
 // FOR GETTING THE VIDEO INFORMATION
@@ -57,7 +54,6 @@ chiita.getSourceURL = function(url) {
 //BIG BANG!
 chiita.bigBang = () => {
     Day.deleteMany({},function(err){if(err){console.log(err);}});  
-    Cycle.deleteMany({},function(err){if(err){console.log(err);}});  
     Recommendation.deleteMany({},function(err){if(err){console.log(err);}});  
     User.deleteMany({},function(err){if(err){console.log(err);}});  
     seedDB();
@@ -71,7 +67,6 @@ chiita.bigBang = () => {
 
 chiita.bigBangTwo = () => {
     Day.deleteMany({},function(err){if(err){console.log(err);}});  
-    Cycle.deleteMany({},function(err){if(err){console.log(err);}});  
     Recommendation.find({})
     .then((foundRecommendations) => {
         foundRecommendations.forEach((recommendation)=>{
@@ -222,21 +217,10 @@ chiita.createNewDay = async () => {
                 console.log("The day that was in the present was sent to the past");
             })
         }
-        Cycle.findOne({status:"present"})
-        .then((foundCycle) => {
-            if(foundCycle){
-                foundCycle.daysOfThisCycle.push(presentDay);
-                foundCycle.elapsedDaysOfThisCycle ++;
-                foundCycle.save(()=>{
-                    console.log("The day was added to the present cycle")
-                })
-            }
-        })
     })
     .catch(()=>{
         console.log("There was an error sending the day to the past in the createNewDay function")
     })
-    
     let information = await chiita.bringMusicFromTheFuture();
     let dayIndex = await chiita.getPresentDay();
     let totalRecommendationsOfThisDay = information.numberOfMusicVideos + 1;
@@ -344,7 +328,6 @@ chiita.getPresentDay = async () => {
         return foundDays.length
     });
 }
-
 
 //For troubleshooting and understanding if it works properly or not
 chiita.evaluateTimestamps = () => {

@@ -45,20 +45,32 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-12">
-      <div class="text-center recommendationFrame">
-          <iframe id="existing-iframe-example" 
-          width="640" height="360"
-          src="<%=presentRecommendation.url%>&start=<%=elapsedSeconds%>&mute=0" 
-          allow="autoplay" autoplay="1"
-          frameborder="0"
-          onload="iFrameLoaded();"
-          style="border: solid 4px #37474F"
-          ></iframe>
+  <% if(presentRecommendation.type === "music"){ %>
+    <div class="row">
+      <div class="col-12">
+        <div class="text-center recommendationFrame">
+            <iframe id="existing-iframe-example" 
+            width="640" height="360"
+            src="<%=presentRecommendation.url%>&start=<%=elapsedSeconds%>&mute=0" 
+            allow="autoplay" autoplay="1"
+            frameborder="0"
+            style="border: solid 4px #37474F"
+            ></iframe>
+        </div>
       </div>
     </div>
-  </div>
+  <% } %>
+
+  <% if(presentRecommendation.type === "film"){ %>
+    <div class="row">
+      <div class="col-12">
+        <div class="text-center recommendationFrame">
+            <img src="<%=presentRecommendation.imageURL%>" alt="" class="presentFilmImage">
+        </div>
+      </div>
+    </div>
+  <% } %>
+
 
   <div class="row">
     <div class="col-2"></div>
@@ -170,6 +182,7 @@
         </div>
       <% if (!currentUser){ %>
         <div class="col"><a href="/login">Log In  </a>  /  <a href="/register">  Register</a></div>
+        <div class="col"><a href="/recommendations/new">Add Recommendation</a></div>
         <div class="col"><a href="/about">About</a></div>
       <% } %>
       <% if (currentUser) { %>
