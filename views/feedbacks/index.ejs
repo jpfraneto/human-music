@@ -16,6 +16,7 @@
           <thead>
             <tr>
               <th scope="col">User</th>
+              <th scope="col">Feedback</th>
               <th scope="col">Date</th>
             </tr>
           </thead>
@@ -23,6 +24,7 @@
             <% foundFeedbacks.reverse().forEach(function(feedback){ %>
               <tr>
                 <td><%= feedback.author.username %></td>
+                <td><%= feedback.message.substring(1,33) %></td>
                 <td><a href="/future/feedback/<%=feedback._id%>"><%= feedback.messageDate %></a></td>
               </tr>
             <% }) %>

@@ -10,6 +10,7 @@ let Feedback = require("../models/feedback");
 let RetreatForm = require("../models/retreatForm");
 const middleware = require("../middleware");
 let chiita = require("../middleware/chiita");
+const middlewareObj = require("../middleware");
 
 // Root Route
 router.get("/", function(req,res){
@@ -213,10 +214,13 @@ router.get("/days", function(req, res){
     res.render("future/podcast"); 
  });
 
+ router.get("/future/nextsteps", function(req, res){
+    res.render("future/nextsteps"); 
+ });
+
  router.get("/future/feedback", function(req, res){
     Feedback.find()
     .then((foundFeedbacks) => {
-        console.log(foundFeedbacks);
         res.render("feedbacks/index", {foundFeedbacks:foundFeedbacks});
     })
 });
@@ -260,14 +264,18 @@ router.post("/future/feedback", function(req, res){
 router.get("/future/feedback/:id", function(req, res){
     Feedback.findById(req.params.id)
     .then((foundFeedack)=>{
-        res.render("feedbacks/show", {username:req.params.username, feedback:foundFeedack})
+        if(req.user){
+            res.render("feedbacks/show", {username:req.user.username, feedback:foundFeedack})
+        } else {
+            res.render("feedbacks/show", {username:undefined, feedback:foundFeedack})
+        }
     })
 });
 
-router.get("/future/feedback/:id/edit", function(req, res){
+router.get("/future/feedback/:id/edit", middlewareObj.isChocapec, function(req, res){
     Feedback.findById(req.params.id)
     .then((foundFeedback)=>{
-        res.render("feedbacks/edit", {username:req.params.username, feedback:foundFeedback})
+        res.render("feedbacks/edit", {username:req.user.username, feedback:foundFeedback})
     })
 });
 

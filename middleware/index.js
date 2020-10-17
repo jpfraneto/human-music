@@ -8,7 +8,7 @@ middlewareObj.checkRecommendationOwnership = function(req, res, next) {
                 req.flash("error", "Recommendation not found");               
                 res.redirect("back");
             } else {
-                if(foundRecommendation.author.id.equals(req.user._id)){
+                if(foundRecommendation.author.username === req.user.username){
                     next();
                 } else {
                     res.redirect("back");
@@ -35,6 +35,18 @@ middlewareObj.isNotLoggedIn = function(req, res, next){
     req.flash("error", "You cannot be here if you are already logged in!");
     res.redirect("/");
 };
+
+middlewareObj.isUser = function(req, res, next){
+    if(req.user){
+        if(req.user.username === req.params.username){
+            return next();
+        } else {
+            res.redirect("/")
+        }
+    } else {
+        res.redirect("/");
+    }
+}
 
 middlewareObj.isChocapec = function(req, res, next){
     if(req.user){

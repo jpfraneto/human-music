@@ -25,6 +25,13 @@ router.get("/:username", middleware.isLoggedIn, function(req,res){
         });
 });
 
+router.get("/:username/edit", function(req, res){
+    User.findOne(req.params.username)
+    .then((foundUser)=>{
+        res.render("users/edit", {user:foundUser})
+    })
+});
+
 router.get("/:username/recommendations", middleware.isLoggedIn, function(req, res){
     Recommendation.find({"author.username":req.params.username}, function(err, foundRecommendations){
         if(err){console.log(err)}

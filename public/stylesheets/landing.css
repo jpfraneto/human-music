@@ -1,3 +1,7 @@
+html {
+  overflow-y: scroll;
+}
+
 body {
   height: 100%;
   background: #0e2636;
@@ -12,7 +16,6 @@ body::after{
   display:block;
   height: 60px;
 }
-
 
 p {
   margin: 0;
@@ -293,4 +296,12 @@ hr {
 
 .futureElements {
   font-size: 23px;
+}
+
+.languagePicker {
+  width: 111px;
+}
+
+.languagePicker option{
+  width: 111px;
 }

@@ -14,12 +14,6 @@ var UserSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Recommendation"
         }
-    ],
-    challenges: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Challenge"
-        }
     ]
 });
 
