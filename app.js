@@ -11,12 +11,14 @@ let express       = require("express"),
     methodOverride = require("method-override"),
     Recommendation = require("./models/recommendation"),
     User          = require("./models/user"),
+    Comment       = require("./models/comment"),
     Day           = require("./models/day"),
     chiita        = require("./middleware/chiita"),
     seedDB        = require("./seeds");
 
 const recommendationRoutes = require("./routes/recommendations"),
       indexRoutes          = require("./routes/index"),
+      commentRoutes        = require("./routes/comments"),
       userRoutes           = require("./routes/users");
 
 mongoose.set('useUnifiedTopology', true);
@@ -78,6 +80,7 @@ app.use(function(req, res, next){
 app.use("/", indexRoutes);
 app.use("/recommendations", recommendationRoutes);
 app.use("/users", userRoutes);
+app.use("/future/feedback/:id", commentRoutes);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {

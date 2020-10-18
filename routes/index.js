@@ -262,7 +262,7 @@ router.post("/future/feedback", function(req, res){
 });
 
 router.get("/future/feedback/:id", function(req, res){
-    Feedback.findById(req.params.id)
+    Feedback.findById(req.params.id).populate("comments")
     .then((foundFeedack)=>{
         if(req.user){
             res.render("feedbacks/show", {username:req.user.username, feedback:foundFeedack})

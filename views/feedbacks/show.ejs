@@ -1,13 +1,39 @@
 <%- include ("../partials/header") %>
 
-<div class="container text-center content">
-    <p><%=feedback.messageDate%></p>
-    <br>
-    <p><%=feedback.message%></p>
+<div class="row"> 
+    <div class="col"></div>
+    <div class="col-9">
+        <div class="title text-center">
+        </div>
+        <div class="container text-center title">
+            <p><strong> Feedback by <%=feedback.author.username%>, from <%= feedback.author.country%>, on the <%=feedback.messageDate%>: </strong></p>
+        </div>
+        <div class="container text-center content">
+            <p><%= feedback.message %></p>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+<hr>
+
+<div class="row feedbackCommentsDiv content">
+    <div class="col"></div>
+    <div class="col-9">
+        <h3>Comments</h3>
+        <% feedback.comments.forEach((comment) =>{ %>
+            <div class="container content">
+                <p><strong><%=comment.author.username%> / <%= comment.author.country%> [<%=comment.commentDate%>]: </strong><%=comment.text%></p>
+            </div>
+            <hr>
+        <% }) %>
+    </div>
+    <div class="col"></div>
 </div>
 
 <div class="text-center dojoBackButton">
     <form class="delete-form" id="delete-form" action="/future/feedback/<%=feedback._id%>?_method=DELETE" method="POST">
+        <a class="btn btn-primary" role="button" href="/future/feedback/<%=feedback._id%>/comments/new">Add Comment</a>
         <% if(username === "chocapec"){ %>
             <a class="btn btn-warning" role="button" href="/future/feedback/<%=feedback._id%>/edit">Edit feedback</a>
             <td><button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button></td>
