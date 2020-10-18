@@ -10,4 +10,4 @@ This place is for sharing from the heart. Each one of us has the opportunity for
 There is no limitations, there is no boundaries, there is nothing that is good, there is nothing that is bad. What will make this place special is that your recommendation comes from your heart. I believe music is a string that unites us all, and through the understanding of this basic fact we can reach to a conception that on the source we are all part of the same family. We are all human. We are all in this together, no matter from where we come from, no matter our color of skin, money in the bank, no matter if you are sad, no matter if you are angry. We are all in this together, and if we recongnize this basic fact we can move forward for building a better world.
 
 
-Thank you for reading. Thank you for sharing. Thank you for being here. Thank you for being alive.
+Thank you for reading. Thank you for sharing. Thank you for being here. Thank you for being alive. Its great to have you here.

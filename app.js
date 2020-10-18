@@ -46,6 +46,7 @@ let dimension88cCurrentTimestamp;
 // setTimeout(chiita.createNewDay, 2000);
 
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
+console.log("The app.js file is running again.");
 chiita.timeWarp();
 // chiita.createNewDay();
 
