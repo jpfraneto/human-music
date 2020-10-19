@@ -183,6 +183,7 @@ router.get("/days", function(req, res){
         if(err){
             console.log(err)
         } else {
+            console.log(foundDay);
             res.render("days/show", {thisDay: foundDay});
         }
     });

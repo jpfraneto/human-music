@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-1"></div>
-  <div class="col-10 title text-center"><p><strong>This is day number <%= thisDay.dayIndex %> of this project</strong></p></div>
+  <div class="col-10 title text-center"><p><strong>This is day number <%= thisDay.dayIndex %> of this project - <%= thisDay.daySKU %></strong></p></div>
   <div class="col-1"></div>
 </div>
 
@@ -15,7 +15,7 @@
             <th scope="col">User</th>
             <th scope="col">Date of Recommendation</th>
             <th scope="col">Name</th>
-            <th scope="col">Date Played</th>
+            <th scope="col">Time Played</th>
           </tr>
         </thead>
         <tbody>
@@ -25,7 +25,7 @@
                 <td> <a href="/users/<%= recommendation.author.username %>">@<%= recommendation.author.username %></a></td>
                 <td><%= recommendation.recommendationDate %></td>
                 <td><a href="/recommendations/<%=recommendation._id%>"><%= recommendation.name %></a></td>
-                <td><%= recommendation.startingRecommendationTimestamp %></td>
+                <td><%= (new Date(recommendation.startingRecommendationTimestamp)).toUTCString().substring(17,25) %></td>
               </tr>
             <% } %>
           <% }) %>
