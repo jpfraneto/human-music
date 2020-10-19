@@ -24,6 +24,7 @@
           <a class="nav-link navbarDropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">
             PRESENT
           </a>
+          <p class="text-center theClock"><%=today%> | <span id="presentTime">WELCOME BACK</span></p>
         </li>
 
         <li class="nav-item dropdown btn-margin">
@@ -76,7 +77,7 @@
     <div class="col-2"></div>
     <div class="col-8 userinformation">
         <div id="countdownClockDiv">
-          <h3 class="countdownClock text-center" id="countdownClock">Remaining Recommendation Time: <span id="remainingHours">00</span>:<span id="remainingMinutes">00</span>:<span id="remainingSeconds">00</span></h3>
+          <p class="content" id="endingTimeTag">This recommendation ends at <%=endingTime%></p>
         </div>
         
         <p><strong>User:</strong><a href="/users/<%= presentRecommendation.author.username %>"> <%= presentRecommendation.author.username %></a></p>

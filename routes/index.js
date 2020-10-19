@@ -17,6 +17,8 @@ router.get("/", function(req,res){
     Recommendation.findOne({status:"present"}, function (err, presentRecommendation){
         if(err){console.log(err)}
         else {
+            let now = new Date();
+            let today = chiita.changeDateFormat(now);
             if (!presentRecommendation){
                 Day.findOne({status:"present"}).populate("recommendationsOfThisDay").exec(function(err, presentDay){
                     if(err){
@@ -24,8 +26,14 @@ router.get("/", function(req,res){
                     } else {
                         if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
                             let nextRecommendationIndex = presentDay.elapsedRecommendations;
-                            let nextRecommendationTimestamp = presentDay.recommendationsOfThisDay[nextRecommendationIndex].startingRecommendationTimestamp;
-                            res.render("theVoid", {nextRecommendationTimestamp: nextRecommendationTimestamp, chiDuration:Math.round(presentDay.chiDurationForThisDay/1000)});
+                            let nextRecommendationStartingTimestamp = presentDay.recommendationsOfThisDay[nextRecommendationIndex].startingRecommendationTimestamp;
+                            let reimainingVoidTime = nextRecommendationStartingTimestamp - (now.getTime());
+                            let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
+                            res.render("theVoid", {
+                                reimainingVoidTime: reimainingVoidTime, 
+                                startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
+                                today : today
+                            });
                         } else {
                             res.render("endOfDay");
                         }  
@@ -36,7 +44,14 @@ router.get("/", function(req,res){
                 let now = (new Date()).getTime();
                 let elapsedTime = now - presentRecommendation.startingRecommendationTimestamp; 
                 let elapsedSeconds = Math.floor(elapsedTime/1000);
-                res.render("present", {elapsedSeconds:elapsedSeconds, presentRecommendation: presentRecommendation});
+                let endingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
+                let endingTime = (new Date(endingTimestamp)).toUTCString().substring(17,25)
+                res.render("present", {
+                    elapsedSeconds:elapsedSeconds, 
+                    presentRecommendation: presentRecommendation, 
+                    endingTime : endingTime,
+                    today : today
+                });
             }
         }
     });

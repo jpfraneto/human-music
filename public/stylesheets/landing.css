@@ -41,6 +41,14 @@ p {
   margin-top:5%;
 }
 
+.theClock {
+  font-family: 'Share Tech Mono', monospace;
+  color: #daf6ff;
+  font-size: 13px;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+  text-align : center;
+}
+
 .userinformation{
   margin-top: 8px;
   margin-bottom: 13px;

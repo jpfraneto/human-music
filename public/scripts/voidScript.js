@@ -1,35 +1,26 @@
-window.onload = function() {
-    remainingRecommendationTime = updateCountdown();
-    let voidTimer = setInterval(updateCountdown, 1000);
-    setTimeout(function() {
-      clearInterval(voidTimer);
-      location.reload();
-    }, remainingRecommendationTime);
+window.onload = () => {
+  remainingVoidTime = updateClock();
+  timer = setInterval(updateClock, 1000);
+  if(remainingVoidTime>0){
+    setTimeout (() => {
+      clearInterval(timer);
+      window.location.reload()
+    }, remainingVoidTime);
+  } else {
+    let endingVoidTag = document.getElementById("endingVoidTag");
+    endingVoidTag.innerHTML = "";
+    let aTag = document.createElement("a");
+    aTag.setAttribute("href", "https://www.human-music.com");
+    aTag.setAttribute("class", "content");
+    aTag.innerText = "The interval between recommendations is over, click here to refresh the page";
+    endingVoidTag.appendChild(aTag);
   }
-  
-  function updateCountdown () {
-    let chi = parseInt(document.getElementById("chiDuration").innerHTML);
-    let nextTimestamp = parseInt(document.getElementById("nextRecommendationTimestamp").innerHTML);
-    let presentTimestamp = ( new Date() ).getTime();
-  
-    let ms = nextTimestamp - presentTimestamp;
-    let s = (ms/1000);
-  
-    let seconds = Math.floor(s % 60);
-    let hours = Math.floor(s / 3600);
-    let minutes = Math.floor((s/60) % 60);
-  
-    let displayHours = (hours < 10) ? "0" + hours : hours;
-    let displayMinutes = (minutes < 10 ) ?  "0" + minutes : minutes;
-    let displaySeconds = (seconds < 10 ) ? "0" + seconds : seconds;
-  
-    let remainingHours = document.getElementById("remainingHours");
-    remainingHours.innerHTML = displayHours;
-    let remainingMinutes = document.getElementById("remainingMinutes");
-    remainingMinutes.innerHTML = displayMinutes;
-    let remainingSeconds = document.getElementById("remainingSeconds");
-    remainingSeconds.innerHTML = displaySeconds;
-  
-    return ms;
-  }
-  
+}
+
+function updateClock () {
+  let  presentTimeSpan = document.getElementById("presentClock");
+  presentTimeSpan.innerHTML = (new Date()).toUTCString().substring(17,25);
+
+  let remainingVoidTime = parseInt(document.getElementById("remainingVoidTime").innerHTML);
+  return remainingVoidTime;
+}
