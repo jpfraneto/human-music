@@ -61,18 +61,3 @@ function remainingRecommendationTime (){
   let date = new Date;
   let presentTimestamp = date.getTime();
 };
-
-function goSomewhereRandom () {
-  const urls = ["https://www.google.com", 
-  "https://www.utne.com", 
-  "https://www.theatlantic.com",
-  "https://www.patatap.com/",
-  "https://news.ycombinator.com/",
-  "https://stratechery.com/",
-  "https://www.4alltech.com/",
-  "https://www.theguardian.com"];
-
-  const randomUrl = urls[Math.floor(Math.random() * urls.length)];
-
-  window.location.href = randomUrl;
-}

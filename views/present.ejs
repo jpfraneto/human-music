@@ -72,17 +72,23 @@
     </div>
   <% } %>
 
+<div class="row">
+  <div class="col"></div>
+  <div class="col-8">
+    <div id="countdownClockDiv">
+      <p class="content text-center" id="endingTimeTag"> <span onclick="bookmark()"><i class="fas fa-bookmark"></i> Bookmark</span>     -     This recommendation ends at <%=endingTime%></p>
+    </div>
+  </div>
+  <div class="col"></div>
+</div>
 
   <div class="row">
     <div class="col-2"></div>
     <div class="col-8 userinformation">
-        <div id="countdownClockDiv">
-          <p class="content" id="endingTimeTag">This recommendation ends at <%=endingTime%></p>
-        </div>
         
         <p><strong>User:</strong><a href="/users/<%= presentRecommendation.author.username %>"> <%= presentRecommendation.author.username %></a></p>
         <p><strong>Country of Identification:</strong> <%= presentRecommendation.author.country %></p>
-        <p><strong>Date of Recommendation:</strong> <%= presentRecommendation.date %> </p>
+        <p><strong>Date of Recommendation:</strong> <%= presentRecommendation.recommendationDate %> </p>
         <p><strong>Name:</strong> <%= presentRecommendation.name %> </p>
         <br>
         <p><strong>Why did you recommend it?:</strong> <%= presentRecommendation.description %></p>

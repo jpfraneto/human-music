@@ -28,3 +28,7 @@ function updateCountdown () {
     return ms;
   }
 }
+
+function bookmark () {
+  alert("This button is for bookmarking the recommendation. I'm working for having this functionality ready!")
+}
