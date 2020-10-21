@@ -13,6 +13,51 @@ window.onload = () => {
   }, remainingRecommendationTime)
 }
 
+const favoriteButton = document.getElementById("addFavoriteButton");
+const unFavoriteButton = document.getElementById("removeFavoriteButton");
+favoriteButton.addEventListener("click", function(e){
+  favoriteButton.style.display = "none";
+  unFavoriteButton.style.display = "inline-block";
+  fetch("/favorited", {method:"POST"})
+  .then((response) =>{
+    if(response.ok) {
+      return
+    }
+    throw new Error("Request failed");
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+})
+
+unFavoriteButton.addEventListener("click", function(e){
+  favoriteButton.style.display = "inline-block";
+  unFavoriteButton.style.display = "none";
+  fetch("/unfavorited", {method:"POST"})
+  .then((response) =>{
+    if(response.ok) {
+      return
+    }
+    throw new Error("Request failed");
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+})
+
+toggleButtons();
+
+function toggleButtons () {
+  let isFavorited = document.getElementById("isRecommendationFavorited").innerHTML;
+  if(isFavorited === "true"){
+    favoriteButton.style.display = "none";
+    unFavoriteButton.style.display = "inline-block";
+  } else {
+    favoriteButton.style.display = "inline-block";
+    unFavoriteButton.style.display = "none";
+  }
+}
+
 function updateCountdown () {
   let duration = parseInt(document.getElementById("recommendationDuration").innerHTML);
   let timestamp = parseInt(document.getElementById("startingTimestamp").innerHTML);
@@ -22,7 +67,7 @@ function updateCountdown () {
 
   if (ms > 0){
 
-    let  presentTimeSpan = document.getElementById("presentTime");
+    let  presentTimeSpan = document.getElementById("presentClock");
     presentTimeSpan.innerHTML = (new Date()).toUTCString().substring(17,25)
   
     return ms;

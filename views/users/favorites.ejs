@@ -1,0 +1,39 @@
+<%- include("../partials/header") %>
+
+<div class="row">
+  <div class="col-1"></div>
+  <div class="col-10 title text-center"><p><strong><%=foundUser.username%>'s Recommendation </strong></p></div>
+  <div class="col-1"></div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <table class="table content">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Date of Recommendation</th>
+            <th scope="col">Name</th>
+            <th scope="col">Day Played</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% foundUser.favoriteRecommendations.forEach(function(favoriteRecommendation){ %>
+            <tr>
+              <td><%= favoriteRecommendation.author.username %></td>
+              <td><%= favoriteRecommendation.recommendationDate %></td>
+              <td><a href="/recommendations/<%=favoriteRecommendation._id%>"><%= favoriteRecommendation.name %></a></td>
+              <td><%= favoriteRecommendation.daySKU %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <div class="text-center">
+        <a class="btn btn-success btn-sm" href="/users/<%=foundUser.username%>">Back to User</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../partials/footer") %>

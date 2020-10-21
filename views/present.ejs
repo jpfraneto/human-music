@@ -24,7 +24,7 @@
           <a class="nav-link navbarDropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">
             PRESENT
           </a>
-          <p class="text-center theClock"><%=today%> | <span id="presentTime">WELCOME BACK</span></p>
+          <p class="text-center theClock"><%=today%> | <span id="presentClock">WELCOME BACK</span></p>
         </li>
 
         <li class="nav-item dropdown btn-margin">
@@ -76,7 +76,11 @@
   <div class="col"></div>
   <div class="col-8">
     <div id="countdownClockDiv">
-      <p class="content text-center" id="endingTimeTag"> <span onclick="bookmark()"><i class="fas fa-bookmark"></i> Bookmark</span>     -     This recommendation ends at <%=endingTime%></p>
+        <% if(currentUser){ %>
+          <p class="content text-center" id="endingTimeTag"> <button class="btn btn-sm btn-success favoriteButtons" id="addFavoriteButton"><i class="far fa-gem"></i> Add Favorite</button><button class="btn btn-sm btn-danger favoriteButtons" id="removeFavoriteButton"><i class="fas fa-gem"></i> Remove Favorite</button>         This recommendation ends at <%=endingTime%></p>
+        <% } else { %>
+          <p class="content text-center" id="endingTimeTag">This recommendation ends at <%=endingTime%></p>
+        <% } %>
     </div>
   </div>
   <div class="col"></div>
@@ -99,6 +103,7 @@
   <div style="visibility: hidden;">
     <span id="recommendationDuration"><%=presentRecommendation.duration%></span>
     <span id="startingTimestamp"><%=presentRecommendation.startingRecommendationTimestamp%></span>
+    <span id="isRecommendationFavorited"><%=isRecommendationFavorited%></span>
   </div>
 
 </div>

@@ -45,12 +45,23 @@ router.get("/", function(req,res){
                 let elapsedTime = now - presentRecommendation.startingRecommendationTimestamp; 
                 let elapsedSeconds = Math.floor(elapsedTime/1000);
                 let endingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
-                let endingTime = (new Date(endingTimestamp)).toUTCString().substring(17,25)
+                let endingTime = (new Date(endingTimestamp)).toUTCString().substring(17,25);
+                let isRecommendationFavorited;
+                if(req.user){
+                    let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
+                    if(indexOfRecommendation === -1){
+                        isRecommendationFavorited = false;
+                    } else {
+                        isRecommendationFavorited = true;
+                    }
+                    console.log("THe recommendation is favorited: " + isRecommendationFavorited);
+                }
                 res.render("present", {
                     elapsedSeconds:elapsedSeconds, 
                     presentRecommendation: presentRecommendation, 
                     endingTime : endingTime,
-                    today : today
+                    today : today,
+                    isRecommendationFavorited : isRecommendationFavorited
                 });
             }
         }
@@ -58,6 +69,48 @@ router.get("/", function(req,res){
 });
 
 let today = new Date();
+
+// router.get("/isfavorited", (req, res) => {
+//     console.log("The is favorited route was triggered");
+//     res.hola = "Aloja!";
+// })
+
+router.post("/favorited", (req, res) => {
+    Recommendation.findOne({status:"present"})
+    .then((presentRecommendation) => {
+        if(req.user){
+        req.user.favoriteRecommendations.push(presentRecommendation);
+        req.user.save(()=>{
+            console.log("The recommendation was added to the user");
+        });
+        } else {
+            console.log("There is no user logged in, we cannot save the recommendation to its profile!");
+        }
+    })
+    .catch((error)=>{
+        console.log(error)
+    });
+});
+
+router.post("/unfavorited", (req, res) => {
+    Recommendation.findOne({status:"present"})
+    .then((presentRecommendation) => {
+        if(req.user){   
+            const index = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
+            if( index > -1 ){
+                req.user.favoriteRecommendations.splice(index,1);
+            }
+            req.user.save(()=>{
+                console.log("Updated the user after deleting the recommendation");
+            })
+        } else {
+            console.log("There is no user logged in!")
+        }
+    })
+    .catch((error)=>{
+        console.log(error)
+    });
+});
 
 //CREATE - add new recommendation to db
 router.post("/", function(req,res){
@@ -88,6 +141,7 @@ router.post("/", function(req,res){
     if(type === "music"){
         imageURL = undefined;
         url = req.body.url;
+        let newDate = new Date();
         let videoID = chiita.youtube_parser(url);
         let apiKey = process.env.YOUTUBE_APIKEY;
         let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
@@ -101,7 +155,7 @@ router.post("/", function(req,res){
                     author : author,
                     name : name,
                     type : type,
-                    recommendationDate : chiita.changeDateFormat(today),
+                    recommendationDate : chiita.changeDateFormat(newDate),
                     url : url,
                     description : req.body.description,
                     status : "future",
@@ -183,8 +237,11 @@ router.get("/days", function(req, res){
         if(err){
             console.log(err)
         } else {
-            console.log(foundDay);
-            res.render("days/show", {thisDay: foundDay});
+            if(foundDay){
+                res.render("days/show", {thisDay: foundDay});
+            } else {
+                res.redirect("/past");
+            }
         }
     });
  });

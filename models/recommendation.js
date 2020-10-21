@@ -23,6 +23,7 @@ var recommendationSchema = new mongoose.Schema({
     startingRecommendationTimestamp: Number,
     imageURL: String,
     daySKU: String,
+    favorited : Number
 });
 
 module.exports = mongoose.model("Recommendation", recommendationSchema);

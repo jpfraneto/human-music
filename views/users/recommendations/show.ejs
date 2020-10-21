@@ -17,7 +17,7 @@
             <div class="recommendationInformationDiv">
               <p><strong>Name: </strong><%= recommendation.name %></p>
               <p><strong>Status: </strong><%= recommendation.status %></p>
-              <p><strong>Date of Recommendation: </strong> <%= recommendation.date %> </p>
+              <p><strong>Date of Recommendation: </strong> <%= recommendation.recommendationDate %> </p>
               <p><strong>Why did you recommend it?: </strong><%= recommendation.description %></p>
               <div class="text-center">
                 <form class="delete-form" id="delete-form" action="/recommendations/<%=recommendation._id%>?_method=DELETE" method="POST">

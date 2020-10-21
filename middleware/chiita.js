@@ -257,7 +257,6 @@ chiita.createNewDay = async () => {
         newDay.save(() => {
             nowTime = new Date();
             console.log("This new day was created, the time of creation is: " + nowTime);
-            console.log(newDay);
             console.log("In " + todaysFilm.duration + " milliseconds the startRecommendationInterval will start after the movie.")
             setTimeout(chiita.startRecommendationInterval, todaysFilm.duration);
             // setTimeout(chiita.startRecommendationInterval, 3333); //This line is for testing the code

@@ -41,6 +41,14 @@ router.get("/:username/recommendations", middleware.isLoggedIn, function(req, re
     });
 });
 
+router.get("/:username/favorites", middleware.isLoggedIn, function(req, res){
+    User.findOne({"username" : req.params.username}).populate("favoriteRecommendations")
+    .then((foundUser)=>{
+        console.log(foundUser);
+        res.render("users/favorites", {foundUser:foundUser})
+    });
+});
+
 router.get("/:username/recommendations/:id", middleware.isLoggedIn, function(req,res){
     Recommendation.findById(req.params.id, function(err, foundRecommendation){
         if(err){console.log(err)}

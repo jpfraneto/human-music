@@ -313,3 +313,7 @@ hr {
 .languagePicker option{
   width: 111px;
 }
+
+.favoriteButtons {
+  display : none
+}
