@@ -21,10 +21,25 @@ window.onload = function() {
     let url = videoInput.value;
     let videoID = youtube_parser(url);
     if(videoID !== false) {
+      checkIfRecommendationIsInDatabase(videoID);
       iFrame.src = "https://www.youtube.com/embed/" + videoID;
     } else {
       alert("The video url is not valid!");
     }
+  }
+}
+
+async function checkIfRecommendationIsInDatabase(videoID){
+  const response = await fetch("/checkIfRepeated", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({videoID:videoID})
+  });
+  const data = await response.json();
+  if(data.isRepeated){
+    alert("Holy shit! That video was already recommended by @" + data.author.username)
   }
 }
 

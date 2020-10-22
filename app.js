@@ -27,6 +27,7 @@ mongoose.connect(process.env.DATABASE_MONGODB, { useNewUrlParser: true, useFindA
 
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.json());
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
@@ -41,14 +42,21 @@ let dimension88cCurrentTimestamp;
 // chiita.bigBang();
 //For sending the recommendations to the future
 // chiita.bigBangTwo();
+// chiita.createNewDay();
 
 // chiita.bigBang();
 // setTimeout(chiita.createNewDay, 2000);
 
+// Recommendation.find({type:"music"})
+// .then((foundRecommendations) =>{
+//     foundRecommendations.forEach((recommendation)=>{
+//         console.log(recommendation.url.slice(-11));
+//     });
+// })
+
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
 console.log("The app.js file is running again.");
 chiita.timeWarp();
-// chiita.createNewDay();
 
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")

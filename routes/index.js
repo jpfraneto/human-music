@@ -112,6 +112,24 @@ router.post("/unfavorited", (req, res) => {
     });
 });
 
+router.post("/checkIfRepeated", (req, res) => {
+    let videoID = req.body.videoID
+    let response = {
+        isRepeated : false,
+    }
+    Recommendation.find({type:"music"})
+    .then((foundRecommendations)=>{
+        foundRecommendations.forEach((recommendation)=>{
+            if(videoID === recommendation.url.slice(-11)){
+                response.isRepeated = true;
+                response.author = recommendation.author
+            }
+        })
+        res.json(response)
+    })
+    .catch(err => console.log("There was an error!"))
+});
+
 //CREATE - add new recommendation to db
 router.post("/", function(req,res){
     let author;
