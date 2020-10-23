@@ -22,7 +22,6 @@ const recommendationRoutes = require("./routes/recommendations"),
       userRoutes           = require("./routes/users");
 
 mongoose.set('useUnifiedTopology', true);
-// mongoose.connect("mongodb://localhost/humanMusic", { useNewUrlParser: true, useFindAndModify: false });
 mongoose.connect(process.env.DATABASE_MONGODB, { useNewUrlParser: true, useFindAndModify: false });
 
 
@@ -41,9 +40,6 @@ if(process.env.NODE_ENV === 'production') {
     })
 }
 
-//Global Variables
-let dimension88cCurrentTimestamp;
-
 /////////////////////SET FUNCTIONS////////////////////////////
 
 //For starting from scratch
@@ -54,13 +50,6 @@ let dimension88cCurrentTimestamp;
 
 // chiita.bigBang();
 // setTimeout(chiita.createNewDay, 2000);
-
-// Recommendation.find({type:"music"})
-// .then((foundRecommendations) =>{
-//     foundRecommendations.forEach((recommendation)=>{
-//         console.log(recommendation.url.slice(-11));
-//     });
-// })
 
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
 console.log("The app.js file is running again.");

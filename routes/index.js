@@ -25,15 +25,20 @@ router.get("/", function(req,res){
                         console.log(err)
                     } else {
                         if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
-                            let nextRecommendationIndex = presentDay.elapsedRecommendations;
-                            let nextRecommendationStartingTimestamp = presentDay.recommendationsOfThisDay[nextRecommendationIndex].startingRecommendationTimestamp;
-                            let reimainingVoidTime = nextRecommendationStartingTimestamp - (now.getTime());
-                            let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
-                            res.render("theVoid", {
-                                reimainingVoidTime: reimainingVoidTime, 
-                                startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
-                                today : today
-                            });
+                            axios.get("https://api.nasa.gov/planetary/apod?api_key=OMcSf5neLQv0rUKv8xebrLM63HFac79GpysEI5Yr")
+                            .then((imageOfTheDay) => {
+                                let nextRecommendationIndex = presentDay.elapsedRecommendations;
+                                let nextRecommendationStartingTimestamp = presentDay.recommendationsOfThisDay[nextRecommendationIndex].startingRecommendationTimestamp;
+                                let reimainingVoidTime = nextRecommendationStartingTimestamp - (now.getTime());
+                                let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
+                                res.render("theVoid", {
+                                    reimainingVoidTime: reimainingVoidTime, 
+                                    startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
+                                    today : today,
+                                    nasaInfo : imageOfTheDay.data
+                                });
+                            })
+                            .catch(err => console.log(err))
                         } else {
                             res.render("endOfDay");
                         }  
