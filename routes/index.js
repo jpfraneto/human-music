@@ -25,7 +25,7 @@ router.get("/", function(req,res){
                         console.log(err)
                     } else {
                         if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
-                            axios.get("https://api.nasa.gov/planetary/apod?api_key=OMcSf5neLQv0rUKv8xebrLM63HFac79GpysEI5Yr")
+                            axios.get("https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_APIKEY)
                             .then((imageOfTheDay) => {
                                 let nextRecommendationIndex = presentDay.elapsedRecommendations;
                                 let nextRecommendationStartingTimestamp = presentDay.recommendationsOfThisDay[nextRecommendationIndex].startingRecommendationTimestamp;
