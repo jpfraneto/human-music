@@ -59,7 +59,7 @@ setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
-let job = new CronJob("43 20 * * *", () => {
+let job = new CronJob("58 00 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 
