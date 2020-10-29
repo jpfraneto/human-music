@@ -31,16 +31,6 @@ p {
   text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
 }
 
-#clock .text {
-  letter-spacing: 0.1em;
-  font-size: 13px;
-  padding: 0px 0 0;
-}
-
-.landingClock {
-  margin-top:5%;
-}
-
 .theClock {
   font-family: 'Share Tech Mono', monospace;
   color: #daf6ff;
@@ -54,25 +44,11 @@ p {
   margin-bottom: 13px;
   width: 100%;
   font-family: 'Share Tech Mono', monospace;
-  color: #ffffff;
   top: 88%;
   color: #daf6ff;
   font-size: 13px;
   text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
   text-align: center
-}
-
-.userDisplay {
-  padding-top: 3px;
-  font-family: 'Share Tech Mono', monospace;
-  color: #daf6ff;
-  font-size: 13px;
-  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-}
-
-.entranceButton {
-  margin: 0 0 10px 10px;
-  width: 111px;
 }
 
 #loginForm {
@@ -134,19 +110,19 @@ h4 {
     height: 360px;
 }
 
-.videoWrapper {
+.resp-container {
   position: relative;
   padding-bottom: 56.25%; /* 16:9 */
-  padding-top: 25px;
-  height: 0;
+  overflow: hidden;
 }
 
-.videoWrapper iframe {
+.resp-iframe {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 60%;
+  height: 100%;
+  border : 0;
 }
 
 .landingImage {
@@ -190,19 +166,6 @@ h4 {
   text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
 }
 
-.footerContainer {
-  background-color: black;
-  height: 50px;
-  padding-top: 10px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  margin-bottom: 0px;
-  text-align: center;
-  position:fixed;
-  width: 100%;
-}
-
 hr {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -214,10 +177,6 @@ hr {
 .horizontalRule {
   border: 1px dashed #0aafe6;
   width: 38%;
-}
-
-.col-12 {
-  width: 77%;
 }
 
 #bioBox {
@@ -251,17 +210,6 @@ hr {
   height: 100px;
 }
 
-.countdownClock {
-  font-family: 'Share Tech Mono', monospace;
-  color: rgb(113, 123, 211);
-  font-size: 23px;
-  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-}
-
-.futureUL {
-  padding-inline-start: 0px;
-}
-
 .footerDiv {
   background-color: beige;
   width: 100%;
@@ -270,31 +218,8 @@ hr {
   bottom: 0;
 }
 
-.houseImage {
-  width: 600px;
-  height: 369px;
-}
-
 .goodbyeImage {
   width:33%;
-}
-
-.commitmentLetter{
-  margin-bottom: 13px;
-  font-family: 'Share Tech Mono', monospace;
-  color: #ffffff;
-  top: 88%;
-  color: #daf6ff;
-  font-size: 13px;
-  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-  text-align:justify;
-  text-justify: inter-word;
-}
-
-.letterImage{
-  width: 88%;
-  position: relative;
-  border-radius: 10px;
 }
 
 .presentFilmImage {
@@ -306,12 +231,8 @@ hr {
   font-size: 23px;
 }
 
-.languagePicker {
-  width: 111px;
-}
-
-.languagePicker option{
-  width: 111px;
+.futureUL {
+  padding: 0;
 }
 
 .favoriteButtons {

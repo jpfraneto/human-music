@@ -2,6 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Human Music BETA</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
@@ -11,6 +12,42 @@
   <link rel="stylesheet" href="/stylesheets/landing.css">
 </head>
 <body>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="exampleModalLabel">Add New Recommendation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/" method="POST">
+            <div class="form-group">
+              <label for="videoURL" class="col-form-label">Youtube URL of your recommendation [https://www.youtube.com/watch?v=ZOu3aJ8RDqw]:</label>
+              <input class="form-control" id="videoURL" type="text" name="url">
+            </div>
+            <div class="form-group">
+              <label for="descriptionTextArea" class="col-form-label">What does this piece mean to you?</label>
+              <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
+            </div>
+            <div class="form group">
+              <label for="userCheckbox" class="col-form-label">Was this created by you?</label>    
+              <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
+            </div>
+            <div class="form group"></div>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Add Recommendation</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          
+        </div>
+      </div>
+    </div>
+  </div>
 
   <nav class="navbar navbar-expand bg-light justify-content-center">
       <ul class="navbar-nav">
@@ -35,70 +72,46 @@
       </ul> 
   </nav>
   
-<div class="container">
+<div class="container clock">
 
-  <div class="row">
-    <div class="col-12 clock">
       <p class="text">Welcome to Human Music</p>
       <p class="text">A temple for what makes us human</p>
       <p class="text">A place for those who embrace the unknown</p>
       <p class="text">A space to dis/<strong>connect with yourself and evolve</strong></p>
-    </div>
-  </div>
 
   <% if(presentRecommendation.type === "music"){ %>
+
     <div class="row">
       <div class="col-12">
-        <div class="text-center recommendationFrame">
-            <iframe id="existing-iframe-example" 
-            width="640" height="360"
-            src="<%=presentRecommendation.url%>&start=<%=elapsedSeconds%>&mute=0" 
-            allow="autoplay" autoplay="1"
-            frameborder="0"
-            style="border: solid 4px #37474F"
-            ></iframe>
+        <div class="text-center videoSquare">
+          <iframe id="ytplayer" type="text/html" width="640" height="360"
+          src="<%=presentRecommendation.url%>&start=<%=elapsedSeconds%>&mute=0" 
+          style="border: solid 4px #37474F"
+          allowfullscreen></iframe>
         </div>
       </div>
     </div>
+
   <% } %>
 
   <% if(presentRecommendation.type === "film"){ %>
-    <div class="row">
-      <div class="col-12">
-        <div class="text-center recommendationFrame">
-            <img src="<%=presentRecommendation.imageURL%>" alt="" class="presentFilmImage">
-        </div>
-      </div>
+    <div class="resp-container">
+      <img src="<%=presentRecommendation.imageURL%>" alt="" class="presentFilmImage">
     </div>
   <% } %>
 
-<div class="row">
-  <div class="col"></div>
-  <div class="col-8">
-    <div id="countdownClockDiv">
-        <% if(currentUser){ %>
-          <p class="content text-center" id="endingTimeTag"> <button class="btn btn-sm btn-success favoriteButtons" id="addFavoriteButton"><i class="far fa-gem"></i> Add Favorite</button><button class="btn btn-sm btn-danger favoriteButtons" id="removeFavoriteButton"><i class="fas fa-gem"></i> Remove Favorite</button>         This recommendation ends at <%=endingTime%></p>
-        <% } else { %>
-          <p class="content text-center" id="endingTimeTag">This recommendation ends at <%=endingTime%></p>
-        <% } %>
-    </div>
-  </div>
-  <div class="col"></div>
-</div>
+    <% if(currentUser){ %>
+      <p class="content text-center" id="endingTimeTag"> <button class="btn btn-sm btn-success favoriteButtons" id="addFavoriteButton"><i class="far fa-gem"></i> Add Favorite</button><button class="btn btn-sm btn-danger favoriteButtons" id="removeFavoriteButton"><i class="fas fa-gem"></i> Remove Favorite</button>         This recommendation ends at <%=endingTime%></p>
+    <% } else { %>
+      <p class="content text-center" id="endingTimeTag">This recommendation ends at <%=endingTime%></p>
+    <% } %>
 
-  <div class="row">
-    <div class="col-2"></div>
-    <div class="col-8 userinformation">
-        
-        <p><strong>User:</strong><a href="/users/<%= presentRecommendation.author.username %>"> <%= presentRecommendation.author.username %></a></p>
-        <p><strong>Country of Identification:</strong> <%= presentRecommendation.author.country %></p>
-        <p><strong>Date of Recommendation:</strong> <%= presentRecommendation.recommendationDate %> </p>
-        <p><strong>Name:</strong> <%= presentRecommendation.name %> </p>
-        <br>
-        <p><strong>Why did you recommend it?:</strong> <%= presentRecommendation.description %></p>
-    </div>
-    <div class="col-2"></div>
-  </div>
+    <p><strong>User:</strong><a href="/users/<%= presentRecommendation.author.username %>"> <%= presentRecommendation.author.username %></a></p>
+    <p><strong>Country of Identification:</strong> <%= presentRecommendation.author.country %></p>
+    <p><strong>Date of Recommendation:</strong> <%= presentRecommendation.recommendationDate %> </p>
+    <p><strong>Name:</strong> <%= presentRecommendation.name %> </p>
+    <br>
+    <p><strong>Why did you recommend it?:</strong> <%= presentRecommendation.description %></p>
 
   <div style="visibility: hidden;">
     <span id="recommendationDuration"><%=presentRecommendation.duration%></span>
@@ -114,12 +127,12 @@
     <div class="row">
       <% if (!currentUser){ %>
         <div class="col"><a href="/login">Log In  </a>  /  <a href="/register">  Register</a></div>
-        <div class="col"><a href="/recommendations/new">Add Recommendation</a></div>
+        <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
         <div class="col"><a href="/about">About</a></div>
       <% } %>
       <% if (currentUser) { %>
         <div class="col"><p><a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a></p></div>
-        <div class="col"><a href="/recommendations/new">Add Recommendation</a></div>
+        <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
         <div class="col"><a href="/logout">Log Out</a></div>
         <div class="col"><a href="/about">About</a></div>
       <% } %>

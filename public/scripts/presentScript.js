@@ -1,16 +1,18 @@
 window.onload = () => {
+  const videoInput = document.getElementById("videoURL");
+  console.log("The video input element is: ")
+  console.log(videoInput);
+  videoInput.onchange = changeVideo;
+
   remainingRecommendationTime = updateCountdown();
   timer = setInterval(updateCountdown, 1000);
-  setTimeout (() => {
-    clearInterval(timer);
-    let endingTimeTag = document.getElementById("endingTimeTag");
-    endingTimeTag.innerHTML = "";
-    let aTag = document.createElement("a");
-    aTag.setAttribute("href", "https://www.human-music.com");
-    aTag.setAttribute("class", "content");
-    aTag.innerText = "The recommendation is over, click here to refresh the page";
-    endingTimeTag.appendChild(aTag);
+  if(remainingRecommendationTime <= 0){
+    window.location.reload()
+  } else {
+    setTimeout (() => {
+      window.location.reload()
   }, remainingRecommendationTime)
+  }
 }
 
 const favoriteButton = document.getElementById("addFavoriteButton");
@@ -74,6 +76,33 @@ function updateCountdown () {
   }
 }
 
-function bookmark () {
-  alert("This button is for bookmarking the recommendation. I'm working for having this functionality ready!")
+function changeVideo() {
+  const videoInput = document.getElementById("videoURL");
+  let url = videoInput.value;
+  let videoID = youtube_parser(url);
+  if (videoID !== false) {
+    checkIfRecommendationIsInDatabase(videoID);
+  } else {
+    alert("The video url is not valid!");
+  }
 }
+
+async function checkIfRecommendationIsInDatabase(videoID){
+  const response = await fetch("/checkIfRepeated", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({videoID:videoID})
+  });
+  const data = await response.json();
+  if(data.isRepeated){
+    alert("Holy shit! That video was already recommended by @" + data.author.username)
+  }
+}
+
+function youtube_parser(url) {
+  let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+  let match = url.match(regExp);
+  return (match&&match[7].length==11)? match[7] : false;
+};

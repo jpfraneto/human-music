@@ -186,7 +186,8 @@ router.post("/", function(req,res){
                     wasCreatedByUser : wasCreatedByUser
                 });
                 newRecommendation.save(()=>{
-                    console.log("The new recommendation was added to the DB");
+                    console.log("This new recommendation was added to the DB");
+                    console.log(newRecommendation);
                     if(req.user){
                         req.user.recommendations.push(newRecommendation);
                         req.user.save(()=>{
