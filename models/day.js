@@ -4,6 +4,7 @@ var daySchema = new mongoose.Schema({
     dayIndex: Number,  //determined by the previous day index
     startingDayTimestamp: Number, //determined by the previous day starting timestamp
     status: String, 
+    systemStatus : String,
     daySKU: String, //determined by the previous day sku
     totalRecommendationsOfThisDay: Number,
     elapsedRecommendations: Number,

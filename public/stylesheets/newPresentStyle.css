@@ -1,0 +1,123 @@
+.iFrameContainer {
+    position : relative;
+    padding-top : 56.25%; /* 16:9 */
+    overflow : hidden;
+}
+
+.iFrameContainer iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    overflow : hidden;
+}
+
+.iFrameContainer img {
+    position: absolute;
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: 100%;
+    border: 0;
+    overflow : hidden;
+}
+
+.controls {
+    margin-top: 0.5em;
+}
+
+.box {
+    display: flex;
+    width: 100%;
+    padding-bottom: 38px;
+}
+
+.column {
+    position: relative;
+    float:left;
+    background-color: transparent;
+}
+
+.left {
+    text-align: center;
+    width:22%
+}
+
+.right {
+    text-align: center;
+    width:22%
+}
+
+.middle {
+    width:56%
+}
+
+.navigationBar a {
+    font-size: 1.618em;
+    margin: 0 1.618em;
+    color: black;
+}
+
+.navigationBar a:hover {
+    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+    color: black;
+    text-decoration: none;
+}
+
+.recommendationInformationDisplay {
+    animation-duration: 2s;
+    animation-name: infoAppear;
+}
+
+@keyframes infoAppear {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.showButton {
+    margin-top: 0.5em;
+    animation-duration: 3s;
+    animation-name: appear;
+}
+  
+@keyframes appear {
+    from {
+        opacity : 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    background-color: black;
+    height:38px;
+}
+
+.footer a {
+    margin: 1.618em;
+    color: white;
+    text-decoration: none;
+    font-size: 1.618em;
+}
+
+.footer a:hover {
+    color: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+    text-shadow: 0 0 20px #0ae678
+}

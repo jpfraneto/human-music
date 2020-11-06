@@ -1,7 +1,5 @@
 window.onload = () => {
   const videoInput = document.getElementById("videoURL");
-  console.log("The video input element is: ")
-  console.log(videoInput);
   videoInput.onchange = changeVideo;
 
   remainingRecommendationTime = updateCountdown();

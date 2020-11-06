@@ -12,6 +12,7 @@ const middleware = require("../middleware");
 let chiita = require("../middleware/chiita");
 const middlewareObj = require("../middleware");
 
+let today = new Date();
 // Root Route
 router.get("/", function(req,res){
     Recommendation.findOne({status:"present"}, function (err, presentRecommendation){
@@ -40,7 +41,7 @@ router.get("/", function(req,res){
                             })
                             .catch(err => console.log(err))
                         } else {
-                            res.render("endOfDay");
+                            res.render("endOfDay", {today:today});
                         }  
                     }
                 });
@@ -73,12 +74,117 @@ router.get("/", function(req,res){
     });
 });
 
-let today = new Date();
+router.get("/newPresentUpdate", (req, res) => {
+    let answer = {};
+    Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
+    .then((presentDay) => {
+        let now = (new Date).getTime();
+        answer.systemStatus = presentDay.systemStatus;
+        answer.recommendation = null;
+        answer.elapsedTime = 0;
+        if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
+            let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
+            let delay = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration - now;
+            answer.recommendation = presentRecommendation;
+            answer.nextEventDelay = delay;
+            answer.elapsedTime = Math.floor((now - presentRecommendation.startingRecommendationTimestamp)/1000);
+        } else if (presentDay.systemStatus === "void") {         
+            answer.nextEventDelay = presentDay.startingTimestampsOfThisDay[presentDay.elapsedRecommendations] - now;
+        } else if (presentDay.systemStatus === "endOfDay") {
+            answer.nextEventDelay = presentDay.startingDayTimestamp + 86400000 - now;
+        } 
+        console.log(answer);
+        res.render("newPresent2", {answer:answer}); //The elapsedTime is missing for when there is a recommendation in the present
+    })
+});
 
-// router.get("/isfavorited", (req, res) => {
-//     console.log("The is favorited route was triggered");
-//     res.hola = "Aloja!";
-// })
+router.get("/newPresent", (req, res) => {
+    Recommendation.findOne({status:"present"})
+    .then((presentRecommendation)=>{
+        let now = (new Date());
+        if(presentRecommendation){
+            let elapsedTime = now.getTime() - presentRecommendation.startingRecommendationTimestamp; 
+            let elapsedSeconds = Math.floor(elapsedTime/1000);
+            let endingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
+            let endingTime = (new Date(endingTimestamp)).toUTCString().substring(17,25);
+            let isRecommendationFavorited;
+            if(req.user){
+                let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
+                if(indexOfRecommendation === -1){
+                    isRecommendationFavorited = false;
+                } else {
+                    isRecommendationFavorited = true;
+                }
+                console.log("The recommendation is favorited: " + isRecommendationFavorited);
+            }
+            res.render("newPresent", {
+                elapsedSeconds:elapsedSeconds, 
+                presentRecommendation: presentRecommendation, 
+                endingTime : endingTime,
+                today : today,
+                isRecommendationFavorited : isRecommendationFavorited
+            });
+        } else {
+            Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
+            .then((presentDay) => {
+                if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
+                    axios.get("https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_APIKEY)
+                    .then((imageOfTheDay) => {
+                        let nextRecommendationIndex = presentDay.elapsedRecommendations;
+                        let nextRecommendationStartingTimestamp = presentDay.startingTimestampsOfThisDay[nextRecommendationIndex];
+                        let reimainingVoidTime = nextRecommendationStartingTimestamp - (now.getTime());
+                        console.log("The remaining void time is: " + reimainingVoidTime);
+                        let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
+                        res.render("theVoid", {
+                            reimainingVoidTime: reimainingVoidTime, 
+                            startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
+                            today : today,
+                            nasaInfo : imageOfTheDay.data
+                        });
+                    })
+                    .catch(err => console.log(err))
+                } else {
+                    res.render("endOfDay", {today:today});
+                }  
+            })
+        }
+    })
+});
+
+router.get("/checkSystemStatus", (req,res) => {
+    let answer = {};
+    Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
+    .then((presentDay) => {
+        let now = (new Date).getTime();
+        answer.systemStatus = presentDay.systemStatus;
+        answer.recommendation = null;
+        answer.elapsedTime = 0;
+        if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
+            let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
+            let delay = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration - now;
+            answer.recommendation = presentRecommendation;
+            answer.nextEventDelay = delay;
+            answer.elapsedTime = Math.floor((now - presentRecommendation.startingRecommendationTimestamp))/1000;
+        } else if (presentDay.systemStatus === "void") {         
+            answer.nextEventDelay = presentDay.startingTimestampsOfThisDay[presentDay.elapsedRecommendations] - now;
+        } else if (presentDay.systemStatus === "endOfDay") {
+            answer.nextEventDelay = presentDay.startingDayTimestamp + 86400000 - now;
+        } 
+        res.json(answer);
+    })
+    // .catch(()=>{console.log("There was an error getting the present day")})
+});
+
+router.post("/getRecommendation", (req,res) => {
+    Recommendation.findOne({status:"present"})
+    .then((presentRecommendation)=>{
+        res.json(presentRecommendation);
+    })
+});
+
+router.get("/mobile", (req, res) => {
+    res.render("mobile");
+});
 
 router.post("/favorited", (req, res) => {
     Recommendation.findOne({status:"present"})
@@ -179,6 +285,7 @@ router.post("/", function(req,res){
                     name : name,
                     type : type,
                     recommendationDate : chiita.changeDateFormat(newDate),
+                    youtubeID : videoID,
                     url : url,
                     description : req.body.description,
                     status : "future",

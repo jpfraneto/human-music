@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var recommendationSchema = new mongoose.Schema({
+var voidImageSchema = new mongoose.Schema({
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -10,21 +10,13 @@ var recommendationSchema = new mongoose.Schema({
         country: String
     },
     name: String,
-    type: String,
-    recommendationDate: {
+    imageDate: {
         type: String,
         default: Date.now.toString(),
     },
-    url: String,
-    youtubeID : String,
     description:String,
-    status: String,
-    duration: Number,
     wasCreatedByUser: Boolean,
-    startingRecommendationTimestamp: Number,
     imageURL: String,
-    daySKU: String,
-    favorited : Number
 });
 
-module.exports = mongoose.model("Recommendation", recommendationSchema);
+module.exports = mongoose.model("voidImage", voidImageSchema);
