@@ -47,7 +47,7 @@ if(process.env.NODE_ENV === 'production') {
 //For starting from scratch
 // chiita.bigBang();
 //For sending the recommendations to the future
-chiita.bigBangTwo();
+// chiita.bigBangTwo();
 // chiita.createNewDay();
 
 // chiita.bigBang();
@@ -61,7 +61,7 @@ setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
-let job = new CronJob("58 00 * * *", () => {
+let job = new CronJob("33 09 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 
