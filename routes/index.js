@@ -46,7 +46,6 @@ router.get("/", function(req,res){
                     }
                 });
             } else {
-                presentRecommendation.url = chiita.getSourceURL(presentRecommendation.url);
                 let now = (new Date()).getTime();
                 let elapsedTime = now - presentRecommendation.startingRecommendationTimestamp; 
                 let elapsedSeconds = Math.floor(elapsedTime/1000);

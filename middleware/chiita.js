@@ -27,20 +27,20 @@ chiita.getRecommendationInfo = function(url) {
         }
     }
 
-    const showInfo = async () => {
-        const information = getVideoInfo()
-        .then(response => {
-            if (response.data){
-                let videoData = JSON.parse(JSON.stringify(response.data))
-                let durationISO = videoData.items[0].contentDetails.duration;
-                let videoTitle = videoData.items[0].snippet.title;
-                let durationInSeconds = (moment.duration(durationISO, moment.ISO_8601)).asSeconds();
-                return [videoTitle, durationInSeconds]
-            }
-        })
-        .catch(error => {
-            console.log(error)
-        })
+const showInfo = async () => {
+    const information = getVideoInfo()
+    .then(response => {
+        if (response.data){
+            let videoData = JSON.parse(JSON.stringify(response.data))
+            let durationISO = videoData.items[0].contentDetails.duration;
+            let videoTitle = videoData.items[0].snippet.title;
+            let durationInSeconds = (moment.duration(durationISO, moment.ISO_8601)).asSeconds();
+            return [videoTitle, durationInSeconds]
+        }
+    })
+    .catch(error => {
+        console.log(error)
+    })
     }
 }
 
