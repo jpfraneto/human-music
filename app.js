@@ -54,8 +54,13 @@ if(process.env.NODE_ENV === 'production') {
 
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
 // console.log("The app.js file is running again.");
-chiita.timeWarp();
+// chiita.timeWarp();
 // chiita.addYoutubeIDs();
+
+// Recommendation.findOne({status:"present"})
+// .then((presentRecommendation)=>{
+//     console.log(presentRecommendation);
+// })
 
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")

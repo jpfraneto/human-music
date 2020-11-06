@@ -93,6 +93,9 @@ chiita.timeWarp = async () => {
                             let remainingTimeForNextInterval = startingTimestamp + recommendationDuration - now;
                             if(thisRecommendation.status === "present"){
                                 chiita.changeSystemStatus("recommendation");
+                                if(presentDay.elapsedRecommendations === 0){
+                                    chiita.changeSystemStatus("film");
+                                }
                                 console.log("The recommendation was already in the present, it won't be changed")
                                 console.log("1: A setTimeout will start now and it will be triggered in: " + remainingTimeForNextInterval);
                                 setTimeout(chiita.startRecommendationInterval, remainingTimeForNextInterval);
