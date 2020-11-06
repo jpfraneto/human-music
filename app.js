@@ -24,7 +24,9 @@ const recommendationRoutes = require("./routes/recommendations"),
       userRoutes           = require("./routes/users");
 
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(process.env.DATABASE_MONGODB, { useNewUrlParser: true, useFindAndModify: false });
+// mongoose.connect(process.env.DATABASE_MONGODB, { useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect("mongodb+srv://admin-jp:marisol@humanmusic.qmrfq.mongodb.net/humanMusic", { useNewUrlParser: true, useFindAndModify: false });
+
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -55,14 +57,14 @@ if(process.env.NODE_ENV === 'production') {
 
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
 // console.log("The app.js file is running again.");
-// chiita.timeWarp();
-chiita.addYoutubeIDs();
+chiita.timeWarp();
+// chiita.addYoutubeIDs();
 
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
-let job = new CronJob("33 09 * * *", () => {
+let job = new CronJob("46 09 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 
