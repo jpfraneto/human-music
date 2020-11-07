@@ -224,8 +224,8 @@ chiita.sendDayToPast = () => {
     })
 }
 
-// let timeInDay = 86400000;
-let timeInDay = 33333000;
+let timeInDay = 86400000;
+// let timeInDay = 33333000;
 
 chiita.createNewDay = async () => {
     chiita.sendDayToPast();
