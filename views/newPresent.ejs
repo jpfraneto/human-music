@@ -47,30 +47,24 @@
     <div id="middleColumn" class="column middle text-center">
         <div class="navigationBar">
             <p><span><a href="/past">PAST</a></span><span><strong><a href="/">PRESENT</a></strong></span><span><a href="/future">FUTURE</a></span></p>
-            <p>272020X | 12:06:44</p>
+            <p><%= today %> | <span id="presentClock">88:88:88</span></p>
         </div>
         
-            <div class="iFrameContainer" id="mediaContainer">
-                <% if (presentRecommendation.type === "music") { %>
-                    <iframe id="presentPlayer" width="640" height="360"
-                    src="https://www.youtube.com/embed/<%= presentRecommendation.youtubeID %>?start=<%=elapsedSeconds%>&autoplay=1&enablejsapi=1&mute=1&controls=0"
-                    style="border: solid 4px #37474F"
-                    allow="autoplay"
-                    ></iframe>
-                <% } else if (presentRecommendation.type === "film"){ %>
-                    <img id="filmImage" src="<%=presentRecommendation.imageURL%>" alt="">
-                <% } %>
-            </div>
-
-        <div class="controls">
-            <button id="muteButton">Mute</button>
-            <button id="fullscreenButton">Go fullscreen!</button>
-            <button id="intoTheVoid" onclick="intoTheVoid()">Enter the Void</button>
-            <button id="outOfTheVoid" onclick="outOfTheVoid()">Out of the Void</button>
-            <button onclick="getSystemInformation()">Check System Status</button>
+        <div class="iFrameContainer" id="mediaContainer">
+            <iframe id="presentPlayer" width="640" height="360"
+            src="https://www.youtube.com/embed/<%= presentRecommendation.youtubeID %>?start=<%=elapsedSeconds%>&autoplay=1&enablejsapi=1&mute=1&controls=0"
+            style="border: solid 4px #37474F"
+            allow="autoplay"
+            ></iframe>
         </div>
 
-        <p>This recommendation ends at 12:06:45</p>
+        <div class="controls">
+            <button id="muteButton">(un)Mute</button>
+            <button id="fullscreenButton">Go fullscreen</button>
+        </div>
+
+        <p>This recommendation ends at <%= endingTime %></p>
+
         <div id="presentRecommendationInformation">
             <p><strong>User: </strong>@<span id="username"><%= presentRecommendation.author.username %></span></p>
             <p><strong>Country of Identification: </strong><span id="userCountry"><%= presentRecommendation.author.country %></span></p>

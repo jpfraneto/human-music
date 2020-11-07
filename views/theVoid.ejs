@@ -9,127 +9,53 @@
   crossorigin="anonymous">
   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Share+Tech+Mono'>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-  <link rel="stylesheet" href="/stylesheets/landing.css">
+  <link rel="stylesheet" href="/stylesheets/theVoid.css">
 </head>
 <body>
+
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="exampleModalLabel">Add New Recommendation</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Add New Recommendation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/" method="POST">
+                <div class="form-group">
+                    <label for="videoURL" class="col-form-label">Youtube URL of your recommendation [https://www.youtube.com/watch?v=ZOu3aJ8RDqw]:</label>
+                    <input class="form-control" id="videoURL" type="text" name="url">
+                </div>
+                <div class="form-group">
+                    <label for="descriptionTextArea" class="col-form-label">What does this piece mean to you?</label>
+                    <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
+                </div>
+                <div class="form group">
+                    <label for="userCheckbox" class="col-form-label">Was this created by you?</label>    
+                    <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
+                </div>
+                <div class="form group"></div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Recommendation</button>
+                </div>
+                </form>
+            </div>
         </div>
-        <div class="modal-body">
-          <form action="/" method="POST">
-            <div class="form-group">
-              <label for="videoURL" class="col-form-label">Youtube URL of your recommendation [https://www.youtube.com/watch?v=ZOu3aJ8RDqw]:</label>
-              <input class="form-control" id="videoURL" type="text" name="url">
-            </div>
-            <div class="form-group">
-              <label for="descriptionTextArea" class="col-form-label">What does this piece mean to you?</label>
-              <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
-            </div>
-            <div class="form group">
-              <label for="userCheckbox" class="col-form-label">Was this created by you?</label>    
-              <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
-            </div>
-            <div class="form group"></div>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Add Recommendation</button>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          
-        </div>
-      </div>
     </div>
-  </div>
-
-  <nav class="navbar navbar-expand bg-light justify-content-center">
-      <ul class="navbar-nav">
-        <li class="nav-item dropdown btn-margin">
-          <a class="nav-link navbarDropdown" href="/past" role="button" aria-haspopup="true" aria-expanded="false">
-            PAST
-          </a>
-        </li>
-  
-        <li class="nav-item dropdown btn-margin">
-          <a class="nav-link navbarDropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">
-            PRESENT
-          </a>
-          <p class="text-center theClock"><%=today%> | <span id="presentClock">WELCOME BACK</span></p>
-        </li>
-
-        <li class="nav-item dropdown btn-margin">
-          <a class="nav-link navbarDropdown" href="/future" role="button" aria-haspopup="true" aria-expanded="false">
-            FUTURE
-          </a>
-        </li>
-      </ul> 
-  </nav>
-
-<div class="container">
-
-  <div class="row">
-    <div class="col-12 clock">
-      <p class="text">Welcome to Human Music</p>
-      <p class="text">A place for those who love music and all it means to our human experience</p>
-      <p class="text">A place for those who embrace the unknown</p>
-      <p class="text">A place to dis/<strong>connect with yourself</strong></p>
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="col-12">
-      <div class="text-center videoSquare">
-        <img width="640" height="360" src="<%=nasaInfo.url%>" alt="">
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col"></div>
-    <div class="col-8 userinformation">
-      <p class="content" id="endingVoidTag">The next recommendation starts at <%=startingTimeOfNextRecommendation%></p>
-      <hr>
-      <p><strong> <%= nasaInfo.title %></strong></p>
-      <p><strong>Image Description:</strong> <%= nasaInfo.explanation %></p>
-      <hr>
-      <p>This image belongs to the project <a href="https://apod.nasa.gov/">"Astronomical Picture of the Day"</a>, on which each day a different image or photograph of the universe is 
-        featured. All copyright rights belong to NASA.
-      </p>
-    </div>
-    <div class="col"></div>
-  </div>
-
 </div>
 
-<div style="visibility: hidden;">
-  <span id="remainingVoidTime"><%=reimainingVoidTime%></span>
+<div class="text-center">
+  <h1>WELCOME</h1>
+  <p class="content">The system is in a state called "The Void". The next recommendation will start in <%= Math.floor(reimainingVoidTime/1000) %> seconds and you will be automatically redirected there. </p>
 </div>
 
-</div>
-
-<div class="footerDiv">
-  <div class="container text-center">
-    <p>This project is in memory of David Foster Wallace and all of those that have left us on the fight of their own demons.</p>
-    <div class="row">
-      <% if (!currentUser){ %>
-        <div class="col"><a href="/login">Log In  </a>  /  <a href="/register">  Register</a></div>
-        <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
-        <div class="col"><a href="/about">About</a></div>
-      <% } %>
-      <% if (currentUser) { %>
-        <div class="col"><p><a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a></p></div>
-        <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
-        <div class="col"><a href="/logout">Log Out</a></div>
-        <div class="col"><a href="/about">About</a></div>
-      <% } %>
-    </div>
-  </div>
+<div class="footer">
+  <a href="/login">Login</a>
+  <a href="/register">Register</a>
+  <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
+  <a href="/about">About</a>
 </div>
 
 <script src='/scripts/voidScript.js'></script>

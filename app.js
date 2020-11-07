@@ -54,19 +54,13 @@ if(process.env.NODE_ENV === 'production') {
 
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
 // console.log("The app.js file is running again.");
-// chiita.timeWarp();
-// chiita.addYoutubeIDs();
-
-// Recommendation.findOne({status:"present"})
-// .then((presentRecommendation)=>{
-//     console.log(presentRecommendation);
-// })
+chiita.timeWarp();
 
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
-let job = new CronJob("46 09 * * *", () => {
+let job = new CronJob("53 11 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 

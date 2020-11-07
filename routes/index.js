@@ -14,7 +14,7 @@ const middlewareObj = require("../middleware");
 
 let today = new Date();
 // Root Route
-router.get("/", function(req,res){
+router.get("/pastPresent", function(req,res){
     Recommendation.findOne({status:"present"}, function (err, presentRecommendation){
         if(err){console.log(err)}
         else {
@@ -97,7 +97,7 @@ router.get("/newPresentUpdate", (req, res) => {
     })
 });
 
-router.get("/newPresent", (req, res) => {
+router.get("/", (req, res) => {
     Recommendation.findOne({status:"present"})
     .then((presentRecommendation)=>{
         let now = (new Date());
@@ -107,6 +107,7 @@ router.get("/newPresent", (req, res) => {
             let endingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
             let endingTime = (new Date(endingTimestamp)).toUTCString().substring(17,25);
             let isRecommendationFavorited;
+            let formattedToday = chiita.changeDateFormat(today);
             if(req.user){
                 let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
                 if(indexOfRecommendation === -1){
@@ -120,7 +121,7 @@ router.get("/newPresent", (req, res) => {
                 elapsedSeconds:elapsedSeconds, 
                 presentRecommendation: presentRecommendation, 
                 endingTime : endingTime,
-                today : today,
+                today : formattedToday,
                 isRecommendationFavorited : isRecommendationFavorited
             });
         } else {
