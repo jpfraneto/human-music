@@ -82,7 +82,7 @@ chiita.timeWarp = async () => {
     Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
     .then((presentDay) => {
         if(presentDay){
-            for(i=0; i<presentDay.totalRecommendationsOfThisDay;i++){
+            for(i=presentDay.elapsedRecommendations; i<presentDay.totalRecommendationsOfThisDay;i++){
                 now = (new Date).getTime();
                 thisRecommendation = presentDay.recommendationsOfThisDay[i];
                 startingTimestamp = thisRecommendation.startingRecommendationTimestamp;
