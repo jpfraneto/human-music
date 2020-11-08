@@ -161,14 +161,14 @@ router.get("/checkSystemStatus", (req,res) => {
         answer.elapsedTime = 0;
         if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
             let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
-            let delay = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration - now;
+            let delay = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
             answer.recommendation = presentRecommendation;
-            answer.nextEventDelay = delay;
+            answer.nextEventStartingTimestamp = delay;
             answer.elapsedTime = Math.floor((now - presentRecommendation.startingRecommendationTimestamp))/1000;
         } else if (presentDay.systemStatus === "void") {         
-            answer.nextEventDelay = presentDay.startingTimestampsOfThisDay[presentDay.elapsedRecommendations] - now;
+            answer.nextEventStartingTimestamp = presentDay.startingTimestampsOfThisDay[presentDay.elapsedRecommendations];
         } else if (presentDay.systemStatus === "endOfDay") {
-            answer.nextEventDelay = presentDay.startingDayTimestamp + 86400000 - now;
+            answer.nextEventStartingTimestamp = presentDay.startingDayTimestamp + 86400000;
         } 
         res.json(answer);
     })

@@ -47,9 +47,11 @@
     <div id="middleColumn" class="column middle text-center">
         <div class="navigationBar">
             <p><span><a href="/past">PAST</a></span><span><strong><a href="/">PRESENT</a></strong></span><span><a href="/future">FUTURE</a></span></p>
+        </div>
+        <div class="clock">
             <p><%= today %> | <span id="presentClock">88:88:88</span></p>
         </div>
-        
+
         <div class="iFrameContainer" id="mediaContainer">
             <iframe id="presentPlayer" width="640" height="360"
             src="https://www.youtube.com/embed/<%= presentRecommendation.youtubeID %>?start=<%=elapsedSeconds%>&autoplay=1&enablejsapi=1&mute=1&controls=0"
@@ -71,7 +73,12 @@
             <p><strong>Date of Recommendation: </strong><span id="dateOfRecommendation"><%= presentRecommendation.recommendationDate %></span></p>
             <p><strong>Name: </strong><span id="recommendationName"><%= presentRecommendation.name %></span></p>
             <p><strong>Why did you recommend it?: </strong><span id="recommendationDescription"><%= presentRecommendation.description %></span></p>
-            <p><strong>Status: </strong><span id="recommendationStatus"><%= presentRecommendation.status %></span></p>
+        </div>
+
+        <div id="voidInformation" style="display: none;">
+            <p><strong><span id="nasaTitle"></span></strong></p>
+            <p><strong>Date: </strong><span id="nasaDate"></span></p>
+            <p><strong>Explanation: </strong><span id="nasaExplanation"></span></p>
         </div>
     </div>
     <div class="column right"></div>

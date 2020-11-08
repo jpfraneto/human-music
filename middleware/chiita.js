@@ -6,7 +6,7 @@ const User = require("../models/user");
 seedDB        = require("../seeds");
 let chiita = {};
 
-let nowTime, systemStatus;
+let nowTime, systemStatus, delay;
 
 // FOR GETTING THE VIDEO INFORMATION
 chiita.youtube_parser = function(url){
@@ -150,8 +150,8 @@ chiita.timeWarp = async () => {
 chiita.sendRecommendationToPast = (presentRecommendation) => {
     presentRecommendation.status = "past";
     presentRecommendation.save(()=>{
-        let nowTimestamp = (new Date).getTime()
-        let difference = nowTimestamp - (presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration);
+        let now = (new Date).getTime();
+        let difference = now - (presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration);
         console.log("The recommendation was sent to the past, and the difference between the supposed timestamp and the actual is: " + difference);
     })
 }
@@ -159,14 +159,15 @@ chiita.sendRecommendationToPast = (presentRecommendation) => {
 chiita.bringRecommendationToPresent = (futureRecommendation) => {
     futureRecommendation.status = "present";
     futureRecommendation.save(()=>{
-        let nowTimestamp = (new Date).getTime()
-        let difference = nowTimestamp - futureRecommendation.startingRecommendationTimestamp;
+        let now = (new Date).getTime();
+        let difference = now - futureRecommendation.startingRecommendationTimestamp;
         chiita.changeSystemStatus("recommendation");
         console.log("The recommendation was brought to the present, and the difference between the suposed timestamp and the actual one is: " + difference);
         console.log("The setTimeout starts now and lasts " + futureRecommendation.duration + " milliseconds, which is the duration of the recommendation that was brought to the present")
+        delay = futureRecommendation.startingRecommendationTimestamp + futureRecommendation.duration - now;
         setTimeout(()=>{
             chiita.startRecommendationInterval();
-        }, futureRecommendation.duration)
+        }, delay);
     })
 }
 
@@ -225,7 +226,7 @@ chiita.sendDayToPast = () => {
 }
 
 let timeInDay = 86400000;
-// let timeInDay = 33333000;
+// let timeInDay = 160000;
 
 chiita.createNewDay = async () => {
     chiita.sendDayToPast();
@@ -252,7 +253,7 @@ chiita.createNewDay = async () => {
         daySKU : daySKU,
         totalRecommendationsOfThisDay : totalRecommendationsOfThisDay,
         elapsedRecommendations : 0,
-        chiDurationForThisDay : chiDurationForThisDay,
+        chiDurationForThisDay : 5555,
         recommendationsOfThisDay : recommendationsOfThisDay,
         filmOfThisDay : information.filmForToday,
         recommendationDurationsOfThisDay : recommendationDurationsOfThisDay,

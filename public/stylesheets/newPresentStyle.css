@@ -55,9 +55,14 @@
     width:56%
 }
 
+.navigationBar {
+    width : 100%;
+    margin: 0 auto;
+}
+
 .navigationBar a {
-    font-size: 1.618em;
-    margin: 0 1.618em;
+    font-size: 150%;
+    margin: 0 auto;
     color: black;
 }
 
@@ -65,6 +70,16 @@
     text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
     color: black;
     text-decoration: none;
+}
+
+.navigationBar p {
+    margin-bottom: 0;
+}
+
+.clock {
+    width : 100%;
+    margin: 0 auto;
+    font-size: 100%;
 }
 
 .recommendationInformationDisplay {
@@ -107,17 +122,27 @@
     bottom: 0;
     text-align: center;
     background-color: black;
-    height:38px;
+    height: 6%;
 }
 
 .footer a {
     margin: 1.618em;
     color: white;
     text-decoration: none;
-    font-size: 1.618em;
+    font-size: 100%;
 }
 
 .footer a:hover {
     color: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
     text-shadow: 0 0 20px #0ae678
+}
+
+#presentRecommendationInformation{
+    font-size: 100%;
+    margin-bottom: 20px;
+}
+
+#voidInformation {
+    font-size: 100%;
+    margin-bottom: 20px;
 }

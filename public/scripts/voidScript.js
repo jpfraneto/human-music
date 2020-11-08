@@ -1,17 +1,21 @@
 window.onload = () => {
   let information = getSystemInformation();
   information.then((systemInformation)=>{
-    setTimeout (() => {
-      window.location.reload()
-    }, systemInformation.nextEventDelay);
+    let now = (new Date).getTime();
+    let delay = systemInformation.nextEventStartingTimestamp - now;
+    setTimeout (reloadVoid, delay);
   })
 }
 
-async function getNasaData () {
-  console.log("inside the getNasaData function")
-  // const response = await fetch("/checkSystemStatus");
-  // const presentStatus = await response.json();
-  return nasaData
+async function reloadVoid () {
+  let info = getSystemInformation();
+  info.then((newInfo)=>{
+    if(newInfo.systemStatus === "recommendation"){
+      window.location.reload();
+    } else {
+      reloadVoid();
+    }
+    });
 }
 
 function updateVoid () {
@@ -20,7 +24,6 @@ function updateVoid () {
 }
 
 async function getSystemInformation () {
-  console.log("inside the getSystemInformation function")
   const response = await fetch("/checkSystemStatus");
   const presentStatus = await response.json();
   return presentStatus
