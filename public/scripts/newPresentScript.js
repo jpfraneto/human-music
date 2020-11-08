@@ -145,7 +145,7 @@ function updateCountdown () {
 }
 
 async function voidInformation () {
-  fetch("https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_APIKEY)
+  fetch("https://api.nasa.gov/planetary/apod?api_key=OMcSf5neLQv0rUKv8xebrLM63HFac79GpysEI5Yr")
   .then(response=>response.json())
   .then((apod)=>{
     let container = document.getElementById("mediaContainer");
