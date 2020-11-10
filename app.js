@@ -14,7 +14,7 @@ let express       = require("express"),
     Comment       = require("./models/comment"),
     Day           = require("./models/day"),
     chiita        = require("./middleware/chiita"),
-    seedDB        = require("./seeds");
+    seedDB        = require("./seeds2");
 
 let systemStatus;
 

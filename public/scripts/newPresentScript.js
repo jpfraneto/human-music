@@ -1,4 +1,9 @@
-let systemInformation, iFrameGlobalElement, timer, delay, recommendationInfo, voidInfo;
+let systemInformation, iFrameGlobalElement, timer, delay, recommendationInfo, voidInfo, currentUser;
+
+const favoriteButton = document.getElementById("addFavoriteButton");
+const unFavoriteButton = document.getElementById("removeFavoriteButton");
+let muteButton = document.getElementById("muteButton");
+let fsButton = document.getElementById("fullscreenButton");
 
 timer = setInterval(updateCountdown, 1000);
 
@@ -6,6 +11,7 @@ window.onload = () => {
   systemInformationPromise = getSystemInformation();
   systemInformationPromise.then((systemInformation) => {
     systemStatus = systemInformation.systemStatus;
+    toggleButtons(systemInformation.isFavorited);
     let now = (new Date).getTime();
     delay = systemInformation.nextEventStartingTimestamp - now;
     setTimeout(intoTheVoid, delay);
@@ -168,4 +174,51 @@ async function voidInformation () {
     recommendationInfo.style.display = "none";
     voidInfo.style.display = "block";
   })
+}
+
+favoriteButton.addEventListener("click", function(e){
+  favoriteButton.style.display = "none";
+  unFavoriteButton.style.display = "inline-block";
+  fetch("/favorited", {method:"POST"})
+  .then((response) =>{
+    if(response.ok) {
+      return
+    }
+    throw new Error("Request failed");
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+})
+
+unFavoriteButton.addEventListener("click", function(e){
+  favoriteButton.style.display = "inline-block";
+  unFavoriteButton.style.display = "none";
+  fetch("/unfavorited", {method:"POST"})
+  .then((response) =>{
+    if(response.ok) {
+      return
+    }
+    throw new Error("Request failed");
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+})
+
+function toggleButtons (isFavorited) {
+  let controlsDiv = document.getElementById("controlsDiv");
+  controlsDiv.style.visibility = "visible";
+  muteButton.style.visibility = "visible";
+  fsButton.style.visibility = "visible";
+
+  if(isFavorited != null){
+    if(isFavorited){
+      favoriteButton.style.display = "none";
+      unFavoriteButton.style.display = "inline-block";
+    } else {
+      favoriteButton.style.display = "inline-block";
+      unFavoriteButton.style.display = "none";
+    }
+}
 }

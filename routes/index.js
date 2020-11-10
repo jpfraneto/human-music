@@ -108,21 +108,11 @@ router.get("/", (req, res) => {
             let endingTime = (new Date(endingTimestamp)).toUTCString().substring(17,25);
             let isRecommendationFavorited;
             let formattedToday = chiita.changeDateFormat(today);
-            if(req.user){
-                let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
-                if(indexOfRecommendation === -1){
-                    isRecommendationFavorited = false;
-                } else {
-                    isRecommendationFavorited = true;
-                }
-                console.log("The recommendation is favorited: " + isRecommendationFavorited);
-            }
             res.render("newPresent", {
                 elapsedSeconds:elapsedSeconds, 
                 presentRecommendation: presentRecommendation, 
                 endingTime : endingTime,
                 today : formattedToday,
-                isRecommendationFavorited : isRecommendationFavorited
             });
         } else {
             Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
@@ -159,12 +149,21 @@ router.get("/checkSystemStatus", (req,res) => {
         answer.systemStatus = presentDay.systemStatus;
         answer.recommendation = null;
         answer.elapsedTime = 0;
+        answer.isFavorited = null;
         if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
             let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
             let delay = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
             answer.recommendation = presentRecommendation;
             answer.nextEventStartingTimestamp = delay;
             answer.elapsedTime = Math.floor((now - presentRecommendation.startingRecommendationTimestamp))/1000;
+            if(req.user){
+                let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
+                if(indexOfRecommendation === -1){
+                    answer.isFavorited = false;
+                } else {
+                    answer.isFavorited = true;
+                }
+            }
         } else if (presentDay.systemStatus === "void") {         
             answer.nextEventStartingTimestamp = presentDay.startingTimestampsOfThisDay[presentDay.elapsedRecommendations];
         } else if (presentDay.systemStatus === "endOfDay") {

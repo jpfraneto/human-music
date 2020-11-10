@@ -3,7 +3,7 @@ const moment = require("moment");
 const Recommendation = require("../models/recommendation");
 const Day = require("../models/day");
 const User = require("../models/user");
-seedDB        = require("../seeds");
+seedDB        = require("../seeds2");
 let chiita = {};
 
 let nowTime, systemStatus, delay;
@@ -138,7 +138,8 @@ chiita.timeWarp = async () => {
                 console.log("The timewarp updated " + j + " recommendation's status");
             });
         } else {
-            console.log("There was not any day in the present when the timeWarp function was triggered")
+            console.log("There was not any day in the present when the timeWarp function was triggered");
+            chiita.createNewDay();
         }
     })
     .catch(()=>{
