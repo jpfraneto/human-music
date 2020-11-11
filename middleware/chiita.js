@@ -233,16 +233,16 @@ chiita.createNewDay = async () => {
     chiita.sendDayToPast();
     let information = await chiita.bringMusicFromTheFuture();
     let dayIndex = await chiita.getPresentDay();
-    let totalRecommendationsOfThisDay = information.numberOfMusicVideos;
+    let totalRecommendationsOfThisDay = information.numberOfRecommendations;
     let now = new Date();
     let daySKU = changeDateFormat(now);
     let startingDayTimestamp = now.getTime();
     let elapsedDaytime = 0;
-    let recommendationsOfThisDay = [];
-    let recommendationDurationsOfThisDay = [];
-    for (let i=0; i<totalRecommendationsOfThisDay;i++) {
-        recommendationDurationsOfThisDay.push(information.musicForToday[i].duration);
+    let recommendationsOfThisDay = [information.filmForToday];
+    let recommendationDurationsOfThisDay = [information.filmForToday.duration];
+    for (let i=0; i<information.musicForToday.length;i++) {
         recommendationsOfThisDay.push(information.musicForToday[i]);
+        recommendationDurationsOfThisDay.push(information.musicForToday[i].duration);
         elapsedDaytime += information.musicForToday[i].duration;
     }
     let chiDurationForThisDay = Math.round((timeInDay-elapsedDaytime)/totalRecommendationsOfThisDay);
@@ -254,7 +254,7 @@ chiita.createNewDay = async () => {
         daySKU : daySKU,
         totalRecommendationsOfThisDay : totalRecommendationsOfThisDay,
         elapsedRecommendations : 0,
-        chiDurationForThisDay : 5555,
+        chiDurationForThisDay : chiDurationForThisDay,
         recommendationsOfThisDay : recommendationsOfThisDay,
         filmOfThisDay : information.filmForToday,
         recommendationDurationsOfThisDay : recommendationDurationsOfThisDay,
@@ -274,7 +274,9 @@ chiita.addTimestampsToRecommendations = (newDay) => {
         recommendation.startingRecommendationTimestamp = elapsedDayTimestamp;
         dayTimestamps.push(elapsedDayTimestamp);
         recommendation.daySKU = newDay.daySKU;
-        recommendation.youtubeID = recommendation.url.slice(-11);
+        if(recommendation.type === "music"){
+            recommendation.youtubeID = recommendation.url.slice(-11);
+        }
         recommendation.save();
         elapsedDayTimestamp += recommendation.duration + newDay.chiDurationForThisDay;
     });
@@ -300,8 +302,8 @@ chiita.bringMusicFromTheFuture = async () => {
     return Recommendation.find({type:"music", status:"future"})
     .exec()
     .then((foundMusicFromTheFuture) => {
-        let elapsedTime = 0;
-        let numberOfMusicVideos = 0;
+        let elapsedTime = film.duration;
+        let numberOfRecommendations = 1;
         let musicForToday = [];
         while (elapsedTime < timeInDay) {
             let randomIndex = Math.floor(Math.random() * foundMusicFromTheFuture.length);
@@ -309,14 +311,14 @@ chiita.bringMusicFromTheFuture = async () => {
             foundMusicFromTheFuture.splice(randomIndex, 1); //eliminate the chosen element from foundMusic (So that it doesn't repeat)
             musicForToday.push(randomMusicVideoFromFuture); //add the chosen element to the musicForToday array
             elapsedTime += randomMusicVideoFromFuture.duration; //update elapsed time of this day
-            numberOfMusicVideos++; //update the counter of the number of music recommendations of that day
+            numberOfRecommendations++; //update the counter of the number of music recommendations of that day
         }
         musicForToday = musicForToday.slice(0, musicForToday.length-1);
-        numberOfMusicVideos--;
+        numberOfRecommendations--;
         return {
             filmForToday: film,
             musicForToday: musicForToday,
-            numberOfMusicVideos : numberOfMusicVideos
+            numberOfRecommendations : numberOfRecommendations
         };
     })
     .catch((err) =>{

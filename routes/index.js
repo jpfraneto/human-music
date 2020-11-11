@@ -14,64 +14,6 @@ const middlewareObj = require("../middleware");
 
 let today = new Date();
 // Root Route
-router.get("/pastPresent", function(req,res){
-    Recommendation.findOne({status:"present"}, function (err, presentRecommendation){
-        if(err){console.log(err)}
-        else {
-            let now = new Date();
-            let today = chiita.changeDateFormat(now);
-            if (!presentRecommendation){
-                Day.findOne({status:"present"}).populate("recommendationsOfThisDay").exec(function(err, presentDay){
-                    if(err){
-                        console.log(err)
-                    } else {
-                        if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
-                            axios.get("https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_APIKEY)
-                            .then((imageOfTheDay) => {
-                                let nextRecommendationIndex = presentDay.elapsedRecommendations;
-                                let nextRecommendationStartingTimestamp = presentDay.recommendationsOfThisDay[nextRecommendationIndex].startingRecommendationTimestamp;
-                                let reimainingVoidTime = nextRecommendationStartingTimestamp - (now.getTime());
-                                let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
-                                res.render("theVoid", {
-                                    reimainingVoidTime: reimainingVoidTime, 
-                                    startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
-                                    today : today,
-                                    nasaInfo : imageOfTheDay.data
-                                });
-                            })
-                            .catch(err => console.log(err))
-                        } else {
-                            res.render("endOfDay", {today:today});
-                        }  
-                    }
-                });
-            } else {
-                let now = (new Date()).getTime();
-                let elapsedTime = now - presentRecommendation.startingRecommendationTimestamp; 
-                let elapsedSeconds = Math.floor(elapsedTime/1000);
-                let endingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
-                let endingTime = (new Date(endingTimestamp)).toUTCString().substring(17,25);
-                let isRecommendationFavorited;
-                if(req.user){
-                    let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
-                    if(indexOfRecommendation === -1){
-                        isRecommendationFavorited = false;
-                    } else {
-                        isRecommendationFavorited = true;
-                    }
-                    console.log("THe recommendation is favorited: " + isRecommendationFavorited);
-                }
-                res.render("present", {
-                    elapsedSeconds:elapsedSeconds, 
-                    presentRecommendation: presentRecommendation, 
-                    endingTime : endingTime,
-                    today : today,
-                    isRecommendationFavorited : isRecommendationFavorited
-                });
-            }
-        }
-    });
-});
 
 router.get("/newPresentUpdate", (req, res) => {
     let answer = {};
@@ -150,6 +92,7 @@ router.get("/checkSystemStatus", (req,res) => {
         answer.recommendation = null;
         answer.elapsedTime = 0;
         answer.isFavorited = null;
+        answer.dayStartTimestamp = presentDay.startingDayTimestamp;
         if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
             let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
             let delay = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
@@ -335,12 +278,14 @@ router.post("/", function(req,res){
 router.get("/past", function(req,res){
     Day.find({}).populate("recommendationsOfThisDay")
     .then((foundDays) => {
-        res.render("past", {days:foundDays}); 
+        let todayDay = chiita.changeDateFormat(today);
+        res.render("past2", {days:foundDays, today:todayDay}); 
     });
 });
 
 router.get("/future", function(req,res){
-    res.render("future"); 
+    let todayDay = chiita.changeDateFormat(today);
+    res.render("future2", {today: todayDay}); 
 });
 
 // show register form
@@ -349,7 +294,8 @@ router.get("/register", function(req, res){
 });
 
 router.get("/about", function(req, res){
-   res.render("about"); 
+   let todayDay = chiita.changeDateFormat(today);
+   res.render("about", {today: todayDay}); 
 });
 
 router.get("/days", function(req, res){
@@ -398,8 +344,8 @@ router.get("/days", function(req, res){
             res.redirect("/")
         } else {
             let randomRecommendation = allPastRecommendations[Math.floor(Math.random() * allPastRecommendations.length)];
-            randomRecommendation.url = chiita.getSourceURL(randomRecommendation.url);
-            res.render("random", {randomRecommendation:randomRecommendation});
+            randomToday = today.toUTCString().substring(17,25)
+            res.render("random", {randomRecommendation:randomRecommendation, today:randomToday});
         }
     })
     .catch(()=>{

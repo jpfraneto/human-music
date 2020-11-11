@@ -1,69 +1,137 @@
-<%- include("./partials/header") %>
-  
-<div class="container text-center title" style="margin-top: 8px">
-  <p class="aboutTitle"><strong>About the Project</strong></p>
-</div>
-<div class="container text-center content">
-  <p id="p1">Human Music is a project that starts with the dream of a better future. I experience joy through the listening of music that I have never heard before, and I experience joy
-living experiences that remind me about the random nature of our existence as humans. Since the internet is a environment governed by algorythms that seek the maximization of
-profits of the owners of the different platforms, I decided to create a platform that generates music recommendations through which I think is one of the ultimately random algorythms in the world: Human Nature.
-  </p>
-  <br>
-  <p id="p2">This place is for sharing from the heart. Each one of us has the opportunity for sharing something that you think will be valuable for whoever listens. Something
-that becomes a space of light within the darkness. Something that can help anyone that listens overcome anger, sadness or pain. Something that can help anyone that listens to
-foster happiness, gratitude or confort. Something that can help anyone that listens to go deeply inside of (him/her)self, and through that process fight (his/her) demons and 
-become a better actor for our society in this crazy experience that we are all sharing called life. Something that can help whoever listens feel that (he/she) is not alone, for all what is needed is contained within.
-  </p>
-  <br>
-  <p id="p3">There is no limitations, there is no boundaries, there is nothing that is good, there is nothing that is bad. What will make this place special
-    is that your recommendation comes from your heart. I believe music is a string that unites us all, and through the understanding of this basic fact we can reach
-    to a conception that on the source we are all part of the same family. We are all human. We are all in this together, no matter from where we come from, no matter our color of skin,
-    money in the bank, no matter if you are sad, no matter if you are angry. We are all in this together, and if we recongnize this basic fact we can move forward for building 
-    a better world.
-  </p> 
-  <br>
-  <p id="p4">
-    Thank you for reading. Thank you for sharing. Thank you for being here. Thank you for being alive.
-  </p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="stylesheets/futureStyle.css">
+    <title>Human Music</title>
+</head>
+<body>
 
-<div class="container text-center">
-  <div class="langWrap">
-    <a class="languageLink" lang="english" href="#">English</a>
-    <a class="languageLink" href="#" lang="spanish">Spanish</a>
-  </div>
-</div>
-
-</div>
-
-<div class="footerDiv">
-  <div class="container text-center">
-    <p>This project is in memory of David Foster Wallace and all of those that have left us on the fight of their own demons.</p>
-    <div class="row">
-      <% if (!currentUser){ %>
-        <div class="col"><a href="/login">Log In  </a>  /  <a href="/register">  Register</a></div>
-        <div class="col"><a href="/recommendations/new">Add Recommendation</a></div>
-        <div class="col"><a href="/about">About</a></div>
-      <% } %>
-      <% if (currentUser) { %>
-        <div class="col"><p><a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a></p></div>
-        <div class="col"><a href="/recommendations/new">Add Recommendation</a></div>
-        <div class="col"><a href="/logout">Log Out</a></div>
-        <div class="col"><a href="/about">About</a></div>
-      <% } %>
+<div class="modal" tabindex="-1" role="dialog" id="loginModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Login</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>If you have an account, here you can login. If not, you can register <a href="/register">here</a></h5>
+                <form action="/login" method="POST">
+                    <div class="row align-items-center">
+                        <div class="col-12" style="margin-bottom: 16px;">
+                            <label for="loginUsername" class="clock">Username</label>
+                            <input type="text" name="username" placeholder="kishan" id="loginUsername" required>
+                            <label for="loginPassword" class="clock">Password</label>
+                            <input type="password" name="password" placeholder="Password" id="loginPassword" required>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success">Login</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<script src="/scripts/languages.js"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js'></script>
-<script
-  src="https://code.jquery.com/jquery-3.5.1.js"
-  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-  crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>    
-</body>
-    
-</html>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Add New Recommendation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/" method="POST">
+                <div class="form-group">
+                    <label for="videoURL" class="col-form-label">Youtube URL of your recommendation [https://www.youtube.com/watch?v=ZOu3aJ8RDqw]:</label>
+                    <input class="form-control" id="videoURL" type="text" name="url">
+                </div>
+                <div class="form-group">
+                    <label for="descriptionTextArea" class="col-form-label">What does this piece mean to you?</label>
+                    <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
+                </div>
+                <div class="form group">
+                    <label for="userCheckbox" class="col-form-label">Was this created by you?</label>    
+                    <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
+                </div>
+                <div class="form group"></div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Recommendation</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="box">
+    <div class="column left"></div>
+    <div id="middleColumn" class="column middle text-center">
+        <div class="navigationBar">
+            <p><span><a href="/past">PAST</a></span><span><a href="/">PRESENT</a></span><span><a href="/future"><strong>FUTURE</strong></a></span></p>
+        </div>
+        <div class="clock">
+            <p><%= today %> | <span id="presentClock">88:88:88</span></p>
+        </div>
+
+        <div class="text-center">
+          <p class="aboutTitle"><strong>About the Project</strong></p>
+        </div>
+        <div class=" text-center aboutText">
+          <p id="p1">Human Music is a project that starts with the dream of a better future. I experience joy through the listening of music that I have never heard before, and I experience joy
+        living experiences that remind me about the random nature of our existence as humans. Since the internet is a environment governed by algorythms that seek the maximization of
+        profits of the owners of the different platforms, I decided to create a platform that generates music recommendations through which I think is one of the ultimately random algorythms in the world: Human Nature.
+          </p>
+          <p id="p2">This place is for sharing from the heart. Each one of us has the opportunity for sharing something that you think will be valuable for whoever listens. Something
+        that becomes a space of light within the darkness. Something that can help anyone that listens overcome anger, sadness or pain. Something that can help anyone that listens to
+        foster happiness, gratitude or confort. Something that can help anyone that listens to go deeply inside of (him/her)self, and through that process fight (his/her) demons and 
+        become a better actor for our society in this crazy experience that we are all sharing called life. Something that can help whoever listens feel that (he/she) is not alone, for all what is needed is contained within.
+          </p>
+          <p id="p3">There is no limitations, there is no boundaries, there is nothing that is good, there is nothing that is bad. What will make this place special
+            is that your recommendation comes from your heart. I believe music is a string that unites us all, and through the understanding of this basic fact we can reach
+            to a conception that on the source we are all part of the same family. We are all human. We are all in this together, no matter from where we come from, no matter our color of skin,
+            money in the bank, no matter if you are sad, no matter if you are angry. We are all in this together, and if we recongnize this basic fact we can move forward for building 
+            a better world.
+          </p> 
+          <p id="p4">
+            Thank you for reading. Thank you for sharing. Thank you for being here. Thank you for being alive.
+          </p>
+          <a class="btn btn-dark btn-sm" href="/past">PAST</a>
+          <a class="btn btn-dark btn-sm" href="/">PRESENT</a>
+          <a class="btn btn-dark btn-sm" href="/future">FUTURE</a>
+        </div>
+        
+    </div>
+    <div class="column right"></div>
+</div>
+<div class="footer">
+    <% if (!currentUser){ %>
+        <a href="#" data-toggle="modal" data-target="#loginModal">Login</a>
+        <a href="/register">Register</a>
+        <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
+        <a href="/about">About</a>
+    <% } %>
+    <% if (currentUser) { %>
+        <a href="/logout">Log Out</a>
+        <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
+        <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
+        <a href="/about">About</a>
+    <% } %>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="/scripts/futureScript.js"></script>
+</body>
+</html>

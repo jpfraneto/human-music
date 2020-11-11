@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="stylesheets/newPresentStyle.css">
+    <link rel="stylesheet" href="stylesheets/pastStyle.css">
     <title>Human Music</title>
 </head>
 <body>
@@ -76,13 +76,48 @@
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
         <div class="navigationBar">
-            <p><span><a href="/past">PAST</a></span><span><strong><a href="/">PRESENT</a></strong></span><span><a href="/future">FUTURE</a></span></p>
+            <p><span><a href="/past"><strong>PAST</strong></a></span><span><a href="/">PRESENT</a></span><span><a href="/future">FUTURE</a></span></p>
         </div>
         <div class="clock">
             <p><%= today %> | <span id="presentClock">88:88:88</span></p>
         </div>
 
-        <h1>The day is over, the next day will start at <span id="nextDayStartingTime">16:18:00 UTC</span>.</h1>
+        <div class="container text-center pastDescription">
+            <p>Each new day starts at 20:43 UTC time with a recommendation of a film that is important. After the film, the day is filled with music 
+              recommendations that will be brought from the future to the present, one by one, until the day is over and a new film comes. 
+              You can click the name of the film of the day to check out which were the recommendations of that particular day.
+            </p>  
+            <p>If you want to add a recommendation to the future so that it can afterwards be part of this past, <a href="/recommendations/new">click here.</a></p>
+            <p>
+                Enjoy our collective creation and the most diverse recommendation algorythm in the world. 
+            </p>
+        </div>
+
+        <table class="table content">
+            <thead>
+              <tr>
+                <th scope="col">Index</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Film of This Day</th>
+                <th scope="col">Total Recommendations</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% days.reverse().forEach(function(day){ %>
+                <tr>
+                  <td><%= day.dayIndex %></td>
+                  <td><%= day.daySKU %></td>
+                  <td><%= day.status %></td>
+                  <td><a href="/days/<%= day.daySKU %>"><%= day.recommendationsOfThisDay[0].name %></a></td>
+                  <td><%= day.totalRecommendationsOfThisDay %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <div class="text-center">
+            <a class="btn btn-success btn-sm" href="/random">Random Recommendation</a>
+          </div>
 
     </div>
     <div class="column right"></div>
@@ -107,6 +142,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="/scripts/endOfDayScript.js"></script>
+<script src="/scripts/pastScript.js"></script>
 </body>
 </html>

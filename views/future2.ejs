@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="stylesheets/newPresentStyle.css">
+    <link rel="stylesheet" href="stylesheets/futureStyle.css">
     <title>Human Music</title>
 </head>
 <body>
@@ -76,14 +76,26 @@
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
         <div class="navigationBar">
-            <p><span><a href="/past">PAST</a></span><span><strong><a href="/">PRESENT</a></strong></span><span><a href="/future">FUTURE</a></span></p>
+            <p><span><a href="/past">PAST</a></span><span><a href="/">PRESENT</a></span><span><a href="/future"><strong>FUTURE</strong></a></span></p>
         </div>
         <div class="clock">
             <p><%= today %> | <span id="presentClock">88:88:88</span></p>
         </div>
 
-        <h1>The day is over, the next day will start at <span id="nextDayStartingTime">16:18:00 UTC</span>.</h1>
-
+        <div class="container text-center content">
+            <p> This is the place where the future presents are being generated
+            </p>
+            <ul class="futureUL futureElements text-center" style="list-style: none;">
+                <li><a href="/future/community">Community</a></li>
+                <li><a href="/future/podcast">Podcast</a></li>
+                <li><a href="/future/nextsteps">Next Steps</a></li>
+                <li><a href="/future/feedback">Feedback / Advice</a></li>
+                <% if(currentUser){ %>
+                  <li><a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a></li>
+                <% } %>
+            </ul>
+        </div>
+        
     </div>
     <div class="column right"></div>
 </div>
@@ -107,6 +119,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="/scripts/endOfDayScript.js"></script>
+<script src="/scripts/futureScript.js"></script>
 </body>
 </html>
