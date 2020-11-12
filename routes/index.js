@@ -13,6 +13,7 @@ let chiita = require("../middleware/chiita");
 const middlewareObj = require("../middleware");
 
 let today = new Date();
+let todayDay = chiita.changeDateFormat(today);
 // Root Route
 
 router.get("/newPresentUpdate", (req, res) => {
@@ -95,9 +96,9 @@ router.get("/checkSystemStatus", (req,res) => {
         answer.dayStartTimestamp = presentDay.startingDayTimestamp;
         if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
             let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
-            let delay = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
+            let finishingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
             answer.recommendation = presentRecommendation;
-            answer.nextEventStartingTimestamp = delay;
+            answer.nextEventStartingTimestamp = finishingTimestamp;
             answer.elapsedTime = Math.floor((now - presentRecommendation.startingRecommendationTimestamp))/1000;
             if(req.user){
                 let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
@@ -107,7 +108,7 @@ router.get("/checkSystemStatus", (req,res) => {
                     answer.isFavorited = true;
                 }
             }
-        } else if (presentDay.systemStatus === "void") {         
+        } else if (presentDay.systemStatus === "void") {   
             answer.nextEventStartingTimestamp = presentDay.startingTimestampsOfThisDay[presentDay.elapsedRecommendations];
         } else if (presentDay.systemStatus === "endOfDay") {
             answer.nextEventStartingTimestamp = presentDay.startingDayTimestamp + 86400000;
@@ -235,8 +236,6 @@ router.post("/", function(req,res){
                     wasCreatedByUser : wasCreatedByUser
                 });
                 newRecommendation.save(()=>{
-                    console.log("This new recommendation was added to the DB");
-                    console.log(newRecommendation);
                     if(req.user){
                         req.user.recommendations.push(newRecommendation);
                         req.user.save(()=>{
@@ -284,13 +283,12 @@ router.get("/past", function(req,res){
 });
 
 router.get("/future", function(req,res){
-    let todayDay = chiita.changeDateFormat(today);
     res.render("future2", {today: todayDay}); 
 });
 
 // show register form
 router.get("/register", function(req, res){
-    res.render("register");
+    res.render("register", {today: todayDay});
 });
 
 router.get("/about", function(req, res){
@@ -303,7 +301,7 @@ router.get("/days", function(req, res){
         if(err){
             console.log(err); 
         } else {
-            res.render("days/index", {pastDays:foundDays}); 
+            res.render("days/index", {pastDays:foundDays, today: todayDay}); 
         }
     })
  });
@@ -314,7 +312,7 @@ router.get("/days", function(req, res){
             console.log(err)
         } else {
             if(foundDay){
-                res.render("days/show", {thisDay: foundDay});
+                res.render("days/show", {thisDay: foundDay, today: todayDay});
             } else {
                 res.redirect("/past");
             }
@@ -326,7 +324,7 @@ router.get("/days", function(req, res){
     Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
     .then((foundPresentDay) => {
         if(foundPresentDay){
-            res.render("presentDay", {thisDay:foundPresentDay})
+            res.render("presentDay", {thisDay:foundPresentDay, today: todayDay})
         } else {
             res.redirect("/");
         }
@@ -334,7 +332,7 @@ router.get("/days", function(req, res){
  });
 
  router.get("/goodbye", function(req, res){
-    res.render("goodbye"); 
+    res.render("goodbye", {today: todayDay}); 
  });
 
  router.get("/random", function(req, res){
@@ -356,21 +354,21 @@ router.get("/days", function(req, res){
  //Future routes
 
  router.get("/future/community", function(req, res){
-    res.render("future/community"); 
+    res.render("future/community", {today: todayDay}); 
  });
 
  router.get("/future/podcast", function(req, res){
-    res.render("future/podcast"); 
+    res.render("future/podcast", {today: todayDay}); 
  });
 
  router.get("/future/nextsteps", function(req, res){
-    res.render("future/nextsteps"); 
+    res.render("future/nextsteps", {today: todayDay}); 
  });
 
  router.get("/future/feedback", function(req, res){
     Feedback.find()
     .then((foundFeedbacks) => {
-        res.render("feedbacks/index", {foundFeedbacks:foundFeedbacks});
+        res.render("feedbacks/index", {foundFeedbacks:foundFeedbacks, today: todayDay});
     })
 });
 
@@ -378,10 +376,10 @@ router.get("/future/feedback/new", function(req, res){
     if(req.user){
         User.findOne({username:req.user.username})
         .then((foundUser)=>{
-            res.render("feedbacks/new", {foundUser:foundUser});
+            res.render("feedbacks/new", {foundUser:foundUser, today: todayDay});
         });
     } else {
-        res.render("feedbacks/new", {foundUser:undefined});
+        res.render("feedbacks/new", {foundUser:undefined, today: todayDay});
     }
 });
 
@@ -414,9 +412,9 @@ router.get("/future/feedback/:id", function(req, res){
     Feedback.findById(req.params.id).populate("comments")
     .then((foundFeedack)=>{
         if(req.user){
-            res.render("feedbacks/show", {username:req.user.username, feedback:foundFeedack})
+            res.render("feedbacks/show", {username:req.user.username, feedback:foundFeedack, today: todayDay})
         } else {
-            res.render("feedbacks/show", {username:undefined, feedback:foundFeedack})
+            res.render("feedbacks/show", {username:undefined, feedback:foundFeedack, today: todayDay})
         }
     })
 });
@@ -424,7 +422,7 @@ router.get("/future/feedback/:id", function(req, res){
 router.get("/future/feedback/:id/edit", middlewareObj.isChocapec, function(req, res){
     Feedback.findById(req.params.id)
     .then((foundFeedback)=>{
-        res.render("feedbacks/edit", {username:req.user.username, feedback:foundFeedback})
+        res.render("feedbacks/edit", {username:req.user.username, feedback:foundFeedback, today: todayDay})
     })
 });
 
@@ -434,7 +432,7 @@ router.put("/future/feedback/:id", function(req, res){
         feedbackForUpdating.message = req.body.message;
         feedbackForUpdating.save(() => {
             console.log("The feedback was updated!")
-            res.redirect("/future/feedback");
+            res.redirect("/future/feedback", {today: todayDay});
         });
     });
 });
@@ -455,7 +453,7 @@ router.post("/register", function(req,res){
             User.register(newUser, req.body.password, function(err, user){
                 if(err){
                     console.log(err)
-                    return res.render("register");
+                    return res.render("register", {today: todayDay});
                 } else {
                     passport.authenticate("local")(req, res, function(){
                     req.flash("success", "Welcome to Human Music "+user.username);
@@ -464,7 +462,7 @@ router.post("/register", function(req,res){
                 }
             });
         } else {
-            return res.render("register");
+            return res.render("register", {today: todayDay});
         }
     });
 });
@@ -474,7 +472,7 @@ router.get("/login", function(req, res){
     if(req.isAuthenticated()) {
         res.redirect("/");
     } else {
-        res.render("login")
+        res.render("login", {today: todayDay})
     }
 });
 
@@ -494,7 +492,7 @@ router.get("/logout", function(req, res){
 });
 
 router.get("/:anything", function(req, res) {
-    res.render("nonExisting");
+    res.render("nonExisting", {today: todayDay});
 })
 
 

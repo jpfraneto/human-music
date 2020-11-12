@@ -1,41 +1,44 @@
-<%- include ("../partials/header") %>
-
-<div class="container text-center title" style="margin-top: 8px">
-    <p><strong>New Comment</strong></p>
-</div>
-
-<div class="container">
-    <form action="/future/feedback/<%=feedback._id%>/" method="POST"> 
-        <% if(!user){ %>
+<%- include("../partials/newHeader") %>
+  
+<div class="box">
+    <div class="column left"></div>
+    <div id="middleColumn" class="column middle text-center">
+            <p><strong>New Comment</strong></p>        
+            
+            <form action="/future/feedback/<%=feedback._id%>/" method="POST"> 
+                <% if(!user){ %>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col-3">
+                            <label for="usernameInput" class="content">Name:</label>
+                            <input class="form-control" id="usernameInput" type="text" name="usernameInput">
+                        </div>
+                        <div class="col-3">
+                            <label for="userCountry" class="content">Contry:</label>
+                            <input class="form-control" id="userCountry" type="text" name="userCountry">
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                <% } %>
+            <br>
             <div class="row">
                 <div class="col"></div>
-                <div class="col-3">
-                    <label for="usernameInput" class="content">Name:</label>
-                    <input class="form-control" id="usernameInput" type="text" name="usernameInput">
-                </div>
-                <div class="col-3">
-                    <label for="userCountry" class="content">Contry:</label>
-                    <input class="form-control" id="userCountry" type="text" name="userCountry">
+                <div class="col-6">
+                        <div class="form-group content text-center">
+                          <label for="feedbackComment">How would you make this platform better?</label>
+                          <textarea class="form-control" id="feedbackComment" name="comment" rows="6"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a class="btn btn-success" role="button" href="/future/feedback/<%=feedback._id%>">Go back</a>
+                        </div>
                 </div>
                 <div class="col"></div>
             </div>
-        <% } %>
-    <br>
-    <div class="row">
-        <div class="col"></div>
-        <div class="col-6">
-                <div class="form-group content text-center">
-                  <label for="feedbackComment">How would you make this platform better?</label>
-                  <textarea class="form-control" id="feedbackComment" name="comment" rows="6"></textarea>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a class="btn btn-success" role="button" href="/future/feedback/<%=feedback._id%>">Go back</a>
-                </div>
-        </div>
-        <div class="col"></div>
+            </form>
+        
     </div>
-    </form>
+    <div class="column right"></div>
 </div>
 
-<%- include ("../partials/footer") %>
+<%- include("../partials/newFooter") %>

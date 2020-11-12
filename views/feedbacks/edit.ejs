@@ -1,11 +1,11 @@
-<%- include ("../partials/header") %>
+<%- include("../partials/newHeader") %>
 
-<div class="container text-center">
-    <h1>Edit feedback</h1>
-</div>
+<div class="box">
+    <div class="column left"></div>
+    <div id="middleColumn" class="column middle text-center">
+      <p><strong>Edit Feedback</strong></p>     
 
-<div class="container">
-    <div class="row">
+      <div class="row">
         <div class="col-6 text-center content">
             <p><%= feedback.message %></p>
         </div>
@@ -28,6 +28,9 @@
 
         </div>
     </div>
+
+    </div>
+    <div class="column right"></div>
 </div>
 
-<%- include ("../partials/footer") %>
+<%- include("../partials/newFooter") %>

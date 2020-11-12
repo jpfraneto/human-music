@@ -1,3 +1,7 @@
+html {
+    overflow-y: scroll;
+}
+
 .iFrameContainer {
     position : relative;
     padding-top : 56.25%; /* 16:9 */
@@ -82,6 +86,10 @@
     font-size: 100%;
 }
 
+.clock p {
+    margin-bottom: 0;
+}
+
 .recommendationInformationDisplay {
     animation-duration: 2s;
     animation-name: infoAppear;
@@ -145,4 +153,25 @@
 #voidInformation {
     font-size: 100%;
     margin-bottom: 20px;
+}
+
+.activeTense {
+    font-weight: 900;
+    font-size: 1.1em;
+}
+
+.pastDescription {
+    font-size: 0.8em;
+}
+
+.table {
+    font-size: 0.8em;
+}
+
+.aboutText{
+    font-size: 0.85em;
+}
+
+.futureUL {
+    padding-left:0;
 }

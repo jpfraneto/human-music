@@ -10,6 +10,7 @@ var middleware = require("../middleware");
 let chiita = require("../middleware/chiita");
 
 var today = new Date();
+let todayDay = chiita.changeDateFormat(today);
 
 //NEW - show form to create a new recommendation
 router.get("/new", function(req,res){
@@ -38,7 +39,11 @@ router.get("/:id", function(req,res){
     // find the recommendation with the provided id
     Recommendation.findById(req.params.id)
     .then((foundRecommendation) => {
-        res.render("recommendations/show", {recommendation : foundRecommendation});
+        if(foundRecommendation.type === "music") {
+            res.render("recommendations/show", {recommendation : foundRecommendation, today:todayDay});
+        } else if (foundRecommendation.type === "film"){
+            res.render("recommendations/filmShow", {recommendation : foundRecommendation, today:todayDay});
+        }
     })
     .catch(()=>{
         console.log("The process crashed while getting the recommendation")
@@ -49,7 +54,7 @@ router.get("/:id", function(req,res){
 router.get("/:id/edit", middleware.checkRecommendationOwnership, function(req, res){
     Recommendation.findById(req.params.id, function(err, foundRecommendation){
         if(foundRecommendation.status === "future"){
-            res.render("recommendations/edit", {recommendation: foundRecommendation, user:req.user});
+            res.render("recommendations/edit", {recommendation: foundRecommendation, today:todayDay, user:req.user});
         } else {
             console.log("You can't edit a recommendation that is not in the future. It is already carved in stone.");
             res.redirect("/");

@@ -6,6 +6,9 @@ var middleware = require("../middleware");
 var User = require("../models/user");
 let chiita = require("../middleware/chiita");
 
+let today = new Date();
+let todayDay = chiita.changeDateFormat(today);
+
 router.get("/:username", middleware.isLoggedIn, function(req,res){
     User.findOne({username:req.params.username}).populate("recommendations").exec(function(err, foundUser){
             if(err){
@@ -13,12 +16,12 @@ router.get("/:username", middleware.isLoggedIn, function(req,res){
                 res.redirect("/");
             } else {
                 if(!foundUser){
-                    res.render("users/unknown", {username:req.params.username});
+                    res.render("users/unknown", {username:req.params.username, today: todayDay});
                 } else {
                     if(foundUser.recommendations[0]){
-                        res.render("users/show", {foundUser: foundUser, recommendation:foundUser.recommendations[0]});
+                        res.render("users/show", {foundUser: foundUser, today: todayDay, recommendation:foundUser.recommendations[0]});
                     } else {
-                        res.render("users/show", {foundUser: foundUser, recommendation:{}});
+                        res.render("users/show", {foundUser: foundUser, today: todayDay, recommendation:{}});
                     }
                 }
             }
@@ -28,7 +31,7 @@ router.get("/:username", middleware.isLoggedIn, function(req,res){
 router.get("/:username/edit", function(req, res){
     User.findOne(req.params.username)
     .then((foundUser)=>{
-        res.render("users/edit", {user:foundUser})
+        res.render("users/edit", {user:foundUser, today: todayDay})
     })
 });
 
@@ -36,7 +39,7 @@ router.get("/:username/recommendations", middleware.isLoggedIn, function(req, re
     Recommendation.find({"author.username":req.params.username}, function(err, foundRecommendations){
         if(err){console.log(err)}
         else {
-            res.render("users/recommendations/recommendations", {username:req.params.username, userRecommendations:foundRecommendations});
+            res.render("users/recommendations/recommendations", {username:req.params.username, userRecommendations:foundRecommendations, today: todayDay});
         }
     });
 });
@@ -44,7 +47,7 @@ router.get("/:username/recommendations", middleware.isLoggedIn, function(req, re
 router.get("/:username/favorites", middleware.isLoggedIn, function(req, res){
     User.findOne({"username" : req.params.username}).populate("favoriteRecommendations")
     .then((foundUser)=>{
-        res.render("users/favorites", {foundUser:foundUser})
+        res.render("users/favorites", {foundUser:foundUser, today: todayDay})
     });
 });
 
@@ -53,7 +56,7 @@ router.get("/:username/recommendations/:id", middleware.isLoggedIn, function(req
         if(err){console.log(err)}
         else{
             foundRecommendation.url = chiita.getSourceURL(foundRecommendation.url);
-            res.render("users/recommendations/show", {username:req.params.username, recommendation:foundRecommendation});
+            res.render("users/recommendations/show", {username:req.params.username, recommendation:foundRecommendation, today: todayDay});
         }
     });
 });

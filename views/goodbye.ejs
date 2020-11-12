@@ -1,28 +1,14 @@
-<%- include("./partials/header") %>
+<%- include("./partials/newHeader") %>
 
-<div class="container text-center title" style="margin-top: 8px">
-    <p><strong>Goodbye</strong></p>
-</div>
+<div class="box">
+    <div class="column left"></div>
+    <div id="middleColumn" class="column middle text-center">
 
-<div class="container text-center content">
-    <p>It was nice having you here. Hope to see you back soon
-</p>
-</div>
-
-<% const urls = ["https://www.google.com", 
-                 "https://www.utne.com", 
-                 "https://www.theatlantic.com",
-                 "https://www.patatap.com/",
-                 "https://news.ycombinator.com/",
-                 "https://stratechery.com/",
-                 "https://www.4alltech.com/",
-                 "https://www.theguardian.com"] %>
-<% const randomUrl = urls[Math.floor(Math.random() * urls.length)]; %>
-
-<div class="row text-center">
-    <div class="col-12">
-        <img alt="" class="img-thumbnail goodbyeImage" id="randomRecom" src="https://images.unsplash.com/photo-1474432978580-3d2a63f706e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" >
+        <p><strong>Goodbye</strong></p>
+        <p> It was nice having you here. Hope to see you back soon </p>
+        
     </div>
+    <div class="column right"></div>
 </div>
 
-<%- include("./partials/footer") %>
+<%- include("./partials/newFooter") %>

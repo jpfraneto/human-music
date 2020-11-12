@@ -6,13 +6,6 @@ let fsButton = document.getElementById("fullscreenButton");
 
 timer = setInterval(updateCountdown, 1000);
 
-window.onload = () => {
-  systemInformationPromise = getSystemInformation();
-  systemInformationPromise.then((systemInformation) => {
-    toggleButtons(systemInformation.isFavorited);
-  })
-};
-
 async function getSystemInformation () {
     const response = await fetch("/checkSystemStatus");
     const presentStatus = await response.json();
@@ -37,8 +30,11 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
+function onPlayerStateChange (event){
+  //Do something when the state of the player changes
+}
+
 function onPlayerReady(event) {
-  showRecommendationInformation();
   setupFullscreenButton();
   let muteButton = document.getElementById("muteButton");
   muteButton.addEventListener("click", ()=> {
@@ -59,12 +55,21 @@ function setupFullscreenButton() {
   fsButton.addEventListener("click", playFullscreen);
 }
 
+function playFullscreen() {
+  let iframe = document.querySelector("iframe");
+  let requestFullscreen = iframe.requestFullScreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullScreen;
+  if(requestFullscreen){
+    requestFullscreen.bind(iframe)();
+  }
+}
+
 function updateCountdown () {
     let presentTimeSpan = document.getElementById("presentClock");
     presentTimeSpan.innerHTML = (new Date()).toUTCString().substring(17,25)
 }
 
-favoriteButton.addEventListener("click", function(e){
+if(favoriteButton || unFavoriteButton){
+  favoriteButton.addEventListener("click", function(e){
     favoriteButton.style.display = "none";
     unFavoriteButton.style.display = "inline-block";
     fetch("/favorited", {method:"POST"})
@@ -93,6 +98,8 @@ favoriteButton.addEventListener("click", function(e){
       console.log(error);
     })
   })
+
+  toggleButtons(false);
   
   function toggleButtons (isFavorited) {
     let controlsDiv = document.getElementById("controlsDiv");
@@ -110,3 +117,5 @@ favoriteButton.addEventListener("click", function(e){
       }
   }
   }
+}
+

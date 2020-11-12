@@ -1,22 +1,26 @@
-let systemInformation, iFrameGlobalElement, timer, delay, recommendationInfo, voidInfo, currentUser;
+let systemInformation, iFrameGlobalElement, timer, delay, recommendationInfo, voidInfo, currentUser, recommendationEndingTimestamp, endingTime;
 
 const favoriteButton = document.getElementById("addFavoriteButton");
 const unFavoriteButton = document.getElementById("removeFavoriteButton");
 let muteButton = document.getElementById("muteButton");
 let fsButton = document.getElementById("fullscreenButton");
+let bottomMessage = document.getElementById("recommendationBottomMessage");
 
 timer = setInterval(updateCountdown, 1000);
 
-window.onload = () => {
+function setup () {
   systemInformationPromise = getSystemInformation();
   systemInformationPromise.then((systemInformation) => {
     systemStatus = systemInformation.systemStatus;
     toggleButtons(systemInformation.isFavorited);
     let now = (new Date).getTime();
     delay = systemInformation.nextEventStartingTimestamp - now;
+    console.log("The next event [intoTheVoid] will happen in "+ delay + " milliseconds")
     setTimeout(intoTheVoid, delay);
   })
 };
+
+setup();
 
 async function getSystemInformation () {
   const response = await fetch("/checkSystemStatus");
@@ -89,12 +93,13 @@ function intoTheVoid () {
       
       let now = (new Date).getTime();
       delay = systemInformation.nextEventStartingTimestamp - now;
+      console.log("The next event [outOfTheVoid] will happen in "+ delay + " milliseconds")
       setTimeout(outOfTheVoid, delay);
 
       iFrameGlobalElement = null;
       iFrameGlobalElement = $("#presentPlayer").detach();
-      
-      voidInformation();
+
+      voidInformation(systemInformation.nextEventStartingTimestamp);
     } else {
       intoTheVoid();
     }
@@ -109,6 +114,7 @@ function outOfTheVoid () {
 
       let now = (new Date).getTime();
       delay = systemInformation.nextEventStartingTimestamp - now;
+      console.log("The next event [intoTheVoid] will happen in "+ delay + " milliseconds")
       setTimeout(intoTheVoid, delay);
 
       let container = document.getElementById("mediaContainer");
@@ -119,14 +125,16 @@ function outOfTheVoid () {
     
       iFrameGlobalElement.appendTo(container);
 
-      updateRecommendation(systemInformation.recommendation);
+
+      updateRecommendation(systemInformation);
     } else {
       outOfTheVoid();
     }
   })
 }
 
-function updateRecommendation (presentRecommendation) {
+function updateRecommendation (systemInformation) {
+  presentRecommendation = systemInformation.recommendation;
   recommendationInfo = document.getElementById("presentRecommendationInformation");
   voidInfo = document.getElementById("voidInformation");
   recommendationInfo.style.display = "block";
@@ -137,6 +145,12 @@ function updateRecommendation (presentRecommendation) {
   let dateOfRecommendation = document.getElementById("dateOfRecommendation");
   let recommendationName = document.getElementById("recommendationName");
   let recommendationDescription = document.getElementById("recommendationDescription");
+
+  recommendationEndingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
+  endingRecommendationTime = (new Date(recommendationEndingTimestamp)).toUTCString().substring(17,25);
+  bottomMessage.innerText = "This recommendation ends at " + endingRecommendationTime;
+
+  toggleButtons(systemInformation.isFavorited);
 
   username.innerText = presentRecommendation.author.username;
   userCountry.innerText = presentRecommendation.author.country;
@@ -150,7 +164,7 @@ function updateCountdown () {
   presentTimeSpan.innerHTML = (new Date()).toUTCString().substring(17,25)
 }
 
-async function voidInformation () {
+async function voidInformation (nextRecommendationStartingTimestamp) {
   fetch("https://api.nasa.gov/planetary/apod?api_key=OMcSf5neLQv0rUKv8xebrLM63HFac79GpysEI5Yr")
   .then(response=>response.json())
   .then((apod)=>{
@@ -168,6 +182,11 @@ async function voidInformation () {
     nasaTitle.innerText = apod.title;
     nasaDate.innerText = apod.date;
     explanation.innerText = apod.explanation;
+
+    
+    nextStartingTime = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
+
+    bottomMessage.innerText = "The new recommendation will come soon... At " + nextStartingTime;
 
     recommendationInfo = document.getElementById("presentRecommendationInformation");
     voidInfo = document.getElementById("voidInformation");

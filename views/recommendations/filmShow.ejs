@@ -5,11 +5,7 @@
     <div id="middleColumn" class="column middle text-center">
 
         <div class="iFrameContainer" id="mediaContainer">
-            <iframe id="presentPlayer" width="640" height="360"
-            src="https://www.youtube.com/embed/<%= recommendation.youtubeID %>?start=0&autoplay=1&enablejsapi=1&mute=1&controls=0"
-            style="border: solid 4px #37474F"
-            allow="autoplay"
-            ></iframe>
+            <img src="<%=recommendation.imageURL%>" alt="">
         </div>
 
         <div class="controls" id="controlsDiv">

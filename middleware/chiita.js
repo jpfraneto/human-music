@@ -174,13 +174,14 @@ chiita.bringRecommendationToPresent = (futureRecommendation) => {
 
 chiita.startRecommendationInterval = () => {
     nowTime = new Date();
-    console.log("The startRecommendationInterval started at: " + nowTime);
-    chiita.changeSystemStatus("void");
     Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
     .then((presentDay)=>{
         chiita.sendRecommendationToPast(presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations])
         presentDay.elapsedRecommendations ++;
+        presentDay.systemStatus = "void";
+        console.log("The startRecommendationInterval started at: " + nowTime);
         presentDay.save(()=>{
+            console.log("The day was saved with the update of the elapsed recommendations ++ and the status to void")
             if ( presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay ){
                 console.log("The setTimeout of the interval will start now and the duration is (chi): " + presentDay.chiDurationForThisDay);
                 setTimeout(() => {
@@ -237,7 +238,7 @@ chiita.createNewDay = async () => {
     let now = new Date();
     let daySKU = changeDateFormat(now);
     let startingDayTimestamp = now.getTime();
-    let elapsedDaytime = 0;
+    let elapsedDaytime = information.filmForToday.duration;
     let recommendationsOfThisDay = [information.filmForToday];
     let recommendationDurationsOfThisDay = [information.filmForToday.duration];
     for (let i=0; i<information.musicForToday.length;i++) {

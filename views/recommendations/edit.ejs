@@ -1,33 +1,19 @@
-<%- include("../partials/header") %>
-<div class="container">
-    <div class="row">
-        <div class="col-12 text-center title">
-            <h1>Edit Your Recommendation</h1>
-            <div class="container text-center content">
-                <p>If you are not sure about what you have shared, and you want to revisit it, this is the place</p>
-            </div>
-        </div>
-    </div>
-    <hr id="horizontalRule">
+<%- include("../partials/newHeader") %>
 
-    <% source = recommendation.url + "?autoplay=1" %>
-    <% src1 = source.slice(32) %>
-    <% sourceFinal = "https://www.youtube.com/embed/" + src1 %>
-
-    <div class="container text-center">
+<div class="box">
+    <div class="column left"></div>
+    <div id="middleColumn" class="column middle text-center">
+        <iframe id="presentPlayer" width="640" height="360"
+        src="https://www.youtube.com/embed/<%= recommendation.youtubeID %>?start=0&autoplay=1&enablejsapi=1&mute=1&controls=0"
+        style="border: solid 4px #37474F"
+        allow="autoplay"
+        ></iframe>
         <div class="row">
             <div class="col-7">
-                <iframe id="newRecommendationIframe" 
-                width="395" height="222"
-                src="<%= sourceFinal %>" 
-                allow="autoplay" autoplay="1"
-                frameborder="0"
-                style="border: solid 4px #37474F"
-                ></iframe>
                 <div class="userinformation">
                     <p><strong>User: </strong><a href="/users/<%=user._id%>"><%= user.username %></a></p>
                     <p><strong>Country of Identification: </strong><%=user.country%></p>
-                    <p><strong>Date of Recommendation: </strong> <%= recommendation.daySKU %></p>
+                    <p><strong>Date of Recommendation: </strong> <%= recommendation.dayIndex %></p>
                     <p><strong>Why did you recommend it?: </strong></p>
                     <div>
                         <p id="recommendationDescription"><%= recommendation.description%></p>
@@ -42,7 +28,7 @@
                     </div>
     
                     <div class="form-group">
-                        <label for="descriptionTextArea" class="clock">What does this piece mean to you?</label>
+                        <label for="descriptionTextArea" class="clock">Why did you recommend it?</label>
                         <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description" required><%= recommendation.description %></textarea>
                     </div>
     
@@ -58,5 +44,7 @@
             </div>
         </div>
     </div>
+    <div class="column right"></div>
+</div>
 
-<%- include("../partials/footer") %>
+<%- include("../partials/newFooter") %>
