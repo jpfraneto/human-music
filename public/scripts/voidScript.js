@@ -1,10 +1,16 @@
 window.onload = () => {
+  setInterval(updateCountdown, 1000);
   let information = getSystemInformation();
   information.then((systemInformation)=>{
     let now = (new Date).getTime();
     let delay = systemInformation.nextEventStartingTimestamp - now;
     setTimeout (reloadVoid, delay);
   })
+}
+
+function updateCountdown () {
+  let presentTimeSpan = document.getElementById("presentClock");
+  presentTimeSpan.innerHTML = (new Date()).toUTCString().substring(17,25)
 }
 
 async function reloadVoid () {

@@ -100,7 +100,7 @@ chiita.timeWarp = async () => {
                                 thisRecommendation.status = "present"
                                 thisRecommendation.save(()=>{
                                     chiita.changeSystemStatus("recommendation");
-                                    console.log("The recommendation was brought to the present");
+                                    console.log("The recommendation was brought to the present from the future");
                                     console.log("2: A setTimeout will start now and it will be triggered in: " + remainingTimeForNextInterval);
                                     setTimeout(chiita.startRecommendationInterval, remainingTimeForNextInterval);
                                 });
@@ -136,10 +136,10 @@ chiita.timeWarp = async () => {
             presentDay.elapsedRecommendations += k;
             presentDay.save( ()=> {
                 console.log("The timewarp updated " + j + " recommendation's status");
+                console.log("The timewarp updated the elapsed recommendations in " + k + " recommendations");
             });
         } else {
             console.log("There was not any day in the present when the timeWarp function was triggered");
-            chiita.createNewDay();
         }
     })
     .catch(()=>{

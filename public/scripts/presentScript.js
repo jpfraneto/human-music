@@ -5,6 +5,7 @@ const unFavoriteButton = document.getElementById("removeFavoriteButton");
 let muteButton = document.getElementById("muteButton");
 let fsButton = document.getElementById("fullscreenButton");
 let bottomMessage = document.getElementById("recommendationBottomMessage");
+let controlsDiv = document.getElementById("controlsDiv");
 
 timer = setInterval(updateCountdown, 1000);
 
@@ -86,11 +87,12 @@ function showRecommendationInformation () {
 }
 
 function intoTheVoid () {
+  console.log("inside the intoTheVoid function, the getsysteminformation function will run now and check the system status");
   systemInformationPromise = getSystemInformation();
-  
   systemInformationPromise.then((systemInformation) => {
     if(systemInformation.systemStatus === "void"){
-      
+      clearInterval(voidTimer);
+      controlsDiv.style.visibility = "visible";
       let now = (new Date).getTime();
       delay = systemInformation.nextEventStartingTimestamp - now;
       console.log("The next event [outOfTheVoid] will happen in "+ delay + " milliseconds")
@@ -101,16 +103,19 @@ function intoTheVoid () {
 
       voidInformation(systemInformation.nextEventStartingTimestamp);
     } else {
-      intoTheVoid();
+      voidTImer = setInterval(intoTheVoid,1000);
     }
   })
 }
 
+let voidTimer, outVoidTimer;
+
 function outOfTheVoid () {
+  console.log("inside the outOfTheVoid function, the getsysteminformation function will run now and check the system status");
   systemInformationPromise = getSystemInformation();
-  
   systemInformationPromise.then((systemInformation)=>{
     if(systemInformation.systemStatus === "recommendation"){
+      clearInterval(outVoidTimer);
 
       let now = (new Date).getTime();
       delay = systemInformation.nextEventStartingTimestamp - now;
@@ -120,15 +125,14 @@ function outOfTheVoid () {
       let container = document.getElementById("mediaContainer");
       let newSrc = "https://www.youtube.com/embed/" + systemInformation.recommendation.youtubeID + "?start=0&autoplay=1&enablejsapi=1&controls=0";
       iFrameGlobalElement[0].src = newSrc;
-      let voidImage = document.getElementById("voidImage");
+      let voidImage = document.getElementById("presentVoidImage");
       voidImage.remove();
     
       iFrameGlobalElement.appendTo(container);
 
-
       updateRecommendation(systemInformation);
     } else {
-      outOfTheVoid();
+      outVoidTimer = setInterval(outOfTheVoid,1000);
     }
   })
 }
@@ -170,8 +174,7 @@ async function voidInformation (nextRecommendationStartingTimestamp) {
   .then((apod)=>{
     let container = document.getElementById("mediaContainer");
     let newImage = document.createElement("img");
-  
-    newImage.id = "voidImage";
+    newImage.id = "presentVoidImage";
     newImage.src = apod.url;
     container.appendChild(newImage);
 
@@ -226,7 +229,7 @@ unFavoriteButton.addEventListener("click", function(e){
 })
 
 function toggleButtons (isFavorited) {
-  let controlsDiv = document.getElementById("controlsDiv");
+  
   controlsDiv.style.visibility = "visible";
   muteButton.style.visibility = "visible";
   fsButton.style.visibility = "visible";

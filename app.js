@@ -53,16 +53,16 @@ if(process.env.NODE_ENV === 'production') {
 // setTimeout(chiita.createNewDay, 2000);
 
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
-console.log("The app.js file is running again.");
-chiita.timeWarp();
+// console.log("The app.js file is running again.");
+// chiita.timeWarp();
 
 setInterval(()=>{
     console.log("This message is logged every 15 minutes")
 }, 900000);
 
-let job = new CronJob("18 16 * * *", () => {
-    chiita.createNewDay();
-}, undefined, true, "UTC");
+// let job = new CronJob("18 16 * * *", () => {
+//     chiita.createNewDay();
+// }, undefined, true, "UTC");
 
 //The following is the code that starts a new cycle when this one is over
 

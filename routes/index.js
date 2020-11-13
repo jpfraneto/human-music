@@ -71,7 +71,7 @@ router.get("/", (req, res) => {
                         res.render("theVoid", {
                             reimainingVoidTime: reimainingVoidTime, 
                             startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
-                            today : today,
+                            today : todayDay,
                             nasaInfo : imageOfTheDay.data
                         });
                     })

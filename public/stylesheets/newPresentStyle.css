@@ -175,3 +175,13 @@ html {
 .futureUL {
     padding-left:0;
 }
+
+#voidImage {
+    width:100%;
+}
+
+#presentVoidImage{
+    height: 100%;
+    width: auto;
+    text-align: center;
+}
