@@ -233,6 +233,7 @@ function toggleButtons (isFavorited) {
   controlsDiv.style.visibility = "visible";
   muteButton.style.visibility = "visible";
   fsButton.style.visibility = "visible";
+  volumeButton.style.visibility = "visible";
 
   if(isFavorited != null){
     if(isFavorited){

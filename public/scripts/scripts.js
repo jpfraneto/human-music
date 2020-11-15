@@ -4,3 +4,4 @@ function updateCountdown () {
 }
 
 setInterval(updateCountdown, 1000);
+

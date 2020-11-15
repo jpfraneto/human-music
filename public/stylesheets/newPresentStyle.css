@@ -47,20 +47,21 @@ html {
 
 .left {
     text-align: center;
-    width:22%
+    width:8%
 }
 
 .right {
     text-align: center;
-    width:22%
+    width:8%
 }
 
 .middle {
-    width:56%
+    width:84%
 }
 
 .navigationBar {
     width : 100%;
+    height: auto;
     margin: 0 auto;
 }
 
@@ -134,10 +135,10 @@ html {
 }
 
 .footer a {
-    margin: 1.618em;
+    margin: 2%;
     color: white;
     text-decoration: none;
-    font-size: 100%;
+    font-size: 70%;
 }
 
 .footer a:hover {
@@ -185,3 +186,59 @@ html {
     width: auto;
     text-align: center;
 }
+
+#pastSpan {
+    color: brown
+}
+
+#futureSpan {
+    color: green
+}
+
+@media only screen and (min-width: 888px) {
+    .left {
+        width:22%
+    }
+    
+    .right {
+        width:22%
+    }
+    
+    .middle {
+        width:54%
+    }
+
+    .footer a{
+        font-size: 0.5em;
+    }
+
+    .footer {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        text-align: center;
+        background-color: black;
+        height: 6%;
+    }
+    
+    .footer a {
+        margin: 1.618em;
+        color: white;
+        text-decoration: none;
+        font-size: 100%;
+    }
+  }
+
+  .navigationBar a {
+    font-size: 150%;
+    margin: 0 auto;
+    color: black;
+}
+
+@media only screen and (min-width: 3000px) {
+    .navigationBar a{
+        font-size: 2vh;
+        margin: 0 auto;
+        color: black;
+    }
+  }
