@@ -46,15 +46,15 @@ if(process.env.NODE_ENV === 'production') {
 //For starting from scratch
 // chiita.bigBang();
 //For sending the recommendations to the future
-chiita.bigBangTwo();
+// chiita.bigBangTwo();
 // chiita.createNewDay();
 
 // chiita.bigBang();
 // setTimeout(chiita.createNewDay, 2000);
 
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
-// console.log("The app.js file is running again.");
-// chiita.timeWarp();
+console.log("The app.js file is running again.");
+chiita.timeWarp();
 
 let job = new CronJob("55 20 * * *", () => {
     chiita.createNewDay();
