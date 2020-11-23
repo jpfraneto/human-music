@@ -242,7 +242,7 @@ router.post("/", function(req,res){
                             console.log("The user was updated with the new recommendation")
                         });
                     }
-                    res.redirect("/");
+                    // res.redirect("/");
                 });
             }
         })

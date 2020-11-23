@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
     <link rel="stylesheet" href="/stylesheets/newPresentStyle.css">
     <title>Human Music</title>
 </head>
@@ -99,8 +100,12 @@
             <% if(!currentUser){ %>
                 <a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#loginModal">Favorites</a>
             <% } %>
-            <button class="btn btn-dark btn-sm" id="muteButton" style="visibility: hidden;">(un)Mute</button>
+            <!-- <button class="btn btn-dark btn-sm" id="muteButton" style="visibility: hidden;">(un)Mute</button> -->
             <button class="btn btn-dark btn-sm" id="fullscreenButton" style="visibility: hidden;">Go fullscreen</button>
+            <!-- <button class="btn btn-dark btn-sm" id="volumeDown" style="visibility: hidden;"><i class="fas fa-volume-down"></i></button> -->
+            <button class="btn btn-dark btn-sm" id="volumeDisplay" style="visibility: hidden;"><i class="fas fa-music"></i> <span id="currentVolume">00</span></i></button>
+            <!-- <button class="btn btn-dark btn-sm" id="volumeUp" style="visibility: hidden;"><i class="fas fa-volume-up"></i></button> -->
+            <input id="vol-control" type="range" min="0" max="100" step="1" oninput="SetVolume(this.value)" onchange="SetVolume(this.value)"></input>
         </div>
 
         <p id="recommendationBottomMessage">This recommendation ends at <%= endingTime %></p>

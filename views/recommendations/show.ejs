@@ -94,14 +94,8 @@
         </div>
 
         <div class="controls" id="controlsDiv">
-            <% if(currentUser){ %>
-                <button class="btn btn-success btn-sm" id="addFavoriteButton" style="display: none;">Add Favorite</button>
-                <button class="btn btn-danger btn-sm" id="removeFavoriteButton" style="display: none;">Remove Favorite</button>
-            <% } else { %>
-                <a class="btn btn-success btn-sm" href="#" data-toggle="modal" style="display: inline-block;" data-target="#loginModal">Favorites</a>
-            <% } %>
             <button class="btn btn-dark btn-sm" id="muteButton">(un)Mute</button>
-            <button class="btn btn-dark btn-sm" id="fullscreenButton"   >Go fullscreen</button>
+            <button class="btn btn-dark btn-sm" id="fullscreenButton">Go fullscreen</button>
         </div>
         <hr>
         <div id="recommendationInformation">

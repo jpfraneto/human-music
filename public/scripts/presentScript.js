@@ -1,8 +1,12 @@
-let systemInformation, iFrameGlobalElement, timer, delay, recommendationInfo, voidInfo, currentUser, recommendationEndingTimestamp, endingTime;
+let systemInformation, iFrameGlobalElement, timer, delay, recommendationInfo, voidInfo, currentUser, recommendationEndingTimestamp, endingTime, volume;
 
 const favoriteButton = document.getElementById("addFavoriteButton");
 const unFavoriteButton = document.getElementById("removeFavoriteButton");
 let muteButton = document.getElementById("muteButton");
+let volumeDownButton = document.getElementById("volumeDown");
+let volumeUpButton = document.getElementById("volumeUp");
+let volumeDisplay = document.getElementById("volumeDisplay");
+let currentVolume = document.getElementById("currentVolume");
 let fsButton = document.getElementById("fullscreenButton");
 let bottomMessage = document.getElementById("recommendationBottomMessage");
 let controlsDiv = document.getElementById("controlsDiv");
@@ -50,14 +54,20 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
   showRecommendationInformation();
   setupFullscreenButton();
-  let muteButton = document.getElementById("muteButton");
-  muteButton.addEventListener("click", ()=> {
-    if (player.isMuted()){
-      player.unMute();
-    } else {
-      player.mute();
-    }
-  })
+  // let volumeDownButton = document.getElementById("volumeDown");
+  // let volumeUpButton = document.getElementById("volumeUp");
+}
+
+function SetVolume(value){
+  if (player.isMuted()){
+    player.unMute();
+  }
+  player.setVolume(value);
+  currentVolume.innerText = value;
+}
+
+function displayVolumeButtonClick () {
+  
 }
 
 function onPlayerError(event) {
@@ -231,9 +241,11 @@ unFavoriteButton.addEventListener("click", function(e){
 function toggleButtons (isFavorited) {
   
   controlsDiv.style.visibility = "visible";
-  muteButton.style.visibility = "visible";
+  // muteButton.style.visibility = "visible";
   fsButton.style.visibility = "visible";
-  volumeButton.style.visibility = "visible";
+  // volumeDownButton.style.visibility = "visible";
+  // volumeUpButton.style.visibility = "visible";
+  volumeDisplay.style.visibility = "visible";
 
   if(isFavorited != null){
     if(isFavorited){
