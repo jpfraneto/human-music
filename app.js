@@ -13,6 +13,7 @@ let express       = require("express"),
     User          = require("./models/user"),
     Comment       = require("./models/comment"),
     Day           = require("./models/day"),
+    Cycle           = require("./models/cycle"),
     chiita        = require("./middleware/chiita"),
     seedDB        = require("./seeds2");
 
@@ -50,13 +51,22 @@ if(process.env.NODE_ENV === 'production') {
 // chiita.createNewDay();
 
 // chiita.bigBang();
-// setTimeout(chiita.createNewDay, 2000);
+// chiita.createNewCycle();
+// setTimeout(() => {
+//   Cycle.find({}).populate("daysOfThisCycle")
+//   .then((foundCycles)=>{
+//     console.log("The cycles that were found are:")
+//     foundCycles.forEach((cycle)=>{
+//       console.log(cycle.daysOfThisCycle);
+//     })
+//   })
+// }, 2000);
 
 //If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
-console.log("The app.js file is running again.");
-chiita.timeWarp();
+// console.log("The app.js file is running again.");
+// chiita.timeWarp();
 
-let job = new CronJob("55 20 * * *", () => {
+let job = new CronJob("53 21 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 

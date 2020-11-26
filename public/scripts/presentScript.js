@@ -5,11 +5,12 @@ const unFavoriteButton = document.getElementById("removeFavoriteButton");
 let muteButton = document.getElementById("muteButton");
 let volumeDownButton = document.getElementById("volumeDown");
 let volumeUpButton = document.getElementById("volumeUp");
-let volumeDisplay = document.getElementById("volumeDisplay");
+let volumeDisplayButton = document.getElementById("volumeDisplay");
 let currentVolume = document.getElementById("currentVolume");
 let fsButton = document.getElementById("fullscreenButton");
 let bottomMessage = document.getElementById("recommendationBottomMessage");
 let controlsDiv = document.getElementById("controlsDiv");
+let volumeIcon = document.getElementById("volumeIcon");
 
 timer = setInterval(updateCountdown, 1000);
 
@@ -54,6 +55,7 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
   showRecommendationInformation();
   setupFullscreenButton();
+  setupVolumeDisplayButton();
   // let volumeDownButton = document.getElementById("volumeDown");
   // let volumeUpButton = document.getElementById("volumeUp");
 }
@@ -61,13 +63,31 @@ function onPlayerReady(event) {
 function SetVolume(value){
   if (player.isMuted()){
     player.unMute();
+    volumeIcon.innerHTML = '<i class="fas fa-volume-up"></i>'
   }
   player.setVolume(value);
   currentVolume.innerText = value;
 }
 
-function displayVolumeButtonClick () {
-  
+function setupVolumeDisplayButton () {
+  if(player.isMuted()){
+    volumeIcon.innerHTML = '<i class="fas fa-volume-mute"></i>'
+  } else {
+    volumeIcon.innerHTML = '<i class="fas fa-volume-up"></i>'
+  }
+  volumeDisplayButton.addEventListener("click", volumeDisplayFunction)
+}
+
+function volumeDisplayFunction() {
+  if(player.isMuted()){
+    player.unMute();
+    volumeIcon.innerHTML = '<i class="fas fa-volume-up"></i>';
+    currentVolume.innerText = player.getVolume();
+  } else {
+    player.mute();
+    volumeIcon.innerHTML = '<i class="fas fa-volume-mute"></i>'
+    currentVolume.innerText = "";
+  }
 }
 
 function onPlayerError(event) {
@@ -102,7 +122,7 @@ function intoTheVoid () {
   systemInformationPromise.then((systemInformation) => {
     if(systemInformation.systemStatus === "void"){
       clearInterval(voidTimer);
-      controlsDiv.style.visibility = "visible";
+      controlsDiv.style.visibility = "hidden";
       let now = (new Date).getTime();
       delay = systemInformation.nextEventStartingTimestamp - now;
       console.log("The next event [outOfTheVoid] will happen in "+ delay + " milliseconds")
@@ -126,7 +146,7 @@ function outOfTheVoid () {
   systemInformationPromise.then((systemInformation)=>{
     if(systemInformation.systemStatus === "recommendation"){
       clearInterval(outVoidTimer);
-
+      controlsDiv.style.visibility = "visible";
       let now = (new Date).getTime();
       delay = systemInformation.nextEventStartingTimestamp - now;
       console.log("The next event [intoTheVoid] will happen in "+ delay + " milliseconds")

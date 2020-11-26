@@ -6,6 +6,7 @@ let passport = require("passport");
 let Recommendation = require("../models/recommendation");
 let User = require("../models/user");
 let Day = require("../models/day");
+let Cycle = require("../models/cycle");
 let Feedback = require("../models/feedback");
 let RetreatForm = require("../models/retreatForm");
 const middleware = require("../middleware");
@@ -118,6 +119,28 @@ router.get("/checkSystemStatus", (req,res) => {
     // .catch(()=>{console.log("There was an error getting the present day")})
 });
 
+router.post("/showRecommendation", (req,res) => {
+    let answer = {};
+    Recommendation.findById(req.body.recommendationID)
+    .then((foundRecommendation)=>{
+        if(req.user){
+            if(req.user.favoriteRecommendations){
+                let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(foundRecommendation._id);
+                if(indexOfRecommendation === -1){
+                    answer.isFavorited = false;
+                } else {
+                    answer.isFavorited = true;
+                }
+            } else {
+                answer.isFavorited = false;
+            }
+        }
+    res.json(answer);
+    })
+    .catch(()=>{console.log("There was an error in the showRecommendation route")})
+});
+
+
 router.post("/getRecommendation", (req,res) => {
     Recommendation.findOne({status:"present"})
     .then((presentRecommendation)=>{
@@ -130,40 +153,69 @@ router.get("/mobile", (req, res) => {
 });
 
 router.post("/favorited", (req, res) => {
-    Recommendation.findOne({status:"present"})
-    .then((presentRecommendation) => {
-        if(req.user){
-        req.user.favoriteRecommendations.push(presentRecommendation);
-        req.user.save(()=>{
-            console.log("The recommendation was added to the user");
+    if(req.body.recommendationID){
+        Recommendation.findById(req.body.recommendationID)
+        .then((recommendation)=>{
+            req.user.favoriteRecommendations.push(recommendation);
+            req.user.save(()=>{
+                console.log("The recommendation was added to the user")
+            })
+        })
+        .catch((error)=>{
+            console.log(error)
+        });    
+    } else {
+        Recommendation.findOne({status:"present"})
+        .then((presentRecommendation) => {
+            if(req.user){
+            req.user.favoriteRecommendations.push(presentRecommendation);
+            req.user.save(()=>{
+                console.log("The recommendation was added to the user");
+            });
+            } else {
+                console.log("There is no user logged in, we cannot save the recommendation to its profile!");
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
         });
-        } else {
-            console.log("There is no user logged in, we cannot save the recommendation to its profile!");
-        }
-    })
-    .catch((error)=>{
-        console.log(error)
-    });
+    }
 });
 
 router.post("/unfavorited", (req, res) => {
-    Recommendation.findOne({status:"present"})
-    .then((presentRecommendation) => {
-        if(req.user){   
-            const index = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
+    if (req.body.recommendationID){
+        Recommendation.findById(req.body.recommendationID)
+        .then((recommendation)=> {
+            const index = req.user.favoriteRecommendations.indexOf(recommendation._id);
             if( index > -1 ){
                 req.user.favoriteRecommendations.splice(index,1);
             }
             req.user.save(()=>{
                 console.log("Updated the user after deleting the recommendation");
             })
-        } else {
-            console.log("There is no user logged in!")
-        }
-    })
-    .catch((error)=>{
-        console.log(error)
-    });
+        })
+        .catch((error)=>{
+            console.log(error)
+        });
+    } else {
+        Recommendation.findOne({status:"present"})
+        .then((presentRecommendation) => {
+            if(req.user){   
+                const index = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
+                if( index > -1 ){
+                    req.user.favoriteRecommendations.splice(index,1);
+                }
+                req.user.save(()=>{
+                    console.log("Updated the user after deleting the recommendation");
+                })
+            } else {
+                console.log("There is no user logged in!")
+            }
+        })
+        .catch((error)=>{
+            console.log(error)
+        });
+    }
 });
 
 router.post("/checkIfRepeated", (req, res) => {
@@ -199,8 +251,8 @@ router.post("/", function(req,res){
         }
     } else {
         author = {
-            username: "unknown",
-            country: "unknown"
+            username: req.body.username,
+            country: req.body.country
         }
     };
     if(req.body.wasCreatedByUser){
@@ -275,10 +327,13 @@ router.post("/", function(req,res){
 });
 
 router.get("/past", function(req,res){
-    Day.find({}).populate("recommendationsOfThisDay")
-    .then((foundDays) => {
+    Day.find({cycleStatus:"active"}).populate("recommendationsOfThisDay")
+    .then((foundActiveDays) => {
         let todayDay = chiita.changeDateFormat(today);
-        res.render("past2", {days:foundDays, today:todayDay}); 
+        Cycle.find({})
+        .then((foundCycles)=>{
+            res.render("past2", {days:foundActiveDays, today:todayDay, cycles:foundCycles}); 
+        })
     });
 });
 
@@ -342,8 +397,7 @@ router.get("/days", function(req, res){
             res.redirect("/")
         } else {
             let randomRecommendation = allPastRecommendations[Math.floor(Math.random() * allPastRecommendations.length)];
-            randomToday = today.toUTCString().substring(17,25)
-            res.render("random", {randomRecommendation:randomRecommendation, today:randomToday});
+            res.redirect("/recommendations/" + randomRecommendation._id)
         }
     })
     .catch(()=>{
@@ -355,6 +409,10 @@ router.get("/days", function(req, res){
 
  router.get("/future/community", function(req, res){
     res.render("future/community", {today: todayDay}); 
+ });
+
+ router.get("/future/eclipse", function(req, res){
+    res.render("future/eclipse", {today: todayDay}); 
  });
 
  router.get("/future/podcast", function(req, res){

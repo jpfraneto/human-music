@@ -6,6 +6,7 @@ var daySchema = new mongoose.Schema({
     status: String, 
     systemStatus : String,
     daySKU: String, //determined by the previous day sku
+    cycleStatus : String,
     totalRecommendationsOfThisDay: Number,
     elapsedRecommendations: Number,
     chiDurationForThisDay: Number,

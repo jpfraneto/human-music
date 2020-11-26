@@ -24,7 +24,7 @@
                     <div class="row align-items-center">
                         <div class="col-12" style="margin-bottom: 16px;">
                             <label for="loginUsername" class="clock">Username</label>
-                            <input type="text" name="username" placeholder="kishan" id="loginUsername" required>
+                            <input type="text" name="username" placeholder="Username" id="loginUsername" required>
                             <label for="loginPassword" class="clock">Password</label>
                             <input type="password" name="password" placeholder="Password" id="loginPassword" required>
                         </div>
@@ -87,15 +87,19 @@
 
         <div class="iFrameContainer" id="mediaContainer">
             <iframe id="presentPlayer" width="640" height="360"
-            src="https://www.youtube.com/embed/<%= recommendation.youtubeID %>?start=0&autoplay=1&enablejsapi=1&mute=1&controls=0"
+            src="https://www.youtube.com/embed/<%= recommendation.youtubeID %>"
             style="border: solid 4px #37474F"
             allow="autoplay"
             ></iframe>
         </div>
 
-        <div class="controls" id="controlsDiv">
-            <button class="btn btn-dark btn-sm" id="muteButton">(un)Mute</button>
-            <button class="btn btn-dark btn-sm" id="fullscreenButton">Go fullscreen</button>
+        <div class="controls" id="controlsDiv" style="visibility: hidden;"> 
+            <button class="btn btn-success btn-sm" id="addFavoriteButton" style="display: none;">Add Favorite</button>
+            <button class="btn btn-danger btn-sm" id="removeFavoriteButton" style="display: none;">Remove Favorite</button>
+            <% if(!currentUser){ %>
+                <a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#loginModal">Favorites</a>
+            <% } %>
+            <a class="btn btn-warning btn-sm" href="/random">Random Recommendation</a>
         </div>
         <hr>
         <div id="recommendationInformation">

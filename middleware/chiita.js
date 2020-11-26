@@ -3,6 +3,7 @@ const moment = require("moment");
 const Recommendation = require("../models/recommendation");
 const Day = require("../models/day");
 const User = require("../models/user");
+const Cycle = require("../models/cycle");
 seedDB        = require("../seeds2");
 let chiita = {};
 
@@ -253,6 +254,7 @@ chiita.createNewDay = async () => {
         status : "present",
         systemStatus : "recommendation",
         daySKU : daySKU,
+        cycleStatus : "active",
         totalRecommendationsOfThisDay : totalRecommendationsOfThisDay,
         elapsedRecommendations : 0,
         chiDurationForThisDay : chiDurationForThisDay,
@@ -391,6 +393,34 @@ chiita.evaluateTimestamps = () => {
             sum += foundDay.recommendationDurationsOfThisDay[i] + foundDay.chiDurationForThisDay;
         }
         console.log("At the end, the sum is: " + sum);
+    })
+}
+
+chiita.createNewCycle = () => {
+    //This function has to run whenn the system searches for new recommmendations in the future and it fails. If there is no more recommendations
+    //to create a new day the system should save what has happened in that given cycle and record it in the history. 
+    console.log("inside the createNewCycle function");
+    let newCycle = new Cycle();
+    Cycle.find({})
+    .then((foundCycles)=>{
+        if(foundCycles.length === 0) {
+            newCycle.cycleIndex = 0;
+        } else {
+            newCycle.cycleIndex = foundCycles.length;
+        }
+        Day.find({cycleStatus : "active"})
+        .then((foundActiveDays)=>{
+            newCycle.cycleDuration = foundActiveDays.length;
+            newCycle.daysOfThisCycle = foundActiveDays;
+            newCycle.save(()=>{
+                console.log("The new cycle was created!")
+                //Send all the recommendations to the future
+            })
+            foundActiveDays.forEach((activeDay)=>{
+                activeDay.cycleStatus = "past";
+                activeDay.save();
+            })
+        })
     })
 }
 

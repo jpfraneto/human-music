@@ -93,9 +93,6 @@
                   <th scope="col">Date of Recommendation</th>
                   <th scope="col">Name</th>
                   <th scope="col">Time Played</th>
-                  <% if(currentUser){ %>
-                    <th scope="col">Add to Favorites</th>
-                  <% } %>
                 </tr>
               </thead>
               <tbody>
@@ -106,9 +103,6 @@
                       <td><%= recommendation.recommendationDate %></td>
                       <td><a href="/recommendations/<%=recommendation._id%>"><%= recommendation.name %></a></td>
                       <td><%= (new Date(recommendation.startingRecommendationTimestamp)).toUTCString().substring(17,25) %></td>
-                      <% if(currentUser){ %>
-                        <td><i class="far fa-gem"></i></td>
-                      <% } %>
                     </tr>
                   <% } %>
                 <% }) %>
