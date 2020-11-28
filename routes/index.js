@@ -17,30 +17,6 @@ let today = new Date();
 let todayDay = chiita.changeDateFormat(today);
 // Root Route
 
-router.get("/newPresentUpdate", (req, res) => {
-    let answer = {};
-    Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
-    .then((presentDay) => {
-        let now = (new Date).getTime();
-        answer.systemStatus = presentDay.systemStatus;
-        answer.recommendation = null;
-        answer.elapsedTime = 0;
-        if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
-            let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
-            let delay = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration - now;
-            answer.recommendation = presentRecommendation;
-            answer.nextEventDelay = delay;
-            answer.elapsedTime = Math.floor((now - presentRecommendation.startingRecommendationTimestamp)/1000);
-        } else if (presentDay.systemStatus === "void") {         
-            answer.nextEventDelay = presentDay.startingTimestampsOfThisDay[presentDay.elapsedRecommendations] - now;
-        } else if (presentDay.systemStatus === "endOfDay") {
-            answer.nextEventDelay = presentDay.startingDayTimestamp + 86400000 - now;
-        } 
-        console.log(answer);
-        res.render("newPresent2", {answer:answer}); //The elapsedTime is missing for when there is a recommendation in the present
-    })
-});
-
 router.get("/", (req, res) => {
     Recommendation.findOne({status:"present"})
     .then((presentRecommendation)=>{
@@ -50,7 +26,6 @@ router.get("/", (req, res) => {
             let elapsedSeconds = Math.floor(elapsedTime/1000);
             let endingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
             let endingTime = (new Date(endingTimestamp)).toUTCString().substring(17,25);
-            let isRecommendationFavorited;
             let formattedToday = chiita.changeDateFormat(today);
             res.render("newPresent", {
                 elapsedSeconds:elapsedSeconds, 
@@ -62,21 +37,22 @@ router.get("/", (req, res) => {
             Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
             .then((presentDay) => {
                 if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
-                    axios.get("https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_APIKEY)
-                    .then((imageOfTheDay) => {
-                        let nextRecommendationIndex = presentDay.elapsedRecommendations;
-                        let nextRecommendationStartingTimestamp = presentDay.startingTimestampsOfThisDay[nextRecommendationIndex];
-                        let reimainingVoidTime = nextRecommendationStartingTimestamp - (now.getTime());
-                        console.log("The remaining void time is: " + reimainingVoidTime);
-                        let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
-                        res.render("theVoid", {
-                            reimainingVoidTime: reimainingVoidTime, 
-                            startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
-                            today : todayDay,
-                            nasaInfo : imageOfTheDay.data
-                        });
+                    let nextRecommendationIndex = presentDay.elapsedRecommendations;
+                    let nextRecommendationStartingTimestamp = presentDay.startingTimestampsOfThisDay[nextRecommendationIndex];
+                    let reimainingVoidTime = nextRecommendationStartingTimestamp - (now.getTime());
+                    console.log("The remaining void time is: " + reimainingVoidTime);
+                    let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
+                    let imageOfTheDayData = {
+                        url:  "https://apod.nasa.gov/apod/image/2011/marsglobalmap_1100.jpg",
+                        title: "Global Map: Mars at Opposition",
+                        explanation:"This may be the best global Mars map made with a telescope based on planet Earth. The image data were captured by a team of observers over six long nights at the Pic du Midi mountaintop observatory between October 8 and November 1, when the fourth rock from the Sun had not wandered far from its 2020 opposition and its biggest and brightest appearance in Earth's night sky. The large telescope used, 1 meter in diameter with a 17 meter focal length, was also used in support of NASA's Apollo lunar landing missions. After about 30 hours of processing, the data were combined to produced this remarkably sharp projected view of the martian surface extending to about 45 degrees northern latitude. The image data have also been mapped onto rotating sphere and rotating stereo views. Fans of Mars can easily pick out their favorite markings on the Red Planet by eyeing a labeled version of this global map of Mars."
+                    }
+                    res.render("theVoid", {
+                        reimainingVoidTime: reimainingVoidTime, 
+                        startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
+                        today : todayDay,
+                        nasaInfo : imageOfTheDayData
                     })
-                    .catch(err => console.log(err))
                 } else {
                     res.render("endOfDay", {today:today});
                 }  

@@ -4,7 +4,7 @@ const Recommendation = require("../models/recommendation");
 const Day = require("../models/day");
 const User = require("../models/user");
 const Cycle = require("../models/cycle");
-seedDB        = require("../seeds2");
+let seedDB        = require("../seeds2");
 let chiita = {};
 
 let nowTime, systemStatus, delay;
