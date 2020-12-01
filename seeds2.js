@@ -10,48 +10,6 @@ var dataRecs = [
             country: "Chile",
             language: "Spanish"
         },
-        type: "film",
-        name: "Persona [1966] - Ingmar Bergman",
-        recommendationDate: "042020IX",
-        imageURL: "https://siglonuevo.mx/galeria/2019/10/4692_m.jpg",
-        description:"This is an important one",
-        status: "future",
-        duration: 8888,
-    },
-    {
-        author: { 
-            username: "chocapec",
-            country: "Chile",
-            language: "Spanish"
-        },
-        type: "film",
-        name: "Stalker [1979] - Andrei Tarkovsky",
-        recommendationDate: "042020IX",
-        imageURL: "https://miro.medium.com/max/3544/1*ikFyLy2B-0jJU0NI9TMV0Q.jpeg",
-        description:"In an unnamed country at an unspecified time, there is a fiercely protected post-apocalyptic wasteland known as The Zone. An illegal guide (Aleksandr Kajdanovsky), whose mutant child suggests unspeakable horrors within The Zone, leads a writer (Anatoliy Solonitsyn) and a scientist (Nikolay Grinko)",
-        status: "future",
-        duration: 8888,
-    },
-    {
-        author: { 
-            username: "chocapec",
-            country: "Chile",
-            language: "Spanish"
-        },
-        type: "film",
-        name: "Aguirre, The Wrath of God [1979] - Werner Herzog",
-        recommendationDate: "112020IX",
-        imageURL: "https://www.slantmagazine.com/wp-content/uploads/2006/10/aguirrewrathofgod-1000x600.jpg",
-        description:"Since there was something like 16 different nationalities among the actors, they did the original acting in English. Because of the challenges with recording sound in the rainforest, they did overdubbing of sound in a studio. However, the guy who was supposed to sync the sound with the actors in the film disappeared suddenly. So Herzog decided to record the sound in German and have it properly synced back by a German sound engineer. Therefore, this is the original sound and acting of the people in the film. The German version isn't even Kinski's voice as he asked too much money to record his part in studio so Herzog had to hire someone else to do it. There was a generation of directors in the 60s and 70s who always overdubbed the sound in studio rather than incur the expense of having to mic different places with various acoustics. Lots of Italian directors did this regularly. With the advent of better sound technology, they don't really do this anymore. Personally, I'm glad they stopped because it totally takes you out of the movie because it's never exactly synced properly.",
-        status: "future",
-        duration: 8888,
-    },
-    {
-        author: { 
-            username: "chocapec",
-            country: "Chile",
-            language: "Spanish"
-        },
         type: "music",
         name: "Mike Oldfield - Ommadawn Full Album",
         recommendationDate: "042020IX",

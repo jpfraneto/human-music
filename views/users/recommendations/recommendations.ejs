@@ -5,7 +5,7 @@
     <div id="middleColumn" class="column middle text-center">
 
         <div class="container text-center pastDescription">
-            <p>This is the recommendations page of <strong><%=username%></strong></p>  
+            <p>This is the recommendations page of <strong><a href="/users/<%=username%>"><%=username%></a></strong></p>  
         </div>
 
         <table class="table content">
@@ -25,11 +25,11 @@
                         <% if(recommendation.status === "future") { %>
                             <td scope="row"><%=recommendation.recommendationDate%></td>
                             <td><%=recommendation.status%></td>
-                            <td> <a class="recommendationAnchorTag" href="/recommendations/<%=recommendation._id%>/edit"><%=recommendation.name%></a></td>
+                            <td><%=recommendation.name%></td>
                             <td><%=recommendation.duration%></td>
-                            <td><a class="btn-xs btn-success" role="button" href="/recommendations/<%=recommendation._id%>/edit"><i class="fas fa-edit"></i></a></td>
+                            <td><a class="btn-sm btn-warning" role="button" href="/recommendations/<%=recommendation._id%>/edit">Edit</a></td>
                             <form class="delete-form" id="delete-form" action="/recommendations/<%=recommendation._id%>?_method=DELETE" method="POST">
-                                <td><button type="submit" class="btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash-alt"></i></button></td>
+                                <td><button type="submit" class="btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button></td>
                             </form>
         
                         <% } else { %>
@@ -37,9 +37,9 @@
                             <td><%=recommendation.status%></td>
                             <td> <a class="recommendationAnchorTag" href="/recommendations/<%=recommendation._id%>"><%=recommendation.name%></a></td>
                             <td><%=recommendation.duration%></td>
-                            <td><a class="btn-xs btn-success" role="button" href="/recommendations/<%=recommendation._id%>/edit"><i class="fas fa-edit"></i></a></td>
+                            <td><a class="btn-sm btn-warning" role="button">Edit</a></td>
                             <form class="delete-form" id="delete-form" action="/recommendations/<%=recommendation._id%>?_method=DELETE" method="POST">
-                                <td><button type="submit" class="btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash-alt"></i></button></td>
+                                <td><button type="submit" class="btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button></td>
                             </form>
                         <% } %>
                     </tr>

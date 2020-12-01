@@ -36,26 +36,30 @@ router.get("/", (req, res) => {
         } else {
             Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
             .then((presentDay) => {
-                if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
-                    let nextRecommendationIndex = presentDay.elapsedRecommendations;
-                    let nextRecommendationStartingTimestamp = presentDay.startingTimestampsOfThisDay[nextRecommendationIndex];
-                    let reimainingVoidTime = nextRecommendationStartingTimestamp - (now.getTime());
-                    console.log("The remaining void time is: " + reimainingVoidTime);
-                    let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
-                    let imageOfTheDayData = {
-                        url:  "https://apod.nasa.gov/apod/image/2011/marsglobalmap_1100.jpg",
-                        title: "Global Map: Mars at Opposition",
-                        explanation:"This may be the best global Mars map made with a telescope based on planet Earth. The image data were captured by a team of observers over six long nights at the Pic du Midi mountaintop observatory between October 8 and November 1, when the fourth rock from the Sun had not wandered far from its 2020 opposition and its biggest and brightest appearance in Earth's night sky. The large telescope used, 1 meter in diameter with a 17 meter focal length, was also used in support of NASA's Apollo lunar landing missions. After about 30 hours of processing, the data were combined to produced this remarkably sharp projected view of the martian surface extending to about 45 degrees northern latitude. The image data have also been mapped onto rotating sphere and rotating stereo views. Fans of Mars can easily pick out their favorite markings on the Red Planet by eyeing a labeled version of this global map of Mars."
-                    }
-                    res.render("theVoid", {
-                        reimainingVoidTime: reimainingVoidTime, 
-                        startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
-                        today : todayDay,
-                        nasaInfo : imageOfTheDayData
-                    })
+                if(presentDay){
+                    if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
+                        let nextRecommendationIndex = presentDay.elapsedRecommendations;
+                        let nextRecommendationStartingTimestamp = presentDay.startingTimestampsOfThisDay[nextRecommendationIndex];
+                        let reimainingVoidTime = nextRecommendationStartingTimestamp - (now.getTime());
+                        console.log("The remaining void time is: " + reimainingVoidTime);
+                        let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
+                        let imageOfTheDayData = {
+                            url:  "https://apod.nasa.gov/apod/image/2011/marsglobalmap_1100.jpg",
+                            title: "Global Map: Mars at Opposition",
+                            explanation:"This may be the best global Mars map made with a telescope based on planet Earth. The image data were captured by a team of observers over six long nights at the Pic du Midi mountaintop observatory between October 8 and November 1, when the fourth rock from the Sun had not wandered far from its 2020 opposition and its biggest and brightest appearance in Earth's night sky. The large telescope used, 1 meter in diameter with a 17 meter focal length, was also used in support of NASA's Apollo lunar landing missions. After about 30 hours of processing, the data were combined to produced this remarkably sharp projected view of the martian surface extending to about 45 degrees northern latitude. The image data have also been mapped onto rotating sphere and rotating stereo views. Fans of Mars can easily pick out their favorite markings on the Red Planet by eyeing a labeled version of this global map of Mars."
+                        }
+                        res.render("theVoid", {
+                            reimainingVoidTime: reimainingVoidTime, 
+                            startingTimeOfNextRecommendation : startingTimeOfNextRecommendation,
+                            today : todayDay,
+                            nasaInfo : imageOfTheDayData
+                        })
+                    } else {
+                        res.render("endOfDay", {today:today});
+                    }  
                 } else {
                     res.render("endOfDay", {today:today});
-                }  
+                }
             })
         }
     })
@@ -222,9 +226,6 @@ router.post("/", function(req,res){
             username: req.user.username,
             country: req.user.country
         }
-        if(req.user.username === "chocapec") {
-            type = req.body.typeOfRecommendation;
-        }
     } else {
         author = {
             username: req.body.username,
@@ -236,70 +237,45 @@ router.post("/", function(req,res){
     } else {
         var wasCreatedByUser = false;
     }
-    
-    let url, imageURL, duration, name;
-    if(type === "music"){
-        imageURL = undefined;
-        url = req.body.url;
-        let newDate = new Date();
-        let videoID = chiita.youtube_parser(url);
-        let apiKey = process.env.YOUTUBE_APIKEY;
-        let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
-        axios.get(getRequestURL)
-        .then(function(response){
-            let durationISO = response.data.items[0].contentDetails.duration;
-            name = response.data.items[0].snippet.title;
-            duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
-            if (response.data.items.length > 0){
-                newRecommendation = new Recommendation({
-                    author : author,
-                    name : name,
-                    type : type,
-                    recommendationDate : chiita.changeDateFormat(newDate),
-                    youtubeID : videoID,
-                    url : url,
-                    description : req.body.description,
-                    status : "future",
-                    duration : duration,
-                    wasCreatedByUser : wasCreatedByUser
-                });
-                newRecommendation.save(()=>{
-                    if(req.user){
-                        req.user.recommendations.push(newRecommendation);
-                        req.user.save(()=>{
-                            console.log("The user was updated with the new recommendation")
-                        });
-                    }
-                    res.redirect("/");
-                });
-            }
-        })
-        .catch(()=>{
-            console.log("There was an error saving the recommendation to the database");
-        });
-    } else if (type === "film"){
-        newRecommendation = new Recommendation({
-            author : author,
-            name : req.body.filmName,
-            type : type,
-            recommendationDate : chiita.changeDateFormat(today),
-            url : undefined,
-            description : req.body.description,
-            status : "future",
-            duration : req.body.filmDuration,
-            wasCreatedByUser : wasCreatedByUser,
-            imageURL : req.body.url,
-        });
-        newRecommendation.save(()=>{
-            if(req.user){
-                req.user.recommendations.push(newRecommendation);
-                req.user.save(()=>{
-                    console.log("The user was updated with the new recommendation")
-                })
-            }
-            res.redirect("/");
-        });
-    }
+    let url, duration, name;
+    url = req.body.url;
+    let newDate = new Date();
+    let videoID = chiita.youtube_parser(url);
+    let apiKey = process.env.YOUTUBE_APIKEY;
+    let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
+    axios.get(getRequestURL)
+    .then(function(response){
+        let durationISO = response.data.items[0].contentDetails.duration;
+        name = response.data.items[0].snippet.title;
+        duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
+        if (response.data.items.length > 0){
+            newRecommendation = new Recommendation({
+                author : author,
+                name : name,
+                type : type,
+                recommendationDate : chiita.changeDateFormat(newDate),
+                youtubeID : videoID,
+                url : url,
+                description : req.body.description,
+                status : "future",
+                duration : duration,
+                wasCreatedByUser : wasCreatedByUser
+            });
+            newRecommendation.save(()=>{
+                if(req.user){
+                    req.user.recommendations.push(newRecommendation);
+                    req.user.save(()=>{
+                        console.log("The user was updated with the new recommendation")
+                    });
+                }
+                console.log("A new recommendation was saved by " + newRecommendation.author.username + ", with the following youtube ID: " + newRecommendation.youtubeID)
+                res.redirect("/");
+            });
+        }
+    })
+    .catch(()=>{
+        console.log("There was an error saving the recommendation to the database");
+    });
 });
 
 router.get("/past", function(req,res){
@@ -351,6 +327,13 @@ router.get("/days", function(req, res){
     });
  });
 
+ router.get("/cycles/:cycleIndex", function(req,res){
+    Cycle.findOne({cycleIndex: req.params.cycleIndex}).populate("daysOfThisCycle")
+    .then((foundCycle)=>{
+        res.render("cycles/show", {cycle:foundCycle, today:todayDay})
+    })
+ })
+
  router.get("/presentday", function(req, res){
     Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
     .then((foundPresentDay) => {
@@ -380,7 +363,7 @@ router.get("/days", function(req, res){
         console.log("There was an error displaying the random page")
     })
  });
-
+ 
  //Future routes
 
  router.get("/future/community", function(req, res){
@@ -481,7 +464,7 @@ router.delete("/future/feedback/:id", function(req, res){
 
 //handle sign up logic
 router.post("/register", function(req,res){
-    let newUser = new User({name:req.body.name, email:req.body.email, username:req.body.username, country: req.body.country, language:req.body.language, bio: req.body.bio});
+    let newUser = new User({name:req.body.name, email:req.body.email, username:req.body.username, country: req.body.country, language:req.body.language});
     User.find({username:newUser.username}, function(err,foundUser){
         if(foundUser.length === 0){
             User.register(newUser, req.body.password, function(err, user){

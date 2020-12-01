@@ -121,7 +121,6 @@ function intoTheVoid () {
   systemInformationPromise = getSystemInformation();
   systemInformationPromise.then((systemInformation) => {
     if(systemInformation.systemStatus === "void"){
-      clearInterval(voidTimer);
       controlsDiv.style.display = "none";
       let now = (new Date).getTime();
       delay = systemInformation.nextEventStartingTimestamp - now;
@@ -133,7 +132,7 @@ function intoTheVoid () {
 
       voidInformation(systemInformation.nextEventStartingTimestamp);
     } else {
-      voidTImer = setInterval(intoTheVoid,1000);
+      setTimeout(intoTheVoid, 2000);
     }
   })
 }
@@ -170,10 +169,10 @@ function outOfTheVoid () {
   systemInformationPromise = getSystemInformation();
   systemInformationPromise.then((systemInformation)=>{
     if(systemInformation.systemStatus === "recommendation"){
-      clearInterval(outVoidTimer);
       controlsDiv.style.display = "block";
       let now = (new Date).getTime();
-      delay = systemInformation.nextEventStartingTimestamp - now;
+      // delay = systemInformation.nextEventStartingTimestamp - now;
+      delay = systemInformation.recommendation.duration;
       console.log("The next event [intoTheVoid] will happen in "+ delay + " milliseconds")
       setTimeout(intoTheVoid, delay);
 
@@ -187,7 +186,7 @@ function outOfTheVoid () {
 
       updateRecommendation(systemInformation);
     } else {
-      outVoidTimer = setInterval(outOfTheVoid,1000);
+      setTimeout(outOfTheVoid, 2000);
     }
   })
 }
@@ -224,14 +223,16 @@ function updateCountdown () {
 }
 
 favoriteButton.addEventListener("click", function(e){
+  console.log("The favorite button was clicked");
   favoriteButton.style.display = "none";
   unFavoriteButton.style.display = "inline-block";
   fetch("/favorited", {method:"POST"})
   .then((response) =>{
     if(response.ok) {
-      return
+      console.log("The recommendation was favorited and added to the user");
+    } else {
+      throw new Error("Request failed");
     }
-    throw new Error("Request failed");
   })
   .catch((error)=>{
     console.log(error);
@@ -239,14 +240,16 @@ favoriteButton.addEventListener("click", function(e){
 })
 
 unFavoriteButton.addEventListener("click", function(e){
+  console.log("The unfavorite button was clicked");
   favoriteButton.style.display = "inline-block";
   unFavoriteButton.style.display = "none";
   fetch("/unfavorited", {method:"POST"})
   .then((response) =>{
     if(response.ok) {
-      return
+      console.log("The recommendation was unfavorited and deleted from the user");
+    } else {
+      throw new Error("Request failed");
     }
-    throw new Error("Request failed");
   })
   .catch((error)=>{
     console.log(error);

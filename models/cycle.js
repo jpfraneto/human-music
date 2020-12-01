@@ -4,8 +4,8 @@ var cycleSchema = new mongoose.Schema({
     cycleIndex: Number,  //determined by the previous cycle index
     cycleDuration : Number,
     startingDate : {
-        type: String,
-        default: Date.now.toString(),
+        type: Date,
+        default: Date.now,
     },
     daysOfThisCycle: [
         {

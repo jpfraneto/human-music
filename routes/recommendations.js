@@ -39,11 +39,7 @@ router.get("/:id", function(req,res){
     // find the recommendation with the provided id
     Recommendation.findById(req.params.id)
     .then((foundRecommendation) => {
-        if(foundRecommendation.type === "music") {
-            res.render("recommendations/show", {recommendation : foundRecommendation, today:todayDay});
-        } else if (foundRecommendation.type === "film"){
-            res.render("recommendations/filmShow", {recommendation : foundRecommendation, today:todayDay});
-        }
+        res.render("recommendations/show", {recommendation : foundRecommendation, today:todayDay});
     })
     .catch(()=>{
         console.log("The process crashed while getting the recommendation")
@@ -63,31 +59,14 @@ router.get("/:id/edit", middleware.checkRecommendationOwnership, function(req, r
 });
 
 // UPDATE recommendation ROUTE
-router.put("/:id", function(req, res){
+router.put("/:id", function(req, res) {
     Recommendation.findById(req.params.id)
     .then((recommendationForUpdate) => {
         recommendationForUpdate.description = req.body.description;
-
-        let videoID = chiita.youtube_parser(req.body.url);
-        let apiKey = process.env.YOUTUBE_APIKEY;
-        let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
-        axios.get(getRequestURL)
-        .then(function(response){
-            let durationISO = response.data.items[0].contentDetails.duration;
-            name = response.data.items[0].snippet.title;
-            duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
-            if (response.data.items.length > 0){
-                recommendationForUpdate.name = name;
-                recommendationForUpdate.duration = duration;        
-                recommendationForUpdate.save(()=> {
-                    console.log("The recommendation was updated");
-                    res.redirect("/users/"+ req.user.username +"/recommendations");
-                });
-            } else {
-                console.log("The video does not exist");
-                res.redirect("/users/"+ req.user.username +"/recommendations");
-            }
-        })
+        recommendationForUpdate.save(()=> {
+            console.log("The recommendation was updated");
+            res.redirect("/users/"+ req.user.username +"/recommendations");
+        });
     });
 });
 

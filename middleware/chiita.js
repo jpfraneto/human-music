@@ -50,6 +50,7 @@ chiita.bigBang = () => { //Starts the platform from the beginning.
     Day.deleteMany({},function(err){if(err){console.log(err);}});  
     Recommendation.deleteMany({},function(err){if(err){console.log(err);}});  
     User.deleteMany({},function(err){if(err){console.log(err);}});  
+    Cycle.deleteMany({},function(err){if(err){console.log(err);}});  
     seedDB();
     setTimeout(function(){
         console.log("' .     .    .              .'... The big bang happened. Emptyness. Void. Action");
@@ -108,6 +109,7 @@ chiita.timeWarp = async () => {
                                 j++;
                             }
                             presentDay.elapsedRecommendations = i;
+                            break
                         } else {
                             thisRecommendation.status = "past"
                             thisRecommendation.save(()=>{
@@ -117,22 +119,18 @@ chiita.timeWarp = async () => {
                             k++;
                         }
                     } else {
-                        break
-                    }
-                } else {
-                    let nextRecommendation = presentDay.recommendationsOfThisDay[i+1];
-                    if (now < nextRecommendation.startingRecommendationTimestamp){
                         if(presentDay.elapsedRecommendations < presentDay.totalRecommendationsOfThisDay) {
-                            let remainingTimeForNextRecommendation = nextRecommendation.startingRecommendationTimestamp - now;
+                            let remainingTimeForNextRecommendation = startingTimestamp - now;
                             chiita.changeSystemStatus("void");
                             console.log("We are in the void. The next recommendation will be brought to the present in " + remainingTimeForNextRecommendation + " seconds");
-                            setTimeout(chiita.bringRecommendationToPresent, remainingTimeForNextRecommendation, nextRecommendation)
+                            setTimeout(chiita.bringRecommendationToPresent, remainingTimeForNextRecommendation, thisRecommendation)
                         } else if (presentDay.elapsedRecommendations === presentDay.totalRecommendationsOfThisDay) {
                             chiita.changeSystemStatus("endOfDay");
                             console.log("We are in the end of day; the new day will start soon");
                         }
+                        break
                     }
-                }
+                } 
             }
             presentDay.elapsedRecommendations += k;
             presentDay.save( ()=> {
@@ -217,6 +215,7 @@ chiita.sendDayToPast = () => {
                     thisRecommendation.status="past";
                     thisRecommendation.save();
                 })
+                foundDay.elapsedRecommendations ++;
             }
         }
         foundDay.save(()=>{
@@ -235,39 +234,43 @@ chiita.createNewDay = async () => {
     chiita.sendDayToPast();
     let information = await chiita.bringMusicFromTheFuture();
     let dayIndex = await chiita.getPresentDay();
-    let totalRecommendationsOfThisDay = information.numberOfRecommendations;
-    let now = new Date();
-    let daySKU = changeDateFormat(now);
-    let startingDayTimestamp = now.getTime();
-    let elapsedDaytime = information.filmForToday.duration;
-    let recommendationsOfThisDay = [information.filmForToday];
-    let recommendationDurationsOfThisDay = [information.filmForToday.duration];
-    for (let i=0; i<information.musicForToday.length;i++) {
-        recommendationsOfThisDay.push(information.musicForToday[i]);
-        recommendationDurationsOfThisDay.push(information.musicForToday[i].duration);
-        elapsedDaytime += information.musicForToday[i].duration;
+    if(information){
+        let totalRecommendationsOfThisDay = information.numberOfRecommendations;
+        let now = new Date();
+        let daySKU = changeDateFormat(now);
+        let startingDayTimestamp = now.getTime();
+        let elapsedDaytime = 0;
+        let recommendationsOfThisDay = [];
+        let recommendationDurationsOfThisDay = [];
+        for (let i=0; i<information.musicForToday.length;i++) {
+            recommendationsOfThisDay.push(information.musicForToday[i]);
+            recommendationDurationsOfThisDay.push(information.musicForToday[i].duration);
+            elapsedDaytime += information.musicForToday[i].duration;
+        }
+        let chiDurationForThisDay = Math.floor((timeInDay-elapsedDaytime)/totalRecommendationsOfThisDay);
+        let newDay = new Day({
+            dayIndex : dayIndex,
+            startingDayTimestamp : startingDayTimestamp,
+            status : "present",
+            systemStatus : "recommendation",
+            daySKU : daySKU,
+            cycleStatus : "active",
+            totalRecommendationsOfThisDay : totalRecommendationsOfThisDay,
+            elapsedRecommendations : 0,
+            chiDurationForThisDay : chiDurationForThisDay,
+            recommendationsOfThisDay : recommendationsOfThisDay,
+            recommendationDurationsOfThisDay : recommendationDurationsOfThisDay,
+        });
+        let recommendationTimestamps = chiita.addTimestampsToRecommendations(newDay);
+        newDay.startingTimestampsOfThisDay = recommendationTimestamps;
+        newDay.save(() => {
+            console.log("This new day was created, the time of creation is: " + now);
+            chiita.bringRecommendationToPresent(newDay.recommendationsOfThisDay[0]);
+        });
+    } else {
+        console.log("There was an error getting the information for the new day, so a new cycle will be created");
+        chiita.createNewCycle();
     }
-    let chiDurationForThisDay = Math.round((timeInDay-elapsedDaytime)/totalRecommendationsOfThisDay);
-    let newDay = new Day({
-        dayIndex : dayIndex,
-        startingDayTimestamp : startingDayTimestamp,
-        status : "present",
-        systemStatus : "recommendation",
-        daySKU : daySKU,
-        cycleStatus : "active",
-        totalRecommendationsOfThisDay : totalRecommendationsOfThisDay,
-        elapsedRecommendations : 0,
-        chiDurationForThisDay : chiDurationForThisDay,
-        recommendationsOfThisDay : recommendationsOfThisDay,
-        filmOfThisDay : information.filmForToday,
-        recommendationDurationsOfThisDay : recommendationDurationsOfThisDay,
-    });
-    let recommendationTimestamps = chiita.addTimestampsToRecommendations(newDay);
-    newDay.startingTimestampsOfThisDay = recommendationTimestamps;
-    newDay.save(() => {
-        console.log("This new day was created, the time of creation is: " + now);
-        chiita.bringRecommendationToPresent(newDay.recommendationsOfThisDay[0]);
-    });
 }
 
 chiita.addTimestampsToRecommendations = (newDay) => {
@@ -288,25 +291,12 @@ chiita.addTimestampsToRecommendations = (newDay) => {
 
 //////////////////////////
 
-chiita.bringFilmFromFuture = async () => { //goes to the future to search for a random film
-    return Recommendation.find({type:"film", status:"future"})
-    .exec()
-    .then((foundFilmsFromTheFuture) => {
-        let randomFilmFromFuture = foundFilmsFromTheFuture[Math.floor(Math.random() * foundFilmsFromTheFuture.length)];
-        return randomFilmFromFuture;
-    })
-    .catch((err) =>{
-        return "An error ocurred getting a film";
-    });
-};
-
 chiita.bringMusicFromTheFuture = async () => {
-    let film = await chiita.bringFilmFromFuture();
     return Recommendation.find({type:"music", status:"future"})
     .exec()
     .then((foundMusicFromTheFuture) => {
-        let elapsedTime = film.duration;
-        let numberOfRecommendations = 1;
+        let elapsedTime = 0;
+        let numberOfRecommendations = 0;
         let musicForToday = [];
         while (elapsedTime < timeInDay) {
             let randomIndex = Math.floor(Math.random() * foundMusicFromTheFuture.length);
@@ -319,13 +309,12 @@ chiita.bringMusicFromTheFuture = async () => {
         musicForToday = musicForToday.slice(0, musicForToday.length-1);
         numberOfRecommendations--;
         return {
-            filmForToday: film,
             musicForToday: musicForToday,
             numberOfRecommendations : numberOfRecommendations
         };
     })
     .catch((err) =>{
-        return "An error ocurred getting the music";
+        console.log("An error ocurred getting the music for the new day");
     });
 };
 
@@ -337,7 +326,7 @@ chiita.getSystemInformation = async () => {
         let now = (new Date).getTime();
         present.systemStatus = presentDay.systemStatus;
         present.recommendation = null;
-        if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
+        if(presentDay.systemStatus === "recommendation"){
             let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
             let delay = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration - now;
             present.recommendation = presentRecommendation;
@@ -360,8 +349,7 @@ chiita.changeSystemStatus = (newStatus) => {
 }
 
 chiita.getPresentDay = async () => {
-    return Day.find()
-    .exec()
+    return Day.find().exec()
     .then ((foundDays) => {
         return foundDays.length
     });
@@ -413,13 +401,23 @@ chiita.createNewCycle = () => {
             newCycle.cycleDuration = foundActiveDays.length;
             newCycle.daysOfThisCycle = foundActiveDays;
             newCycle.save(()=>{
-                console.log("The new cycle was created!")
-                //Send all the recommendations to the future
+                console.log("The new cycle was created, and now all the recommendations are going to be sent to the future");
+                Recommendation.find({})
+                .then((foundRecommendations)=>{
+                    foundRecommendations.forEach((recommendation)=> {
+                        recommendation.status = "future";
+                        recommendation.save();
+                    });
+                })
             })
             foundActiveDays.forEach((activeDay)=>{
-                activeDay.cycleStatus = "past";
+                activeDay.cycleStatus = "inactive";
                 activeDay.save();
             })
+        })
+        .then(()=>{
+            console.log("After sending all the recommendations to the future and creating the new cycle, a new day will be created now: ");
+            setTimeout(chiita.createNewDay, 500);
         })
     })
 }

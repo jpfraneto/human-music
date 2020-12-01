@@ -77,20 +77,6 @@
                     <label for="userCheckbox" class="userInformation content">Was this created by you?</label>    
                     <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
     
-                    <% if(user){ %>
-                        <% if(user.username === "chocapec") { %>
-                            <label for="typeOfRecommendation" class="userInformation content">Choose a type of recommendation (music/film):</label>
-                            <select name="typeOfRecommendation" id="typeOfRecommendation">
-                                <option value="music" selected="selected">Music</option>
-                                <option value="film">Film</option>
-                            </select>
-                            <label for="filmDurationInput" class="content">Film duration in miliseconds:</label>
-                            <input class="form-control" id="filmDurationInput" type="number" name="filmDuration">
-                            <label for="filmName" class="content">Film name:</label>
-                            <input class="form-control" id="filmName" type="string" name="filmName">
-                        <% } %>
-                    <% } %>
-    
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">Submit!</button>
                         <a class="btn btn-primary" href="/"> Go Back</a>

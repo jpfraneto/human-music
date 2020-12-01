@@ -20,12 +20,6 @@ var daySchema = new mongoose.Schema({
             type:Number
         }
     ],
-    filmOfThisDay: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Recommendation"
-        }
-    ],
     recommendationsOfThisDay: [
         {
             type: mongoose.Schema.Types.ObjectId,

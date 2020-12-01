@@ -46,27 +46,15 @@ if(process.env.NODE_ENV === 'production') {
 
 //For starting from scratch
 // chiita.bigBang();
-//For sending the recommendations to the future
+//For sending all the recommendations to the future
 // chiita.bigBangTwo();
-// chiita.createNewDay();
 
-// chiita.bigBang();
-// chiita.createNewCycle();
-// setTimeout(() => {
-//   Cycle.find({}).populate("daysOfThisCycle")
-//   .then((foundCycles)=>{
-//     console.log("The cycles that were found are:")
-//     foundCycles.forEach((cycle)=>{
-//       console.log(cycle.daysOfThisCycle);
-//     })
-//   })
-// }, 2000);
-
-//If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
+// If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
 console.log("The app.js file is running again.");
 chiita.timeWarp();
+// chiita.createNewDay();
 
-let job = new CronJob("56 16 * * *", () => {
+let job = new CronJob("11 20 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 

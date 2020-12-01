@@ -4,6 +4,7 @@ window.onload = () => {
   information.then((systemInformation)=>{
     let now = (new Date).getTime();
     let delay = systemInformation.nextEventStartingTimestamp - now;
+    console.log("We are in the void, the window will be refreshed in " + delay + " milliseconds");
     setTimeout (reloadVoid, delay);
   })
 }
