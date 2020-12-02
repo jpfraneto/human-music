@@ -97,7 +97,7 @@
               </thead>
               <tbody>
                 <% thisDay.recommendationsOfThisDay.forEach(function(recommendation){ %>
-                  <% if(true){ %>
+                  <% if(recommendation.status !== "inTheLimbo"){ %>
                     <tr>
                       <td> <a href="/users/<%= recommendation.author.username %>">@<%= recommendation.author.username %></a></td>
                       <td><%= recommendation.recommendationDate %></td>

@@ -120,7 +120,7 @@ function intoTheVoid () {
   console.log("inside the intoTheVoid function, the getsysteminformation function will run now and check the system status");
   systemInformationPromise = getSystemInformation();
   systemInformationPromise.then((systemInformation) => {
-    if(systemInformation.systemStatus === "void"){
+    if(systemInformation.systemStatus === "void" || systemInformation.systemStatus === "endOfDay"){
       controlsDiv.style.display = "none";
       let now = (new Date).getTime();
       delay = systemInformation.nextEventStartingTimestamp - now;

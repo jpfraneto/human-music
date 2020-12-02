@@ -205,22 +205,13 @@ chiita.sendDayToPast = () => {
         if(!foundDay){
             console.log("There was not a day in the present!");
             return
+        } else {
+            foundDay.status = "past";
+            foundDay.systemStatus = "past";
+            foundDay.save(()=>{
+                console.log("The day "+ foundDay.daySKU +" was sent to the past")
+            })
         }
-        foundDay.status = "past";
-        foundDay.systemStatus = "past";
-        if(foundDay.elapsedRecommendations < foundDay.totalRecommendationsOfThisDay){
-            for (let i=foundDay.elapsedRecommendations; i<foundDay.totalRecommendationsOfThisDay; i++){
-                Recommendation.findById(foundDay.recommendationsOfThisDay[i])
-                .then((thisRecommendation)=>{
-                    thisRecommendation.status="past";
-                    thisRecommendation.save();
-                })
-                foundDay.elapsedRecommendations ++;
-            }
-        }
-        foundDay.save(()=>{
-            console.log("The day "+ foundDay.daySKU +" was sent to the past")
-        })
     })
     .catch(()=>{
         console.log("There was an error in the sendDayToPast function")
@@ -278,6 +269,7 @@ chiita.addTimestampsToRecommendations = (newDay) => {
     let dayTimestamps = [];
     newDay.recommendationsOfThisDay.forEach((recommendation)=>{
         recommendation.startingRecommendationTimestamp = elapsedDayTimestamp;
+        recommendation.status = "inTheLimbo";
         dayTimestamps.push(elapsedDayTimestamp);
         recommendation.daySKU = newDay.daySKU;
         if(recommendation.type === "music"){

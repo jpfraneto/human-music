@@ -69,31 +69,36 @@ router.get("/checkSystemStatus", (req,res) => {
     let answer = {};
     Day.findOne({status:"present"}).populate("recommendationsOfThisDay")
     .then((presentDay) => {
-        let now = (new Date).getTime();
-        answer.systemStatus = presentDay.systemStatus;
         answer.recommendation = null;
         answer.elapsedTime = 0;
         answer.isFavorited = null;
-        answer.dayStartTimestamp = presentDay.startingDayTimestamp;
-        if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
-            let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
-            let finishingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
-            answer.recommendation = presentRecommendation;
-            answer.nextEventStartingTimestamp = finishingTimestamp;
-            answer.elapsedTime = Math.floor((now - presentRecommendation.startingRecommendationTimestamp))/1000;
-            if(req.user){
-                let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
-                if(indexOfRecommendation === -1){
-                    answer.isFavorited = false;
-                } else {
-                    answer.isFavorited = true;
+        if(presentDay){
+            let now = (new Date).getTime();
+            answer.systemStatus = presentDay.systemStatus;
+            answer.dayStartTimestamp = presentDay.startingDayTimestamp;
+            if(presentDay.systemStatus === "film" || presentDay.systemStatus === "recommendation"){
+                let presentRecommendation = presentDay.recommendationsOfThisDay[presentDay.elapsedRecommendations];
+                let finishingTimestamp = presentRecommendation.startingRecommendationTimestamp + presentRecommendation.duration;
+                answer.recommendation = presentRecommendation;
+                answer.nextEventStartingTimestamp = finishingTimestamp;
+                answer.elapsedTime = Math.floor((now - presentRecommendation.startingRecommendationTimestamp))/1000;
+                if(req.user){
+                    let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(presentRecommendation._id);
+                    if(indexOfRecommendation === -1){
+                        answer.isFavorited = false;
+                    } else {
+                        answer.isFavorited = true;
+                    }
                 }
-            }
-        } else if (presentDay.systemStatus === "void") {   
-            answer.nextEventStartingTimestamp = presentDay.startingTimestampsOfThisDay[presentDay.elapsedRecommendations];
-        } else if (presentDay.systemStatus === "endOfDay") {
-            answer.nextEventStartingTimestamp = presentDay.startingDayTimestamp + 86400000;
-        } 
+            } else if (presentDay.systemStatus === "void") {   
+                answer.nextEventStartingTimestamp = presentDay.startingTimestampsOfThisDay[presentDay.elapsedRecommendations];
+            } else if (presentDay.systemStatus === "endOfDay") {
+                answer.nextEventStartingTimestamp = presentDay.startingDayTimestamp + 86400000;
+            } 
+        } else {
+            answer.systemStatus = "endOfDay";
+            answer.nextEventStartingTimestamp = undefined;
+        }
         res.json(answer);
     })
     // .catch(()=>{console.log("There was an error getting the present day")})
@@ -257,7 +262,7 @@ router.post("/", function(req,res){
                 youtubeID : videoID,
                 url : url,
                 description : req.body.description,
-                status : "future",
+                status : "ether",
                 duration : duration,
                 wasCreatedByUser : wasCreatedByUser
             });
@@ -363,6 +368,27 @@ router.get("/days", function(req, res){
         console.log("There was an error displaying the random page")
     })
  });
+
+ router.get("/reviewer", function(req, res){
+    Recommendation.findOne({status : "ether"})
+    .then((notReviewedRecommendation) => {
+         res.render("reviewer", {recommendation:notReviewedRecommendation, today: todayDay})
+    })
+    .catch(()=>{
+        console.log("There was an error displaying the reviewed page")
+    })
+ });
+
+router.post("/reviewer", function(req,res){
+    Recommendation.findById(req.body.recommendationID)
+    .then((foundRecommendation)=>{
+        foundRecommendation.status = req.body.status;
+        foundRecommendation.save(()=>{
+            console.log("The recommendation's status was updated to: " + foundRecommendation.status)
+            res.redirect("/reviewer");
+        })
+    })
+})
  
  //Future routes
 

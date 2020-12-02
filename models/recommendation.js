@@ -20,7 +20,6 @@ var recommendationSchema = new mongoose.Schema({
     description:String,
     status: String,
     duration: Number,
-    reviewed: Boolean,
     wasCreatedByUser: Boolean,
     startingRecommendationTimestamp: Number,
     daySKU: String,

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/stylesheets/newPresentStyle.css">
+    <link rel="stylesheet" href="stylesheets/newPresentStyle.css">
     <title>Human Music</title>
 </head>
 <body>
@@ -75,8 +75,8 @@
                     <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
                 </div>
                 <div class="form group">
-                    <label for="userCheckbox" class="col-form-label">Was this created by you?</label>    
-                    <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
+                    <label for="userradio" class="col-form-label">Was this created by you?</label>    
+                    <input type="radio" id="userradio" name="wasCreatedByUser" value="true">
                 </div>
                 <div class="form group"></div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -88,46 +88,70 @@
     </div>
 </div>
 
-<div class="container text-center">
-    <div class="navigationBar">
-        <p><span id="pastSpan"><a href="/past">PAST</a></span><span id="presentSpan"><a href="/">PRESENT</a></span><span id="futureSpan" class="activeTense"><a href="/future">FUTURE</a></span></p>
-    </div>
-    <div class="clock">
-        <p><%= today %> | <span id="presentClock">88:88:88</span></p>
-    </div>
-</div>
-
 <div class="box">
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
-      <p><strong>Edit Feedback</strong></p>     
-
-      <div class="row">
-        <div class="col-6 text-center content">
-            <p><%= feedback.message %></p>
+        <div class="navigationBar">
+            <p><span><a href="/past"><strong>PAST</strong></a></span><span><a href="/">PRESENT</a></span><span><a href="/future">FUTURE</a></span></p>
         </div>
-        <div class="col-6">
-            
-            <form action="/future/feedback/<%=feedback._id%>?_method=PUT" method="POST"> 
-                <div class="form-group content">
+        <div class="clock">
+            <p><%= today %> | <span id="presentClock">12:12:12</span></p>
+        </div>
 
-                  <label for="feedbackMessage">What do you think will make this platform better?</label>
-                  <textarea class="form-control" id="feedbackMessage" name="message" rows="6"><%=feedback.message%></textarea>
+        <% if(recommendation){ %>
+            <div class="iFrameContainer" id="mediaContainer">
+                <iframe id="presentPlayer" width="640" height="360"
+                src="https://www.youtube.com/embed/<%= recommendation.youtubeID %>?autoplay=1&enablejsapi=1&mute=1"
+                style="border: solid 4px #37474F"
+                allow="autoplay"
+                ></iframe>
+            </div>
+    
+            <p>This place is for understanding if the recommendation works on the platform or not!</p>
+    
+            <div id="randomRecommendationInformation" class="content">
+                <p><strong>User: </strong>@<span id="username"><%= recommendation.author.username %></span></p>
+                <p><strong>Country of Identification: </strong><span id="userCountry"><%= recommendation.author.country %></span></p>
+                <p><strong>Date of Recommendation: </strong><span id="dateOfRecommendation"><%= recommendation.recommendationDate %></span></p>
+                <p><strong>Name: </strong><span id="recommendationName"><%= recommendation.name %></span></p>
+                <p><strong>Why did you recommend it?: </strong><span id="recommendationDescription"><%= recommendation.description %></span></p>
+            </div>
 
-                </div>
-
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a class="btn btn-success" role="button" href="/future/feedback">Go back</a>
-                </div>
-
+            <form action="/reviewer" method="POST">
+                <label for="recommendationID">The ID is the following: </label>
+                <input id="recommendationID" type="text" name="recommendationID" value="<%=recommendation._id%>">
+                <br>
+                <input type="radio" id="futureBox" name="status" value="future">
+                <label for="futureBox"> It works! It deserves to go to the future</label><br>
+                <input type="radio" id="doomBox" name="status" value="doom">
+                <label for="doomBox">Fuck, this one is not suitable for the flow of the app. It will get lost in the doom.</label><br>
+                <input type="submit" value="Ready Set Go!">
             </form>
 
-        </div>
-    </div>
+        <% } else { %>
+            <p>There are no more recommendations in the ether! <a href="/">GO TO THE PRESENT!</a></p>
+        <% } %>
+
 
     </div>
     <div class="column right"></div>
 </div>
+<div class="footer">
+    <% if (!currentUser){ %>
+        <a href="#" data-toggle="modal" data-target="#loginModal">Login</a>
+        <a href="/register">Register</a>
+    <% } %>
+    <% if (currentUser) { %>
+        <a href="/logout">Log Out</a>
+        <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
+    <% } %>
+    <a href="/future/feedback">Feedback</a>
+    <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
+    <a href="/about">About</a>
+</div>
 
-<%- include("../partials/newFooter") %>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
