@@ -62,6 +62,7 @@ chiita.bigBang = () => { //Starts the platform from the beginning.
 
 chiita.bigBangTwo = () => { //Throws all the recommendations to he future
     Day.deleteMany({},function(err){if(err){console.log(err);}});  
+    Cycle.deleteMany({},function(err){if(err){console.log(err);}});  
     Recommendation.find({})
     .then((foundRecommendations) => {
         foundRecommendations.forEach((recommendation)=>{

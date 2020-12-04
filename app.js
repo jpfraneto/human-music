@@ -53,18 +53,9 @@ if(process.env.NODE_ENV === 'production') {
 console.log("The app.js file is running again.");
 chiita.timeWarp();
 
-// Day.findOne({status:"present"})
-// .then((presentDay)=>{
-//   console.log(presentDay);
-//   let now = (new Date()).getTime();
-//   for(let i=0; i<presentDay.startingTimestampsOfThisDay.length; i++){
-//     console.log("the index is " + i + " the difference is: " + (now-presentDay.startingTimestampsOfThisDay[i]));
-//   }
-// })
-
 // chiita.createNewDay();
 
-let job = new CronJob("38 20 * * *", () => {
+let job = new CronJob("21 19 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 
