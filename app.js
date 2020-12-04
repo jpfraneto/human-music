@@ -50,8 +50,17 @@ if(process.env.NODE_ENV === 'production') {
 // chiita.bigBangTwo();
 
 // If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
-// console.log("The app.js file is running again.");
+console.log("The app.js file is running again.");
 chiita.timeWarp();
+
+// Day.findOne({status:"present"})
+// .then((presentDay)=>{
+//   console.log(presentDay);
+//   let now = (new Date()).getTime();
+//   for(let i=0; i<presentDay.startingTimestampsOfThisDay.length; i++){
+//     console.log("the index is " + i + " the difference is: " + (now-presentDay.startingTimestampsOfThisDay[i]));
+//   }
+// })
 
 // chiita.createNewDay();
 

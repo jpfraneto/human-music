@@ -89,7 +89,7 @@ chiita.timeWarp = async () => {
                 thisRecommendation = presentDay.recommendationsOfThisDay[i];
                 startingTimestamp = thisRecommendation.startingRecommendationTimestamp;
                 recommendationDuration = thisRecommendation.duration;
-                if(thisRecommendation.status === "present" || thisRecommendation.status === "future"){
+                if(thisRecommendation.status === "present" || thisRecommendation.status === "inTheLimbo"){
                     if (now>startingTimestamp){
                         if (now-startingTimestamp < recommendationDuration){
                             let remainingTimeForNextInterval = startingTimestamp + recommendationDuration - now;
