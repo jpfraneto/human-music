@@ -44,9 +44,9 @@ router.get("/", (req, res) => {
                         console.log("The remaining void time is: " + reimainingVoidTime);
                         let startingTimeOfNextRecommendation = (new Date(nextRecommendationStartingTimestamp)).toUTCString().substring(17,25);
                         let imageOfTheDayData = {
-                            url:  "https://apod.nasa.gov/apod/image/2011/marsglobalmap_1100.jpg",
-                            title: "Global Map: Mars at Opposition",
-                            explanation:"This may be the best global Mars map made with a telescope based on planet Earth. The image data were captured by a team of observers over six long nights at the Pic du Midi mountaintop observatory between October 8 and November 1, when the fourth rock from the Sun had not wandered far from its 2020 opposition and its biggest and brightest appearance in Earth's night sky. The large telescope used, 1 meter in diameter with a 17 meter focal length, was also used in support of NASA's Apollo lunar landing missions. After about 30 hours of processing, the data were combined to produced this remarkably sharp projected view of the martian surface extending to about 45 degrees northern latitude. The image data have also been mapped onto rotating sphere and rotating stereo views. Fans of Mars can easily pick out their favorite markings on the Red Planet by eyeing a labeled version of this global map of Mars."
+                            url:  presentDay.apod.url,
+                            title: presentDay.apod.title,
+                            explanation : presentDay.apod.explanation
                         }
                         res.render("theVoid", {
                             reimainingVoidTime: reimainingVoidTime, 
@@ -308,6 +308,18 @@ router.get("/about", function(req, res){
    res.render("about", {today: todayDay}); 
 });
 
+router.get("/welcome", function(req, res){
+    let todayDay = chiita.changeDateFormat(today);
+    res.render("welcome", {today: todayDay}); 
+ });
+
+ router.get("/bienvenida", function(req, res){
+    let todayDay = chiita.changeDateFormat(today);
+    res.render("bienvenida", {today: todayDay}); 
+ });
+
+
+
 router.get("/days", function(req, res){
     Day.find({status:"past"}).populate("recommendationsOfThisDay").exec(function(err, foundDays){
         if(err){
@@ -519,11 +531,15 @@ router.get("/login", function(req, res){
     }
 });
 
+router.get("/loginFailure", function(req,res){
+    res.render("loginFailure", {today: todayDay});
+})
+
 // handling login logic
 router.post("/login", passport.authenticate("local",
     {
         successRedirect: "/",
-        failureRedirect: "/register"
+        failureRedirect: "/loginFailure"
     }), function(req, res){
 });
 

@@ -25,11 +25,6 @@ async function reloadVoid () {
     });
 }
 
-function updateVoid () {
-  let nasaData = getNasaData()
-  //Set the parameters for the void image
-}
-
 async function getSystemInformation () {
   const response = await fetch("/checkSystemStatus");
   const presentStatus = await response.json();

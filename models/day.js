@@ -10,6 +10,11 @@ var daySchema = new mongoose.Schema({
     totalRecommendationsOfThisDay: Number,
     elapsedRecommendations: Number,
     chiDurationForThisDay: Number,
+    apod : {
+        url : String,
+        title : String,
+        explanation : String
+    },
     recommendationDurationsOfThisDay: [
         {
             type:Number

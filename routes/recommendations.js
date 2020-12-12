@@ -22,6 +22,15 @@ router.get("/new", function(req,res){
     }
 });
 
+router.get("/nueva", function(req,res){
+    let formatedDate = chiita.changeDateFormat(today);
+    if (req.user){
+        res.render("recommendations/nueva", {user:req.user, today:formatedDate});
+    } else {
+        res.render("recommendations/nueva", {user: undefined, today:formatedDate});
+    }
+});
+
 
 router.get("/allRecommendations", middleware.isChocapec, function(req, res){
     Recommendation.find({})

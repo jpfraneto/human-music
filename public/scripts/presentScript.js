@@ -289,3 +289,43 @@ async function checkIfRecommendationIsInDatabase(videoID){
     alert("Holy shit! That video was already recommended by @" + data.author.username)
   }
 }
+
+const recommendationForm = document.getElementById("newRecommendationForm");
+recommendationForm.addEventListener("submit", handleFormSubmit);
+
+async function handleFormSubmit(event){
+  event.preventDefault();
+  const form = event.currentTarget;
+  const url = form.action;
+
+  try {
+    const formData = new FormData(form);
+    const responseData = await postFormDataAsJson({url, formData});
+    console.log(responseData);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function postFormDataAsJson({url, formData}){
+  const plainFormData = Object.fromEntries(formData.entries());
+  const formDataJsonString = JSON.stringify(plainFormData);
+  const fetchOptions = {
+    method : "POST",
+    headers : {
+      "Content-Type": "application/json",
+			"Accept": "application/json"
+    },
+    body : formDataJsonString,
+  };
+  const response = await fetch (url, fetchOptions);
+  
+  if(!response.ok) {
+    const errorMessage = await response.text();
+    throw new Error(errorMessage);
+  }
+
+  return response.json();
+}
+
+//https://simonplend.com/how-to-use-fetch-to-post-form-data-as-json-to-your-api/
