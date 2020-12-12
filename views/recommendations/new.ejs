@@ -11,7 +11,7 @@
 
 <div class="container text-center">
     <div class="navigationBar">
-        <p><span id="pastSpan" class="activeTense"><a href="/past">PAST</a></span><span id="presentSpan" class="activeTense"><a href="/">PRESENT</a></span><span id="futureSpan" class="activeTense"><a href="/future">FUTURE</a></span></p>
+        <p><span id="pastSpan"><a href="/past">PAST</a></span><span id="presentSpan"><a href="/">PRESENT</a></span><span id="futureSpan" class="activeTense"><a href="/future">FUTURE</a></span></p>
     </div>
     <div class="clock">
         <p><%= today %> | <span id="presentClock">88:88:88</span></p>
@@ -21,42 +21,48 @@
 <div class="box">
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
-        <h1>Add new music to the future</h1>
+        <h5>Add new music to the future</h5>
+        <h5>Example:</h5>
         <div class="row">
-            <div class="col-7">
-                <iframe id="newRecommendationIframe" 
-                width="395" height="222"
-                src="https://www.youtube.com/embed/SZxrMwtBZaY" 
-                allow="autoplay" autoplay="1"
-                frameborder="0"
-                style="border: solid 4px #37474F"
-                ></iframe>
+            <div class="col-sm-12">
+                <div class="iFrameContainer" id="mediaContainer">
+                    <iframe id="newRecommendationIframe" 
+                    width="640" height="360"
+                    src="https://www.youtube.com/embed/SZxrMwtBZaY" 
+                    allow="autoplay" autoplay="1"
+                    frameborder="0"
+                    style="border: solid 4px #37474F"
+                    ></iframe>
+                </div>
+
                 <div class="userinformation">
                     <% if(user){ %>
                         <p><strong>User:</strong> <a href="/users/<%=user._id%>">@<%= user.username %></a></p>
                         <p><strong>Country of Identification:</strong> <%=user.country%></p>
                     <% } else { %>
-                        <p><strong>User:</strong><span > Unknown</span></p>
-                        <p><strong>Country of Identification:</strong><span > Unknown</span></p>
+                        <p><strong>User:</strong><span > Dave Concord</span></p>
+                        <p><strong>Country of Identification:</strong><span > USA</span></p>
                     <% } %>
                     <p><strong>Date of Recommendation:</strong> <%= today %></p>
-                    <p><strong>Why did you recommend it?:</strong></p>
+                    <p><strong>Why did you recommend it?:</strong> The first time I listened to this I realized that there is something deep and 
+                    important in the listening of music that has been created with the infinity in mind. It transported me to a place that felt good.</p>
                     <div>
                         <p id="recommendationDescription"></p>
                     </div>
                 </div>
             </div>
-            <div class="col-5">
+            <hr>
+            <div class="col-sm-12">
                 <form action="/" method="POST">
                     <% if(!currentUser){ %>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-6 col-sm-12">
                                 <div class="form-group">
                                     <label for="username" class="content">Name</label>
                                     <input class="form-control" placeholder="Name" id="username" type="text" name="username">
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-6 col-sm-12">
                                 <div class="form-group">
                                     <label for="country" class="content">Country</label>
                                     <input class="form-control" placeholder="Country" id="country" type="text" name="country">
