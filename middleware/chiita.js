@@ -260,7 +260,6 @@ chiita.createNewDay = async () => {
         newDay.apod.explanation = "This may be the best global Mars map made with a telescope based on planet Earth. The image data were captured by a team of observers over six long nights at the Pic du Midi mountaintop observatory between October 8 and November 1, when the fourth rock from the Sun had not wandered far from its 2020 opposition and its biggest and brightest appearance in Earth's night sky. The large telescope used, 1 meter in diameter with a 17 meter focal length, was also used in support of NASA's Apollo lunar landing missions. After about 30 hours of processing, the data were combined to produced this remarkably sharp projected view of the martian surface extending to about 45 degrees northern latitude. The image data have also been mapped onto rotating sphere and rotating stereo views. Fans of Mars can easily pick out their favorite markings on the Red Planet by eyeing a labeled version of this global map of Mars."
         newDay.apod.title = "Global Map: Mars at Opposition";
         newDay.save(() => {
-            console.log(newDay);
             console.log("This new day was created, the time of creation is: " + now);
             chiita.bringRecommendationToPresent(newDay.recommendationsOfThisDay[0]);
         });

@@ -20,8 +20,8 @@ function setup () {
     systemStatus = systemInformation.systemStatus;
     toggleButtons(systemInformation.isFavorited);
     let now = (new Date).getTime();
-    delay = systemInformation.nextEventStartingTimestamp - now;
-    console.log("The next event [intoTheVoid] will happen in "+ delay + " milliseconds")
+    delay = systemInformation.nextEventStartingTimestamp - now + 4444;
+    console.log("The next event [intoTheVoid] will happen in "+ delay + " milliseconds");
     setTimeout(intoTheVoid, delay);
   })
 };
@@ -172,7 +172,7 @@ function outOfTheVoid () {
       controlsDiv.style.display = "block";
       let now = (new Date).getTime();
       // delay = systemInformation.nextEventStartingTimestamp - now;
-      delay = systemInformation.recommendation.duration;
+      delay = systemInformation.recommendation.duration + 4444;
       console.log("The next event [intoTheVoid] will happen in "+ delay + " milliseconds")
       setTimeout(intoTheVoid, delay);
 
