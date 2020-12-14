@@ -55,7 +55,7 @@ chiita.timeWarp();
 
 // chiita.createNewDay();
 
-let job = new CronJob("21 19 * * *", () => {
+let job = new CronJob("11 11 * * *", () => {
     chiita.createNewDay();
 }, undefined, true, "UTC");
 

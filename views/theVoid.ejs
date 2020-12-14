@@ -1,19 +1,36 @@
-<%- include("./partials/newHeader") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/newPresentStyle.css">
+    <title>Human Music</title>
+</head>
+<body>
+
+<div class="container text-center">
+    <div class="navigationBar">
+        <p><span id="pastSpan"><a href="/past">PASADO</a></span><span id="presentSpan" class="activeTense"><a href="/">PRESENTE</a></span><span id="futureSpan"><a href="/future">FUTURO</a></span></p>
+    </div>
+    <div class="clock">
+        <p><%= today %> | <span id="presentClock">88:88:88</span></p>
+    </div>
+</div>
 
 <div class="box">
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
 
-        <p><strong>The Void</strong></p>
-        <p> Welcome! The system is in a state called "The Void". The next recommendation will start at <%= startingTimeOfNextRecommendation %>  
-          and you will be automatically redirected there. </p>
+        <p> Bienvenid@! El sistema está en un estado llamado "The Void". La próxima recomendación empezará a las <%= startingTimeOfNextRecommendation %>  
+            y la página se recargará de forma automática. </p>
         <div class="container">
             <img src="<%= nasaInfo.url %>" alt="" id="voidImage">
         </div>
         <div id="voidInformation">
             <p><strong><span id="nasaTitle"><%= nasaInfo.title %></span></strong></p>
-            <p><strong>Date: </strong><span id="nasaDate"><%= today %></span></p>
-            <p><strong>Explanation: </strong><span id="nasaExplanation"><%= nasaInfo.explanation %></span></p>
+            <p><strong>Fecha: </strong><span id="nasaDate"><%= today %></span></p>
+            <p><strong>Explicación: </strong><span id="nasaExplanation"><%= nasaInfo.explanation %></span></p>
         </div>
     </div>
     <div class="column right"></div>
@@ -21,16 +38,16 @@
 
 <div class="footer">
     <% if (!currentUser){ %>
-        <a href="#" data-toggle="modal" data-target="#loginModal">Login</a>
-        <a href="/register">Register</a>
+        <a href="#" data-toggle="modal" data-target="#loginModal">Iniciar Sesión</a>
+        <a href="/register">Registrarse</a>
     <% } %>
     <% if (currentUser) { %>
-        <a href="/logout">Log Out</a>
+        <a href="/logout">Cerrar Sesión</a>
         <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
     <% } %>
-    <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
+    <a href="recommendations/nueva">Agregar Recomendación</a>
     <a href="/future/feedback">Feedback</a>
-    <a href="/about">About</a>
+    <a href="/future/nextsteps">Colaborar</a>
 
 </div>
 

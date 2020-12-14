@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/stylesheets/newPresentStyle.css">
-    <title>Human Music BETA</title>
+    <title>Human Music</title>
 </head>
 <body>
 
 <div class="container text-center">
     <div class="navigationBar">
-        <p><span id="pastSpan"><a href="/past">PAST</a></span><span id="presentSpan"><a href="/">PRESENT</a></span><span id="futureSpan" class="activeTense"><a href="/future">FUTURE</a></span></p>
+        <p><span id="pastSpan"><a href="/past">PASADO</a></span><span id="presentSpan"><a href="/">PRESENTE</a></span><span id="futureSpan" class="activeTense"><a href="/future">FUTURO</a></span></p>
     </div>
     <div class="clock">
         <p><%= today %> | <span id="presentClock">88:88:88</span></p>
@@ -21,8 +21,7 @@
 <div class="box">
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
-        <h5>Agregar música al futuro:</h5>
-        <h5>Ejemplo:</h5>
+        <h5>Agregar música al futuro, como por ejemplo:</h5>
         <div class="row">
             <div class="col-sm-12">
                 <div class="iFrameContainer" id="mediaContainer">
@@ -84,7 +83,7 @@
                     <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
     
                     <div class="form-group">
-                        <button type="submit" class="btn btn-success">Enviar</button>
+                        <button type="submit" class="btn btn-success">Agregarla Al Futuro</button>
                         <a class="btn btn-primary" href="/">Atrás</a>
                     </div>  
                 </form>   
@@ -96,17 +95,16 @@
 
 <div class="footer">
     <% if (!currentUser){ %>
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
+        <a href="/login">Iniciar Sesión</a>
+        <a href="/register">Registrarse</a>
     <% } %>
     <% if (currentUser) { %>
-        <a href="/logout">Log Out</a>
+        <a href="/logout">Cerrar Sesión</a>
         <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
     <% } %>
-    <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
-    <a href="/about">About</a>
+    <a href="/recommendations/nueva">Agregar Recomendación</a>
     <a href="/future/feedback">Feedback</a>
-
+    <a href="/future/nextsteps">Ayudar</a>
 </div>
 
 

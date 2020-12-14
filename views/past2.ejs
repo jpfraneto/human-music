@@ -11,7 +11,7 @@
 
 <div class="container text-center">
     <div class="navigationBar">
-        <p><span id="pastSpan" class="activeTense"><a href="/past">PAST</a></span><span id="presentSpan"><a href="/">PRESENT</a></span><span id="futureSpan"><a href="/future">FUTURE</a></span></p>
+        <p><span id="pastSpan" class="activeTense"><a href="/past">PASADO</a></span><span id="presentSpan"><a href="/">PRESENTE</a></span><span id="futureSpan"><a href="/future">FUTURO</a></span></p>
     </div>
     <div class="clock">
         <p><%= today %> | <span id="presentClock">88:88:88</span></p>
@@ -23,13 +23,10 @@
     <div id="middleColumn" class="column middle text-center">
 
         <div class="container text-center pastDescription">
-            <p>Each new day starts with a recommendation of a film that is important. After the film, the day is filled with music 
-              recommendations that will be brought from the future to the present, one by one, until the day is over and a new film comes. 
-              You can click the name of the film of the day to check out which were the recommendations of that particular day.
-            </p>  
-            <p>If you want to add a recommendation to the future so that it can afterwards be part of this past, <a href="/recommendations/new">click here.</a></p>
+            <p>Cada nuevo día empieza a las 16:14 UTC, en honor a la fecha en la que empezó a existir esta plataforma: El 14 de Diciembre de 2020.
+              Si quieres agregar una recomendación al futuro para que después sea parte de este pasado, <a href="/recommendations/nueva">haz click acá.</a></p>
             <p>
-                Enjoy our collective creation and the most diverse recommendation algorythm in the world. 
+              Disfruta nuestra creación colectiva y el algoritmo de recomendación de música más diverso del mundo.
             </p>
         </div>
 
@@ -37,9 +34,9 @@
             <thead>
               <tr>
                 <th scope="col">Index</th>
-                <th scope="col">Date</th>
-                <th scope="col">Total Recommendations</th>
-                <th scope="col">Status</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Número de Recomendaciones</th>
+                <th scope="col">Estado</th>
               </tr>
             </thead>
             <tbody>
@@ -54,23 +51,23 @@
             </tbody>
           </table>
           <div class="text-center">
-            <a class="btn btn-success btn-sm" href="/random">Random Recommendation</a>
+            <a class="btn btn-success btn-sm" href="/random">Recomendación Aleatoria</a>
           </div>
           <hr>
           <div class="container text-center pastDescription">
-            <p>Each time that the system generates a new day and there is not enough recommendations in the future for it to fit the new day, all the 
-                recommendations are sent to the future and a new cycle starts. There will be one day when the rate of recommendations will exceed the 
-                rate at which they are played, and that will be the day when the whole system enters a state of perpetual motion. That day will be 
-                when the infinite loop of music will start. 
-            </p> 
-            <p>Down here you can check out all the cycles that have gone through until now.</p> 
+            <p>Cada vez que el sistema crea un nuevo día y no hay suficientes recomendaciones en el futuro para esto, todas las recomendaciones
+              que estaban en el pasado son enviadas al futuro y un nuevo ciclo comienza. Va a llegar un día en el cual la tasa de recomendaciones 
+              en el mundo va a ser más grande que su reproducción, y en este momento todo el sistema va a alcanzar un estado de movimiento 
+              perpetuo. Ese va a ser el día en el que el loop infinito de música de todo el mundo va a empezar.
+            </p>
+            <p>Acá abajo puedes ver todos los ciclos que han existido hasta ahora.</p>
         </div>
           <table class="table content">
             <thead>
               <tr>
-                <th scope="col">Cycle Index</th>
-                <th scope="col">Starting Time</th>
-                <th scope="col">Cycle Duration</th>
+                <th scope="col">Index</th>
+                <th scope="col">Fecha de Creación</th>
+                <th scope="col">Número de Días</th>
               </tr>
             </thead>
             <tbody>
@@ -83,7 +80,6 @@
                   <% }) %>
             </tbody>
           </table>
-
     </div>
     <div class="column right"></div>
 </div>

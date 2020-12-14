@@ -11,7 +11,7 @@
 
 <div class="container text-center">
     <div class="navigationBar">
-        <p><span id="pastSpan"><a href="/past">PAST</a></span><span id="presentSpan"><a href="/">PRESENT</a></span><span id="futureSpan" class="activeTense"><a href="/future">FUTURE</a></span></p>
+        <p><span id="pastSpan"><a href="/past">PASADO</a></span><span id="presentSpan"><a href="/">PRESENTE</a></span><span id="futureSpan" class="activeTense"><a href="/future">FUTURO</a></span></p>
     </div>
     <div class="clock">
         <p><%= today %> | <span id="presentClock">88:88:88</span></p>
@@ -23,14 +23,13 @@
     <div id="middleColumn" class="column middle text-center">
 
         <div class="container text-center content">
-            <p> This is the place where the future presents are being generated
+            <p> Este es el lugar donde los futuros presentes están siendo generados
             </p>
             <ul class="futureUL futureElements text-center" style="list-style: none;">
-                <li><a href="/future/community">Community</a></li>
+                <li><a href="/future/community">Comunidad</a></li>
                 <li><a href="/future/podcast">Podcast</a></li>
-                <li><a href="/future/nextsteps">Next Steps / Contribute</a></li>
-                <li><a href="/future/eclipse">Eclipse</a></li>
-                <li><a href="/future/feedback">Feedback / Advice</a></li>
+                <li><a href="/future/nextsteps">Siguientes Pasos / Contribuir</a></li>
+                <li><a href="/future/feedback">Feedback</a></li>
                 <% if(currentUser){ %>
                   <li><a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a></li>
                 <% } %>
