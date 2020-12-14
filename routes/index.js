@@ -55,10 +55,10 @@ router.get("/", (req, res) => {
                             nasaInfo : imageOfTheDayData
                         })
                     } else {
-                        res.render("endOfDay", {today:today});
+                        res.render("endOfDay", {today:todayDay});
                     }  
                 } else {
-                    res.render("endOfDay", {today:today});
+                    res.render("endOfDay", {today:todayDay});
                 }
             })
         }
