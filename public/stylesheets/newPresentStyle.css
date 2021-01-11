@@ -243,4 +243,74 @@ html {
     }
   }
 
+.headerBanner{
+    font-family: 'Monoton', cursive;
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.newMusicPresenter {
+    font-weight: bold;
+    color: rgb(38, 73, 170)
+}
+
+#addRecommendationForm {
+    color:white;
+    border: 2px solid red;
+    background-color:  black;
+    padding: 13px 13px 0 13px;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    z-index: 1; /* Sit on top */
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin: auto;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
   
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 1% auto; /* 15% from the top and centered */
+    border: 1px solid #888;
+    padding: 18px;
+    width: 44%; /* Could be more or less, depending on screen size */
+  }
+  
+  .closeModal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+.closeModal:hover,
+.closeModal:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+h1{
+    margin-bottom: 0;
+}
+
+#vol-control{
+    visibility: hidden;
+}
+
+.volumeControls{
+    display: inline;
+}
+
+a:hover {
+    text-decoration: none;
+}

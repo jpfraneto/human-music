@@ -1,4 +1,4 @@
-<%- include("../../partials/newHeader") %>
+<%- include("../../partials/header") %>
 
 <div class="box">
     <div class="column left"></div>
@@ -37,19 +37,16 @@
 
 <div class="footer">
     <% if (!currentUser){ %>
-        <a href="#" data-toggle="modal" data-target="#loginModal">Login</a>
+        <a href="/login">Login</a>
         <a href="/register">Register</a>
-        <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
-        <a href="/about">About</a>
     <% } %>
     <% if (currentUser) { %>
         <a href="/logout">Log Out</a>
         <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
-        <a href="#" data-toggle="modal" data-target="#exampleModal">Add Recommendation</a>
-        <a href="/about">About</a>
     <% } %>
-
-</div>
+    <a href="/recommendations/new">Add Recommendation</a>
+    <a id="emailTag" href="mailto:hola@human-music.com">hola@human-music.com</a>
+  </div>
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

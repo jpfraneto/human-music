@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="stylesheets/newPresentStyle.css">
-    <title>Human Music</title>
-</head>
-<body>
+<%- include("../partials/header") %>
 
 <div class="box">
     <div class="column left"></div>
@@ -31,7 +22,7 @@
             <button class="btn btn-success" id="addFavoriteButton" style="display: none;">Add Favorite</button>
             <button class="btn btn-danger" id="removeFavoriteButton" style="display: none;">Remove Favorite</button>
             <% if(!currentUser){ %>
-                <a class="btn btn-success" href="#" data-toggle="modal" data-target="#loginModal">Favorites</a>
+                <a class="btn btn-success" href="#" id="favoritesButton" data-toggle="modal" data-target="#loginModal">Favorites</a>
             <% } %>
             <button class="btn btn-dark" id="muteButton" style="visibility: hidden;">(un)Mute</button>
             <button class="btn btn-dark" id="fullscreenButton" style="visibility: hidden;">Go fullscreen</button>
@@ -51,6 +42,7 @@
     </div>
     <div class="column right"></div>
 </div>
+
 <div class="footer">
     <% if (!currentUser){ %>
         <a href="/login">Login</a>
@@ -60,12 +52,9 @@
         <a href="/logout">Log Out</a>
         <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
     <% } %>
-    <a href="/future/feedback">Feedback</a>
     <a href="/recommendations/new">Add Recommendation</a>
-    <a href="/about">About</a>
-
+    <a id="emailTag" href="mailto:hola@human-music.com">hola@human-music.com</a>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

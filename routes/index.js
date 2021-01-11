@@ -104,6 +104,11 @@ router.get("/checkSystemStatus", (req,res) => {
     // .catch(()=>{console.log("There was an error getting the present day")})
 });
 
+router.post("/addRecommendation", (req,res) => {
+    console.log(req.body);
+    res.json({123:345})
+})
+
 router.post("/showRecommendation", (req,res) => {
     let answer = {};
     Recommendation.findById(req.body.recommendationID)
@@ -119,6 +124,8 @@ router.post("/showRecommendation", (req,res) => {
             } else {
                 answer.isFavorited = false;
             }
+        } else {
+            answer.isFavorited = undefined;
         }
     res.json(answer);
     })
@@ -245,7 +252,7 @@ router.post("/", function(req,res){
     let url, duration, name;
     url = req.body.url;
     let newDate = new Date();
-    let videoID = chiita.youtube_parser(url);
+    let videoID = chiita.getYoutubeID(url);
     let apiKey = process.env.YOUTUBE_APIKEY;
     let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
     axios.get(getRequestURL)
@@ -276,10 +283,12 @@ router.post("/", function(req,res){
                 console.log("A new recommendation was saved by " + newRecommendation.author.username + ", with the following youtube ID: " + newRecommendation.youtubeID)
                 res.redirect("/");
             });
+        } else {
+            console.log("There was an error retrieving the recommendation information");
         }
     })
     .catch(()=>{
-        console.log("There was an error saving the recommendation to the database");
+        console.log("There was an error calling the youtube API from the database");
     });
 });
 

@@ -1,40 +1,3 @@
-setInterval(updateCountdown, 1000);
-
-window.onload = function() {
-  //For updating the text on the description as the user writes it down. Read this docummentation for further understanding: https://api.jquery.com/val/
-  const textInput = document.getElementById('descriptionTextArea');
-  const log = document.getElementById("recommendationDescription");
-  
-  textInput.addEventListener('beforeinput', updateValue);
-  
-  function updateValue(e) {
-    log.textContent = e.target.value;
-  }
-
-  //For changing the video that is shown as soon as the cursor goes away from the input
-  const videoInput = document.getElementById("videoURL");
-
-  videoInput.onchange = changeVideo;
-
-  function changeVideo() {
-    const videoInput = document.getElementById("videoURL");
-    const iFrame = document.getElementById("newRecommendationIframe");
-    let url = videoInput.value;
-    let videoID = youtube_parser(url);
-    if(videoID !== false) {
-      iFrame.src = "https://www.youtube.com/embed/" + videoID;
-    } else {
-      alert("The video url is not valid!");
-    }
-  }
-}
-
-function youtube_parser(url) {
-  let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-  let match = url.match(regExp);
-  return (match&&match[7].length==11)? match[7] : false;
-};
-
 function changeDateFormat(date){
   let formatedDate = "";
   let day = (date.getDay()<10) ? "0" + date.getDay() : date.getDay();
@@ -44,7 +7,64 @@ function changeDateFormat(date){
   return formatedDate;
 }
 
-function updateCountdown () {
-  let presentTimeSpan = document.getElementById("presentClock");
-  presentTimeSpan.innerHTML = (new Date()).toUTCString().substring(17,25)
+let modal = document.getElementById("recommendationModal");
+let editBtn = document.getElementById("editBtn");
+let submitToFutureBtn = document.getElementById("submitToFutureBtn");
+let previewBtn = document.getElementById("previewBtn");
+let addRecommendationForm = document.getElementById("addRecommendationForm");
+let closeModalBtn = document.getElementById("closeModalBtn");
+
+submitToFutureBtn.addEventListener("click", ()=>{
+  alert("Your recommendation is now in the future! Thank you for helping build this space")
+  addRecommendationForm.submit();
+});
+editBtn.addEventListener("click", ()=>{
+  modal.style.display = "none"
+});
+closeModalBtn.addEventListener("click", ()=>{
+  modal.style.display = "none"
+})
+window.onclick = (e) => {
+  if(e.target == modal) {
+    modal.style.display = "none"
+  }
+}
+
+previewBtn.addEventListener("click", () => {
+  let iFrame = document.getElementById("recommendationIframeSpan");
+  let usernameSpan = document.getElementById("usernameSpan");
+  let countrySpan = document.getElementById("countrySpan");
+  let descriptionSpan = document.getElementById("descriptionSpan");
+  usernameSpan.innerText = document.getElementById("username").value;
+  countrySpan.innerText = document.getElementById("country").value;
+  descriptionSpan.innerText = document.getElementById("descriptionTextArea").value;
+  let youtubeID = getYoutubeID(document.getElementById("videoURL").value)
+  iFrame.src = "https://www.youtube.com/embed/" + youtubeID;
+
+  if(descriptionSpan.innerText.length>0 && countrySpan.innerText && usernameSpan.innerText && youtubeID){
+    modal.style.display = "block";
+  } else {
+    alert("Please fill in all the elements :)")
+  }
+})
+
+addRecommendationForm.addEventListener("submit", (e)=>{
+  e.preventDefault();
+  alert("Your recommendation is now in the future! Thank you for helping build this space")
+  addRecommendationForm.submit();
+})
+
+let youtubeInput = document.getElementById("videoURL");
+youtubeInput.addEventListener('blur', () => {
+  let youtubeID = (getYoutubeID(youtubeInput.value));
+  if(youtubeID.length !== 11){
+    alert("That URL is not valid, please try a new one.");
+  } else {
+    console.log("The link works, and the youtube ID is: " + youtubeID); 
+  }
+});
+
+function getYoutubeID(url){
+  url = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  return undefined !== url[2]?url[2].split(/[^0-9a-z_\-]/i)[0]:url[0];
 }
