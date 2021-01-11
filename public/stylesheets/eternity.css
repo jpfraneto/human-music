@@ -1,0 +1,338 @@
+html {
+    overflow-y: scroll;
+    text-align: center;
+    font-family: 'Audiowide', cursive;
+}
+
+a {
+    text-decoration: none;
+}
+
+p {
+    margin: 0;
+}
+
+.iFrameContainer {
+    position : relative;
+    padding-top : 56.25%; /* 16:9 */
+    overflow : hidden;
+    margin-bottom : 5px
+}
+
+.iFrameContainer iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.box {
+    display: flex;
+    width: 100%;
+    padding-bottom: 38px;
+}
+
+.column {
+    position: relative;
+    float:left;
+    background-color: transparent;
+}
+
+.left {
+    text-align: center;
+    width:8%
+}
+
+.right {
+    text-align: center;
+    width:8%
+}
+
+.middle {
+    width:84%
+}
+
+.navigationBar {
+    width : 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.navigationBar a {
+    font-size: 150%;
+    margin: 0 auto;
+    color: black;
+}
+
+.navigationBar a:hover {
+    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+    color: black;
+    text-decoration: none;
+}
+
+.navigationBar p {
+    margin-bottom: 0;
+}
+
+.dayIdentificators {
+    width : 100%;
+    margin: 0 auto;
+    font-size: 100%;
+}
+
+.dayIdentificators p {
+    margin: 0 auto;
+}
+
+.footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    background-color: black;
+    height: 6%;
+}
+
+.footer a {
+    margin: 2%;
+    color: white;
+    text-decoration: none;
+    font-size: 70%;
+}
+
+.footer a:hover {
+    color: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+    text-shadow: 0 0 20px #0ae678
+}
+
+#dayProgress {
+    width : 100%
+}
+
+.activeTense {
+    display: inline-block;
+    padding: 0 4px;
+    font-weight: 900;
+}
+
+@media only screen and (min-width: 888px) {
+    .left {
+        width:22%
+    }
+    
+    .right {
+        width:22%
+    }
+    
+    .middle {
+        width:54%
+    }
+
+    .footer a{
+        font-size: 0.5em;
+    }
+
+    .footer {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        text-align: center;
+        background-color: black;
+        height: 6%;
+    }
+    
+    .footer a {
+        margin: 1.618em;
+        color: white;
+        text-decoration: none;
+        font-size: 100%;
+    }
+  }
+
+  /* .navigationBar a {
+    font-size: 150%;
+    margin: 0 auto;
+    color: black;
+}
+
+#displayInformation {
+    display : none;
+    background-color: rgb(206, 131, 52);
+    padding: 8px 8px 8px 8px; 
+    border: 1.5px solid black;
+    border-radius: 1%;
+    margin: 1.618em 0;
+}
+
+#tagline {
+    text-align: left;
+    margin:0 0 1em 1.618em;
+}
+
+
+
+h3 {
+    margin: 0;
+}
+
+.televisionContainer {
+    background-color: rgb(206, 131, 52);
+    padding: 8px 8px 8px 8px; 
+    border: 1.5px solid black;
+    border-radius: 1%;
+}
+
+.controls a {
+    font-size: 2em;
+}
+
+.controls a:hover {
+    color: rgb(79, 76, 76);
+    cursor: pointer
+}
+
+#informationButton {
+    margin: 0 0 0 3em;
+}
+
+#favoriteButton {
+    margin: 0 3em 0 0;
+}
+
+#controlsDiv {
+    border: 1.5px dotted black;
+    border-radius: 1%;
+}
+
+.recommendationSquaresDiv {
+    margin-top: 3px;
+    width : 100%;
+    padding : 0;
+}
+
+.recommendationSquaresDiv{
+    display : flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+.recommendationSquare {
+    flex: 1 1 0px;
+    background-color:rgb(206, 131, 52);
+    border: 1px solid black;
+    height: 17px;
+}
+
+.navigationBar {
+    font-size: 1em;
+}
+
+.recommendationSquare:hover {
+    background-color: darkcyan;
+}
+
+.dayProgressDisplayHidden {
+    visibility: hidden;
+}
+
+.dayProgressDisplay {
+    visibility: visible;
+}
+
+.headerContainer {
+    display: inline-block;
+    padding: 0 4px;
+    background-color: rgb(206, 131, 52);
+    border: 1.5px solid black;
+    border-bottom-style: none;
+    border-radius: 1%;
+} */
+
+h1 {
+    margin: 0 ;
+}
+
+#previousButton {
+    
+}
+
+#nextButton {
+    
+}
+
+.recommendationsOfThisDayContainer {
+    display : flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+}
+
+.recommendationContainer {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    background-color:rgb(206, 131, 52);
+    border: 1px solid black;
+    height: 17px;
+    display : inline;
+}
+
+.recommendationContainer:hover {
+    background-color: cyan;
+}
+
+.modal {
+position: fixed;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow-y: scroll;
+background-color: rgba(0, 0, 0, 0.3);
+opacity: 0;
+visibility: hidden;
+}
+.modal-box {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: pink;
+padding: 1rem 1.5rem;
+width: 24rem;
+border-radius: 0.5rem;
+}
+.close-button {
+float: right;
+width: 1.5rem;
+line-height: 1.5rem;
+text-align: center;
+cursor: pointer;
+border-radius: 0.25rem;
+background-color: lightgray;
+}
+
+.show-modal {
+opacity: 1;
+visibility: visible;
+transform: scale(1.0);
+}
+
+.pastModal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    background-color: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.headers {
+    color: white;
+    background-color: black;
+}
