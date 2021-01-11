@@ -11,6 +11,8 @@ let fsButton = document.getElementById("fullscreenButton");
 let bottomMessage = document.getElementById("recommendationBottomMessage");
 let controlsDiv = document.getElementById("controlsDiv");
 let volumeIcon = document.getElementById("volumeIcon");
+let volumeControl = document.getElementById("vol-control");
+let volumeControls = document.getElementById("volumeControls");
 
 timer = setInterval(updateCountdown, 1000);
 
@@ -76,6 +78,12 @@ function setupVolumeDisplayButton () {
     volumeIcon.innerHTML = '<i class="fas fa-volume-up"></i>'
   }
   volumeDisplayButton.addEventListener("click", volumeDisplayFunction)
+  volumeControls.addEventListener("mouseover", ()=>{
+    volumeControl.style.visibility = "visible"
+  })
+  volumeControls.addEventListener("mouseout", ()=>{
+    volumeControl.style.visibility = "hidden"
+  })
 }
 
 function volumeDisplayFunction() {
@@ -291,7 +299,9 @@ async function checkIfRecommendationIsInDatabase(videoID){
 }
 
 const recommendationForm = document.getElementById("newRecommendationForm");
-recommendationForm.addEventListener("submit", handleFormSubmit);
+if (recommendationForm){
+  recommendationForm.addEventListener("submit", handleFormSubmit);
+}
 
 async function handleFormSubmit(event){
   event.preventDefault();
@@ -328,4 +338,3 @@ async function postFormDataAsJson({url, formData}){
   return response.json();
 }
 
-//https://simonplend.com/how-to-use-fetch-to-post-form-data-as-json-to-your-api/

@@ -25,7 +25,8 @@ const recommendationRoutes = require("./routes/recommendations"),
       userRoutes           = require("./routes/users");
 
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(process.env.DATABASE_MONGODB, { useNewUrlParser: true, useFindAndModify: false });
+// mongoose.connect(process.env.DATABASE_MONGODB, { useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect("mongodb://localhost:27017/humanMusic", { useNewUrlParser: true, useFindAndModify: false });
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
@@ -50,7 +51,7 @@ if(process.env.NODE_ENV === 'production') {
 // chiita.bigBangTwo();
 
 // If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
-console.log("The app.js file is running again.");
+// // console.log("The app.js file is running again.");
 chiita.timeWarp();
 
 // chiita.createNewDay();

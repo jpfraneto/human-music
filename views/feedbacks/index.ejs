@@ -1,92 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/stylesheets/newPresentStyle.css">
-    <title>Human Music</title>
-</head>
-<body>
-
-<div class="modal" tabindex="-1" role="dialog" id="loginModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Iniciar Sesión</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <h5>Si tienes una cuenta, puedes Iniciar Sesión. Si no, puedes <a href="/register">registrarte acá.</a></h5>
-                <form action="/login" method="POST">
-                    <div class="row align-items-center">
-                        <div class="col-12" style="margin-bottom: 16px;">
-                            <label for="loginUsername" class="clock">Usuario</label>
-                            <input type="text" name="username" placeholder="Usuario" id="loginUsername" required>
-                            <label for="loginPassword" class="clock">Contraseña</label>
-                            <input type="password" name="password" placeholder="Contraseña" id="loginPassword" required>
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-success">Iniciar Sesión</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="exampleModalLabel">Agregar Nueva Recomendación</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="/" method="POST">
-                    <% if(!currentUser){ %>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="username" class="content">Nombre</label>
-                                    <input class="form-control" placeholder="Name" id="username" type="text" name="username">
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="country" class="content">País</label>
-                                    <input class="form-control" placeholder="Country" id="country" type="text" name="country">
-                                </div>
-                            </div>
-                        </div>
-                    <% } %>
-                <div class="form-group">
-                    <label for="videoURL" class="col-form-label">URL de Youtube de la Recomendación [https://www.youtube.com/watch?v=ZOu3aJ8RDqw]:</label>
-                    <input class="form-control" id="videoURL" type="text" name="url">
-                </div>
-                <div class="form-group">
-                    <label for="descriptionTextArea" class="col-form-label">Qué significa para ti?</label>
-                    <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
-                </div>
-                <div class="form group">
-                    <label for="userCheckbox" class="col-form-label">Fue esta música creada por ti?</label>    
-                    <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
-                </div>
-                <div class="form group"></div>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Agregar Recomendación</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<%- include("../partials/header") %>
 
 <div class="container text-center">
     <div class="navigationBar">
@@ -128,4 +40,4 @@
     <div class="column right"></div>
 </div>
 
-<%- include("../partials/newFooter") %>
+<%- include("../partials/footer") %>

@@ -1,22 +1,22 @@
-<%- include("./partials/newHeader") %>
+<%- include("./partials/header") %>
 
 <div class="box">
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
-      <p><strong>Iniciar Sesión</strong></p>
-      <p>Bienvenid@ de vuelta. Si tienes una cuenta, ingresa acá. Si no, puedes registrarte <a href="/register">acá</a></p>
+      <p><strong>Log In</strong></p>
+      <p>Welcome Back. You can log in here, or register <a href="/register">here</a></p>
 
       <form action="/login" method="POST">
         <div class="row align-items-center">
           <div class="col-12" style="margin-bottom: 16px;">
-            <label for="loginUsername" class="clock">Usuario</label>
-            <input type="text" name="username" placeholder="Usuario" id="loginUsername" required>
-            <label for="loginPassword" class="clock">Contraseña</label>
-            <input type="password" name="password" placeholder="Contraseña" id="loginPassword" required>
+            <label for="loginUsername" class="clock">User</label>
+            <input type="text" name="username" placeholder="Username" id="loginUsername" required>
+            <label for="loginPassword" class="clock">Password</label>
+            <input type="password" name="password" placeholder="*********" id="loginPassword" required>
           </div>
           <div class="col-12">
-            <button type="submit" class="btn btn-success" style="margin-top: 8px">Iniciar Sesión</button>
-            <a href="/" class="btn btn-primary" style="margin-top: 8px">Atrás</a>
+            <button type="submit" class="btn btn-success" style="margin-top: 8px">Log In</button>
+            <a href="/" class="btn btn-primary" style="margin-top: 8px">Back</a>
           </div>
         </div>
       </form>
@@ -25,4 +25,4 @@
     <div class="column right"></div>
 </div>
 
-<%- include("./partials/newFooter") %>
+<%- include("./partials/footer") %>

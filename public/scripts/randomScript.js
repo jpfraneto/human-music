@@ -1,6 +1,6 @@
-
 const favoriteButton = document.getElementById("addFavoriteButton");
 const unFavoriteButton = document.getElementById("removeFavoriteButton");
+const favoritesButton = document.getElementById("favoritesButton");
 
 timer = setInterval(updateCountdown, 1000);
 
@@ -79,6 +79,9 @@ unFavoriteButton.addEventListener("click", function(e){
   })
 })
 
+favoritesButton.addEventListener("click", ()=>{
+  alert("You need to be logged in for adding this video into your favorites")
+})
   
 function toggleButtons (isFavorited) {
   let controlsDiv = document.getElementById("controlsDiv");

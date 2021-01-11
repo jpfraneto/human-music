@@ -1,80 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/stylesheets/newPresentStyle.css">
-    <title>Human Music</title>
-</head>
-<body>
-
-<div class="modal" tabindex="-1" role="dialog" id="loginModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Login</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <h5>If you have an account, here you can login. If not, you can register <a href="/register">here</a></h5>
-                <form action="/login" method="POST">
-                    <div class="row align-items-center">
-                        <div class="col-12" style="margin-bottom: 16px;">
-                            <label for="loginUsername" class="clock">Username</label>
-                            <input type="text" name="username" placeholder="Username" id="loginUsername" required>
-                            <label for="loginPassword" class="clock">Password</label>
-                            <input type="password" name="password" placeholder="Password" id="loginPassword" required>
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-success">Login</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="exampleModalLabel">Add New Recommendation</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="/" method="POST">
-                <div class="form-group">
-                    <label for="videoURL" class="col-form-label">Youtube URL of your recommendation [https://www.youtube.com/watch?v=ZOu3aJ8RDqw]:</label>
-                    <input class="form-control" id="videoURL" type="text" name="url">
-                </div>
-                <div class="form-group">
-                    <label for="descriptionTextArea" class="col-form-label">What does this piece mean to you?</label>
-                    <textarea class="form-control" rows="10" cols="33" id="descriptionTextArea" name="description"></textarea>
-                </div>
-                <div class="form group">
-                    <label for="userCheckbox" class="col-form-label">Was this created by you?</label>    
-                    <input type="checkbox" id="userCheckbox" name="wasCreatedByUser" value="true">
-                </div>
-                <div class="form group"></div>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Recommendation</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<%- include("../partials/header") %>
 
 <div class="container text-center">
     <div class="navigationBar">
-        <p><span id="pastSpan" class="activeTense"><a href="/past">PASADO</a></span><span id="presentSpan"><a href="/">PRESENTE</a></span><span id="futureSpan"><a href="/future">FUTURO</a></span></p>
+        <p><span id="pastSpan" class="activeTense"><a href="/past">PAST</a></span><span id="presentSpan"><a href="/">PRESENT</a></span><span id="futureSpan"><a href="/future">FUTURE</a></span></p>
     </div>
     <div class="clock">
         <p><%= today %> | <span id="presentClock">88:88:88</span></p>
@@ -94,39 +22,38 @@
         </div>
 
         <div class="controls" id="controlsDiv" style="visibility: hidden;"> 
-            <button class="btn btn-success btn-sm" id="addFavoriteButton" style="display: none;">Agregar a Favoritos</button>
-            <button class="btn btn-danger btn-sm" id="removeFavoriteButton" style="display: none;">Eliminar de Favoritos</button>
+            <button class="btn btn-success btn-sm" id="addFavoriteButton" style="display: none;">Add to Favorites</button>
+            <button class="btn btn-danger btn-sm" id="removeFavoriteButton" style="display: none;">Remove from Favorites</button>
             <% if(!currentUser){ %>
-                <a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#loginModal">Favoritos</a>
+                <a class="btn btn-success" href="#" id="favoritesButton" data-toggle="modal" data-target="#loginModal">Favorites</a>
             <% } %>
-            <a class="btn btn-warning btn-sm" href="/random">Recomendación Aleatoria</a>
+            <a class="btn btn-warning btn-sm" href="/random">Random Recommendation</a>
         </div>
         <hr>
         <div id="recommendationInformation">
-            <p><strong>Usuario: </strong>@<span id="username"><%= recommendation.author.username %></span></p>
-            <p><strong>País: </strong><span id="userCountry"><%= recommendation.author.country %></span></p>
-            <p><strong>Fecha de Recomendación: </strong><span id="dateOfRecommendation"><%= recommendation.recommendationDate %></span></p>
-            <p><strong>Nombre: </strong><span id="recommendationName"><%= recommendation.name %></span></p>
-            <p><strong>Por qué la recomendaste?: </strong><span id="recommendationDescription"><%= recommendation.description %></span></p>
+            <p><strong>User: </strong>@<span id="username"><%= recommendation.author.username %></span></p>
+            <p><strong>Country: </strong><span id="userCountry"><%= recommendation.author.country %></span></p>
+            <p><strong>Date of Recommendation: </strong><span id="dateOfRecommendation"><%= recommendation.recommendationDate %></span></p>
+            <p><strong>Name: </strong><span id="recommendationName"><%= recommendation.name %></span></p>
+            <p><strong>Why did you recommend it?: </strong><span id="recommendationDescription"><%= recommendation.description %></span></p>
         </div>
-        <a href="/days/<%=recommendation.daySKU%>">Volver a Este Dia</a>
+        <a href="/days/<%=recommendation.daySKU%>">Back to this Day</a>
     </div>
     <div class="column right"></div>
 </div>
 
 <div class="footer">
     <% if (!currentUser){ %>
-        <a href="/login">Iniciar Sesión</a>
-        <a href="/register">Registrarse</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
     <% } %>
     <% if (currentUser) { %>
-        <a href="/logout">Cerrar Sesión</a>
+        <a href="/logout">Log Out</a>
         <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
     <% } %>
-    <a href="/recommendations/nueva">Agregar Recomendación</a>
-    <a href="/future/feedback">Feedback</a>
-    <a href="/future/nextsteps">Ayudar</a>
-</div>
+    <a href="/recommendations/new">Add Recommendation</a>
+    <a id="emailTag" href="mailto:hola@human-music.com">hola@human-music.com</a>
+  </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
