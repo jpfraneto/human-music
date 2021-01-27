@@ -1,0 +1,66 @@
+html {
+    overflow-y: scroll;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+    background-color: black;
+    color: white;
+}
+
+.headerBanner{
+    font-family: 'Monoton', cursive;
+    background-color: black;
+    color: white;
+    text-align: center;
+    flex: 0 1 auto;
+}
+
+.box {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: row;
+    width: 100%;
+    padding-bottom: 38px;
+}
+
+#addRecommendationForm {
+    margin: auto;
+}
+
+.left {
+    width: 22%;
+}
+
+.right {
+    width: 22%;
+}
+
+.footer {
+    width: 100%;
+    text-align: center;
+    background-color: black;
+    flex-shrink: 0;
+}
+
+.footer a {
+    margin: 2%;
+    color: white;
+    text-decoration: none;
+    font-size: 70%;
+}
+
+.footer a:hover {
+    color: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+    text-shadow: 0 0 20px #0ae678
+}
+
+.column {
+    flex: 0 1 auto;
+    background-color: transparent;
+}

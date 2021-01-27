@@ -8,7 +8,6 @@ var UserSchema = new mongoose.Schema({
     country: String,
     language: String,
     email: String,
-    bio: String,
     recommendations: [
         {
             type: mongoose.Schema.Types.ObjectId,

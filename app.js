@@ -11,17 +11,15 @@ let express       = require("express"),
     methodOverride = require("method-override"),
     Recommendation = require("./models/recommendation"),
     User          = require("./models/user"),
-    Comment       = require("./models/comment"),
-    Day           = require("./models/day"),
     Cycle           = require("./models/cycle"),
     chiita        = require("./middleware/chiita"),
+    theSource     = require("./middleware/theSource"),
     seedDB        = require("./seeds2");
 
 let systemStatus;
 
 const recommendationRoutes = require("./routes/recommendations"),
       indexRoutes          = require("./routes/index"),
-      commentRoutes        = require("./routes/comments"),
       userRoutes           = require("./routes/users");
 
 mongoose.set('useUnifiedTopology', true);
@@ -44,22 +42,12 @@ if(process.env.NODE_ENV === 'production') {
 
 /////////////////////SET FUNCTIONS////////////////////////////
 
-//For starting from scratch
-// chiita.bigBang();
-//For sending all the recommendations to the future
-// chiita.bigBangTwo();
+setTimeout(theSource.bigBang)
 
-// If the app crashes, or the dynos are being cycled, this function will update the system and have it working nice.
-// // console.log("The app.js file is running again.");
-chiita.timeWarp();
+// theSource.sendRecommendationToPast();
 
-// chiita.createNewDay();
-
-let job = new CronJob("14 16 * * *", () => {
-    chiita.createNewDay();
-}, undefined, true, "UTC");
-
-//The following is the code that starts a new cycle when this one is over
+// console.log("The app.js file is running again.");
+// setTimeout(theSource.checkSystem);
 
 app.use(require("express-session")({
     secret: "Music to nourish your soul and activate your mind",
@@ -82,7 +70,6 @@ app.use(function(req, res, next){
 app.use("/", indexRoutes);
 app.use("/recommendations", recommendationRoutes);
 app.use("/users", userRoutes);
-app.use("/future/feedback/:id", commentRoutes);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {

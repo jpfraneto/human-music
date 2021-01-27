@@ -13,14 +13,24 @@
 
 <div class="headerBanner">
     <h1><a href="/">HUMAN-MUSIC</a></h1>
+    <div class="container text-center">
+        <div class="navigationBar">
+            <p><span id="pastSpan">PAST</span><span id="presentSpan" class="activeTense">PRESENT</span><span id="futureSpan">FUTURE</span></p>
+        </div>
+    </div>
+</div>
+
+<div id="theFuture" style="display:none">
+    <h1>In the future there is recommendations enough for: <span id="futureDays"></span> days, <span id="futureHours"></span> hours, <span id="futureMinutes"></span> minutes and <span id="futureSeconds"></span> seconds.</h1>
 </div>
 
 <div class="box" id="systemDisplay">
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
+
         <div class="iFrameContainer" id="mediaContainer">
             <iframe id="presentPlayer" width="640" height="360"
-            src="https://www.youtube.com/embed/<%= randomRecommendation.youtubeID %>?autoplay=1&enablejsapi=1&mute=1"
+            src="https://www.youtube.com/embed/<%= presentRecommendation.youtubeID %>?start=<%=elapsedSeconds%>&autoplay=1&enablejsapi=1&mute=1"
             style="border: solid 4px #37474F"
             allow="autoplay"
             allowFullScreen 
@@ -28,34 +38,33 @@
         </div>
 
         <div class="controls" id="controlsDiv">
+            <% if(!currentUser){ %>
+                <button id="favoritesButton" onclick="alert('Hello, you need to be logged in to add favorites!')">Favorites</button>
+            <% } %> 
+            <button  id="addFavoriteButton" style="display: none;">Add Favorite</button>
+            <button  id="removeFavoriteButton" style="display: none;">Remove Favorite</button>
             <button id="recommendationInfoBtn">Recommendation Info</button>
-            <button id="nextRecommendation">Play next recommendation</button>
         </div>
 
-        <div id="presentRecommendationInformation" style="display:none">
-            <p><strong>User: </strong>@<span id="username"><%= randomRecommendation.author.username %></span></p>
-            <p><strong>Country: </strong><span id="userCountry"><%= randomRecommendation.author.country %></span></p>
-            <p><strong>Date of Recommending: </strong><span id="dateOfRecommendation"><%= randomRecommendation.recommendationDate %></span></p>
-            <p><strong>Name: </strong><span id="recommendationName"><%= randomRecommendation.name %></span></p>
-            <p><strong>Why did you recommend this?: </strong><span id="recommendationDescription"><%= randomRecommendation.description %></span></p>
-        <hr>
-        </div>
-
-        <div id="thePast">
-          <h5>Favorite recommendations of @<%=currentUser.username%>:</h5>
+        <div id="thePast" style="display:none">
+            <p>This are the recommendations that are in the past:</p>
             <table id="pastTable">
                 <thead>
                     <tr>
                         <th>User</th>
                         <th>Name</th>
-                        <th></th>
                     </tr>
                 </thead>
-                <tbody id="pastTableBody">
-
-                </tbody>
+                <tbody id="pastTableBody"></tbody>
             </table>
-            <a href="/users/<%=currentUser.username%>">Go back!</a>
+        </div>
+
+        <div id="presentRecommendationInformation" style="display:none">
+            <p><strong>User: </strong>@<span id="username"><%= presentRecommendation.author.username %></span></p>
+            <p><strong>Country: </strong><span id="userCountry"><%= presentRecommendation.author.country %></span></p>
+            <p><strong>Date of Recommending: </strong><span id="dateOfRecommendation"><%= presentRecommendation.recommendationDate %></span></p>
+            <p><strong>Name: </strong><span id="recommendationName"><%= presentRecommendation.name %></span></p>
+            <p><strong>Why did you recommend this?: </strong><span id="recommendationDescription"><%= presentRecommendation.description %></span></p>
         </div>
 
     </div>
@@ -77,6 +86,6 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="/scripts/favorites.js"></script>
+<script src="/scripts/eternity.js"></script>
 </body>
 </html>
