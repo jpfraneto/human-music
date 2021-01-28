@@ -205,7 +205,6 @@ router.get("/getFutureRecommendations", (req, res) => {
             response.futureRecommendations.push(recommendation.youtubeID);
         })
         response.futureDuration = totalDuration;
-        console.log(response);
         res.json(response);
     })
 })
