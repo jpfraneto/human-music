@@ -228,6 +228,17 @@ futureBtn.addEventListener("click", async () => {
   setTimeout(goToTheFuture);
 })
 
+let navigationBarElements = document.querySelectorAll(".navigationBar span");
+for (let i=0; i< navigationBarElements.length; i++) {
+  navigationBarElements[i].onclick = ()=>{
+    var c = 0;
+    while (c < navigationBarElements.length) {
+      navigationBarElements[c++].className = "";
+    }
+    navigationBarElements[i].className = "activeTense"
+  }
+}
+
 let infoBtn = document.getElementById("recommendationInfoBtn");
 infoBtn.addEventListener("click", ()=>{
   let recommendationInfo = document.getElementById("presentRecommendationInformation");
@@ -271,6 +282,7 @@ function showPast() {
   if (thePast.style.display === "none") {
     thePast.style.display = "block";
   } 
+  let pastSpan = document.getElementById("pastSpan");
 }
 
 function hidePast() {
@@ -317,7 +329,7 @@ async function goToTheFuture() {
   let totalFutureDuration;
   let response = await fetch("/getFutureRecommendations");
   let responseJson = await response.json();
-  console.log(responseJson);
+
   let futureRecommendations = responseJson.futureRecommendations;
 
   let spaceDiv = document.getElementById("theFuture");

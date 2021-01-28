@@ -87,6 +87,7 @@ infoBtn.addEventListener("click", ()=>{
 async function showPast() {
     let response = await fetch("/getFavoriteRecommendations");
     let favoriteRecommendations = await response.json();
+    console.log(favoriteRecommendations);
 
     let thePast = document.getElementById("thePast")
     let pastTableBody = document.getElementById("pastTableBody");
