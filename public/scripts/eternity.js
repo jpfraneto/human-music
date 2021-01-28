@@ -356,3 +356,4 @@ async function getPastRecommendation (youtubeID) {
   let recommendationData = await response.json();
   updateRecommendation(recommendationData);
 }
+
