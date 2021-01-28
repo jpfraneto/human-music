@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
 
 var recommendationSchema = new mongoose.Schema({
+    index : Number,
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -18,12 +19,13 @@ var recommendationSchema = new mongoose.Schema({
     url: String,
     youtubeID : String,
     description:String,
+    language : String,
     status: String,
     duration: Number,
     wasCreatedByUser: Boolean,
     startingRecommendationTimestamp: Number,
-    daySKU: String,
-    favorited : Number
+    endingRecommendationTimestamp: Number,
+    timestampDifference: Number
 });
 
 module.exports = mongoose.model("Recommendation", recommendationSchema);

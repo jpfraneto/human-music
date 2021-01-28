@@ -1,42 +1,82 @@
-<%- include("../partials/header") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/eternity.css">
+    <title>Human-Music</title>
+</head>
+<body>
 
-<div class="row">
-  <div class="col-1"></div>
-  <div class="col-10 title text-center"><p><strong>Favoritos de @<%=foundUser.username%></strong></p></div>
-  <div class="col-1"></div>
+<div class="headerBanner">
+    <h1><a href="/">HUMAN-MUSIC</a></h1>
 </div>
 
-<div class="box">
-  <div class="column left"></div>
-  <div id="middleColumn" class="column middle text-center">
+<div class="box" id="systemDisplay">
+    <div class="column left"></div>
+    <div id="middleColumn" class="column middle text-center">
+        <div class="iFrameContainer" id="mediaContainer">
+            <iframe id="presentPlayer" width="640" height="360"
+            src="https://www.youtube.com/embed/<%= randomRecommendation.youtubeID %>?autoplay=1&enablejsapi=1&mute=1"
+            style="border: solid 4px #37474F"
+            allow="autoplay"
+            allowFullScreen 
+            ></iframe>
+        </div>
 
-    <table class="table content">
-      <thead>
-        <tr>
-          <th scope="col">Usuario</th>
-          <th scope="col">Fecha de Recomendación</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Fecha de Reproducción</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% foundUser.favoriteRecommendations.forEach(function(favoriteRecommendation){ %>
-          <tr>
-            <td><%= favoriteRecommendation.author.username %></td>
-            <td><%= favoriteRecommendation.recommendationDate %></td>
-            <td><a href="/recommendations/<%=favoriteRecommendation._id%>"><%= favoriteRecommendation.name %></a></td>
-            <td><%= favoriteRecommendation.daySKU %></td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-    <div class="text-center">
-      <a class="btn btn-success btn-sm" href="/users/<%=foundUser.username%>">Volver al Usuario</a>
+        <div class="controls" id="controlsDiv">
+            <button id="recommendationInfoBtn">Recommendation Info</button>
+            <button id="nextRecommendation">Play next recommendation</button>
+        </div>
+
+        <div id="presentRecommendationInformation" style="display:none">
+            <p><strong>User: </strong>@<span id="username"><%= randomRecommendation.author.username %></span></p>
+            <p><strong>Country: </strong><span id="userCountry"><%= randomRecommendation.author.country %></span></p>
+            <p><strong>Date of Recommending: </strong><span id="dateOfRecommendation"><%= randomRecommendation.recommendationDate %></span></p>
+            <p><strong>Name: </strong><span id="recommendationName"><%= randomRecommendation.name %></span></p>
+            <p><strong>Why did you recommend this?: </strong><span id="recommendationDescription"><%= randomRecommendation.description %></span></p>
+        <hr>
+        </div>
+
+        <div id="thePast">
+          <h5>Favorite recommendations of @<%=currentUser.username%>:</h5>
+            <table id="pastTable">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="pastTableBody">
+
+                </tbody>
+            </table>
+            <a href="/users/<%=currentUser.username%>">Go back!</a>
+        </div>
+
     </div>
-
-  </div>
-  <div class="column right"></div>
+    <div class="column right"></div>
 </div>
 
+<div class="footer">
+    <% if (!currentUser){ %>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+    <% } %>
+    <% if (currentUser) { %>
+        <a href="/logout">Log Out</a>
+        <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
+    <% } %>
+    <a href="/recommendations/new">Add Recommendation</a>
+    <a id="emailTag" href="mailto:hola@human-music.com">hola@human-music.com</a>
+</div>
 
-<%- include("../partials/footer") %>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="/scripts/favorites.js"></script>
+</body>
+</html>

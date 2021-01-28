@@ -1,12 +1,3 @@
-function changeDateFormat(date){
-  let formatedDate = "";
-  let day = (date.getDay()<10) ? "0" + date.getDay() : date.getDay();
-  formatedDate += day;
-  formatedDate += date.getFullYear();
-  formatedDate += romanize(date.getMonth());
-  return formatedDate;
-}
-
 let modal = document.getElementById("recommendationModal");
 let editBtn = document.getElementById("editBtn");
 let submitToFutureBtn = document.getElementById("submitToFutureBtn");
@@ -30,16 +21,24 @@ window.onclick = (e) => {
   }
 }
 
-previewBtn.addEventListener("click", () => {
+previewBtn.addEventListener("click", async () => {
   let iFrame = document.getElementById("recommendationIframeSpan");
   let usernameSpan = document.getElementById("usernameSpan");
   let countrySpan = document.getElementById("countrySpan");
   let descriptionSpan = document.getElementById("descriptionSpan");
-  usernameSpan.innerText = document.getElementById("username").value;
-  countrySpan.innerText = document.getElementById("country").value;
+  if (document.getElementById("username") && document.getElementById("country")){
+    usernameSpan.innerText = document.getElementById("username").value;
+    countrySpan.innerText = document.getElementById("country").value;
+  } else {
+    const response = await fetch("/getUserInfo");
+    const userData = await response.json();
+    console.log(userData);
+    usernameSpan.innerText = userData.username;
+    countrySpan.innerText = userData.country;
+  }
   descriptionSpan.innerText = document.getElementById("descriptionTextArea").value;
   let youtubeID = getYoutubeID(document.getElementById("videoURL").value)
-  iFrame.src = "https://www.youtube.com/embed/" + youtubeID;
+  iFrame.src = "https://www.youtube.com/embed/" + youtubeID + "?autoplay=1";
 
   if(descriptionSpan.innerText.length>0 && countrySpan.innerText && usernameSpan.innerText && youtubeID){
     modal.style.display = "block";

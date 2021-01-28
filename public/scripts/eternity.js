@@ -1,13 +1,13 @@
-let displayedDaySKU, displayedRecommendationID, currentUser;
+let systemInformation, iFrameGlobalElement, delay, recommendationInfo, voidInfo, currentUser;
 
-timer = setInterval(updateCountdown, 1000);
+const favoriteButton = document.getElementById("addFavoriteButton");
+const unFavoriteButton = document.getElementById("removeFavoriteButton");
+const favoritesButton = document.getElementById("favoritesButton");
+let bottomMessage = document.getElementById("recommendationBottomMessage");
+let controlsDiv = document.getElementById("controlsDiv");
+let systemStatus = "present";
 
-function updateCountdown () {
-    let presentTimeSpan = document.getElementById("presentClock");
-    presentTimeSpan.innerHTML = (new Date()).toUTCString().substring(17,25)
-}
-
-let player;
+let player, iframe;
 var tag = document.createElement('script');
 tag.id = 'iframe-demo';
 tag.src = 'https://www.youtube.com/iframe_api';
@@ -15,268 +15,345 @@ var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 function onYouTubeIframeAPIReady() {
-    console.log("The youtube api is ready");
-    player = new YT.Player('presentPlayer', { 
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange,
-            'onError': onPlayerError
-        }
-    });
+  player = new YT.Player('presentPlayer', { 
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange,
+        'onError': onPlayerError
+      }
+  });
 }
 
 function onPlayerReady(event) {
-    displayedRecommendationID = player.getVideoData().video_id;
-    getRecommendationInformation(displayedRecommendationID);
+  let presentID = player.getVideoData()['video_id']
+  console.log("The presentID is: " + presentID);
+  showControls(presentID);
 }
 
-async function updateDisplay (youtubeID) {
-    getRecommendationInformation(youtubeID);
-}
-
-async function updateRecommendation (recommendationForUpdateID) {
-    player.loadVideoById(recommendationForUpdateID);
-    displayedRecommendationID = recommendationForUpdateID;
-}
-
-function onPlayerStateChange(event){
-    console.log("The state of the player changed");
+async function showControls(youtubeID) {
+  let response = await fetch("/getRecommendationInformation", {
+    method : "POST",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({recommendationID:youtubeID})
+  });
+  let recommendationData = await response.json();
+  toggleButtons(recommendationData.isFavorited)
 }
 
 function onPlayerError(event) {
-    displayedRecommendationID = "error";
-    alert("There was an error loading the video in the player");
+    console.log("There was an error with the player!")
 }
 
-$(()=>{
-    buttonsSetup();
-    displayedDaySKU = document.getElementById("displayedDaySku").innerText;
+function onPlayerStateChange(event) {
+    //Do something when the player state changes. When the video is over, update it with the next one.
+    let displayedID = player.getVideoData()['video_id']
+    if (event.data === 0) {
+      console.log("The video ended and now the set Timeout will bring the next recommendation")
+        setTimeout(()=>{
+            queryNextRecomendation(displayedID);
+        }, 1618)
+    } 
+}
+
+function updateRecommendation (recommendationInformation) {
+  console.log(recommendationInformation);
+  queriedRecommendation = recommendationInformation.recommendation;
+  player.loadVideoById(queriedRecommendation.youtubeID);
+  voidInfo = document.getElementById("voidInformation");
+
+  let username = document.getElementById("username");
+  let userCountry = document.getElementById("userCountry");
+  let dateOfRecommendation = document.getElementById("dateOfRecommendation");
+  let recommendationName = document.getElementById("recommendationName");
+  let recommendationDescription = document.getElementById("recommendationDescription");
+
+  toggleButtons(recommendationInformation.isFavorited);
+
+  username.innerText = queriedRecommendation.author.username;
+  userCountry.innerText = queriedRecommendation.author.country;
+  dateOfRecommendation.innerText = queriedRecommendation.recommendationDate;
+  recommendationName.innerText = queriedRecommendation.name;
+  recommendationDescription.innerText = queriedRecommendation.description;
+}
+
+favoriteButton.addEventListener("click", async function(e){
+  console.log("The favorite button was clicked");
+  let presentID = player.getVideoData()['video_id'];
+
+  const response = await fetch("/favorited", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({recommendationID:presentID})
+  });
+  const data = await response.json();
+  if ( data.user ) {
+    console.log("The recommendation was favorited and added to the user " + data.user);
+    toggleButtons(true);
+  } else {
+    alert("You need to be logged in to add that recommendation to your profile!")
+  }
 })
 
-function buttonsSetup () {
-    let previousButton = document.getElementById("previousButton");
-    let nextButton = document.getElementById("nextButton");
+unFavoriteButton.addEventListener("click", async function(e){
+  console.log("The unfavorite button was clicked");
+  let presentID = player.getVideoData()['video_id'];
 
-    let pastLink = document.getElementById("pastLink");
-    pastLink.addEventListener("click", async ()=>{
-        pastLink.parentNode.parentNode.childNodes.forEach((tense)=>{
-            tense.classList.remove("activeTense");
-        })
-        pastLink.classList.add("activeTense");
+  const response = await fetch("/unfavorited", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({recommendationID:presentID})
+  });
+  const data = await response.json();
+  if ( data.user ) {
+    console.log("The recommendation was removed user " + data.user);
+    toggleButtons(false);
+  } else {
+    alert("You need to be logged in to add that recommendation to your profile!")
+  }
+})
 
-        togglePastModal()
-        
-        // let targetDay = prompt("To which day do you want to move?");
-        // let day = await getDayInformation(targetDay)
-        // console.log(day);
-        // let pastControls = document.getElementById("recommendationsOfThisDayContainer");
-        // pastControls.innerHTML = "";
-        // let newDiv;
-        // for (let i=0; i<day.youtubeIDS.length;i++){
-        //     newDiv = "";
-        //     newDiv = document.createElement("div");
-        //     newDiv.className = "recommendationContainer";
-        //     newDiv.id = day.youtubeIDS[i];
-        //     newDiv.innerText = i;
-        //     newDiv.addEventListener("click", ()=>{
-        //         updateRecommendation(day.youtubeIDS[i]);
-
-        //     });
-        //     pastControls.appendChild(newDiv);
-        // }
-    })
-
-    let currentVolume = document.getElementById("currentVolume");
-    let iframe = document.querySelector("iframe");
-    //Change Displayed Day Button
-    let displayedDayButton = document.getElementById("displayedDaySku");
-    displayedDayButton.addEventListener("click", ()=>{
-        alert("Here you will be able to change the day SKU that is displayed and travel to the past because of that")
-    })
-
-    //Change Displayed Day Index Button
-    let displayedDayIndex = document.getElementById("dayIndex");
-    displayedDayIndex.addEventListener("click", ()=>{
-        alert("Here you will be able to change the day index that is displayed and travel to the past because of that")
-    })
-
-    //Favorite Button
-    let favoritesButton = document.getElementById("favoriteButton");
-    
-    favoritesButton.addEventListener("click", async ()=>{
-        let method;
-        if(true){ //¿Cómo se hace referencia acá al hecho de que haya un usuario logged in o no?
-            if(true){ //Qué está activo en el botón? Esto determina la funcionalidad y cuál es la información que se envía al servidor [favorito o no favoritp]
-                method = "favorite"
-                //Toggle the class to favorited (red)
-                //Toggle the data of the button to favorited
-                favoritesButton.innerHTML = "<i class='far fa-heart'></i>";
-            } else {
-                method = "unfavorite"
-                //Toggle the class to unfavorited (green)
-                //Toggle the data of the button to unfavorited
-                favoritesButton.innerHTML = "<i class='fas fa-heart'></i>";
-            }
-            fetch("/favoriteButton", {
-                method : "POST",
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body : JSON.stringify({displayedRecommendationID:"6PAhw0P3CNA", method:method})
-            });
-        } else {
-            alert("log in to access that functionality");
-        }
-    });
-
-    //Fullscreen Button
-    let fullscreenButton = document.getElementById("fullscreenButton");
-    fullscreenButton.addEventListener("click", ()=>{
-        let requestFullscreen = iframe.requestFullScreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullScreen;
-        if(requestFullscreen){
-          requestFullscreen.bind(iframe)();
-        }
-    });
-
-    //Volume Display
-    let volumeDisplay = document.getElementById("volumeDisplay");
-    volumeDisplay.addEventListener("click", ()=>{
-        if(player.isMuted()){
-            player.unMute();
-            volumeIcon.innerHTML = '<i class="fas fa-volume-up"></i>';
-            currentVolume.innerText = player.getVolume();
-          } else {
-            player.mute();
-            volumeIcon.innerHTML = '<i class="fas fa-volume-mute"></i>'
-            currentVolume.innerText = "";
-          }
-        //This should mute or unmute the player and change the icon of this button
-    });
-    
-    //Volume Bar
-    let volumeBar = document.getElementById("volumeBar");
-    volumeBar.addEventListener("change", (e)=>{
-        let newVolume = e.target.value;
-        player.unMute();
-        player.setVolume(newVolume);
-        volumeIcon.innerHTML = '<i class="fas fa-volume-up"></i>';
-        currentVolume.innerText = newVolume;
-        //Here the volume of the player should change to the value of e.target.value
-    });
-
-    //Day Progress
-    // let dayProgressRange = document.getElementById("dayProgress");
-    // let displayedDaySKU = document.getElementById("displayedDaySku").innerText;
-    // dayProgressRange.addEventListener("change", (e) => {
-    //     let now = (new Date()).getTime()
-    //     if ( e.target.value > now){
-    //         e.target.value = now;
-    //     } else {
-    //         timeTravel(displayedDaySKU, e.target.value);
-    //     }
-    // })
-}
-
-async function timeTravel(displayedDaySKU, targetTimestamp){
-    const response = await fetch("/timeTravel", {
-        method : "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body : JSON.stringify({daySKU:displayedDaySKU , targetTimestamp : targetTimestamp})
-    });
-    const recommendation = await response.json();
-    updateRecommendation(recommendation.recommendation);
-}
-
-async function getRecommendationInformation (youtubeID){
-    const query = await fetch("/getRecommendationInformation", {
-        method : "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body : JSON.stringify({youtubeID:youtubeID, daySKU : "232020XII"})
-    });
-    const response = await query.json();
-    return response
-}
-
-// async function setupProgressButtons () {
-//     let newDiv = document.createElement("div");
-//     let dayProgressDiv = document.getElementById("dayProgress");
-//     dayProgressDiv.classList.add("dayProgressDisplay");
-//     newDiv.classList.add("recommendationSquare");
-//     let dayInformation = await getDayInformation(displayedDaySKU)
-//     let recommendationSquaresContainer = document.getElementById("recommendationSquaresContainer");
-//     for(i=0;i<dayInformation.totalRecommendationsOfThisDay;i++){
-//         newDiv.innerText = i;
-//         recommendationSquaresContainer.appendChild(newDiv);
-//         console.log("A div was added to the list")
-//     }
-// }
-
-async function getDayInformation(thisDay){
-    let query = await fetch("/getDayInformation", {
-        method : "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body : JSON.stringify({daySKU:thisDay})
-    });
-    let response = await query.json();
-    return response;
-}
-
-let infoModal = document.getElementById("infoModal");
-let show = document.querySelector(".show");
-let closeButton = document.querySelector(".close-button");
-
-function toggleModal() {
-    infoModal.classList.toggle("show-modal");
-}
-
-function windowOnClick(event) {
-    if (event.target === infoModal) {
-        toggleModal();
-    } else if (event.target === pastModal) {
-        togglePastModal();
+function toggleButtons (isFavorited) {
+  let controlsDiv = document.getElementById("controlsDiv");
+  controlsDiv.style.display = "block"
+  if(isFavorited != null){
+    if(isFavorited){
+      favoriteButton.style.display = "none";
+      unFavoriteButton.style.display = "inline-block";
+    } else {
+      favoriteButton.style.display = "inline-block";
+      unFavoriteButton.style.display = "none";
     }
 }
-
-let pastModal = document.getElementById("pastModal");
-
-function togglePastModal() {
-    pastModal.classList.toggle("show-modal");
 }
 
-show.addEventListener("click", async ()=>{
+async function checkIfRecommendationIsInDatabase(videoID){
+  const response = await fetch("/checkIfRepeated", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({videoID:videoID})
+  });
+  const data = await response.json();
+  if(data.isRepeated){
+    alert("Holy shit! That video was already recommended by @" + data.author.username)
+  }
+}
 
-    let response = await getRecommendationInformation(displayedRecommendationID);
-    let displayedRecommendation = response.displayedRecommendation;
+const recommendationForm = document.getElementById("newRecommendationForm");
+if (recommendationForm){
+  recommendationForm.addEventListener("submit", handleFormSubmit);
+}
 
-    let username = document.getElementById("username");
-    let country = document.getElementById("userCountry");
-    let recommendationName = document.getElementById("recommendationName");
-    let dateOfRecommendation = document.getElementById("dateOfRecommendation");
-    let description = document.getElementById("recommendationDescription");
+async function handleFormSubmit(event){
+  event.preventDefault();
+  const form = event.currentTarget;
+  const url = form.action;
 
-    username.innerText = displayedRecommendation.author.username;
-    country.innerText = displayedRecommendation.author.country;
-    recommendationName.innerText = displayedRecommendation.name;
-    dateOfRecommendation.innerText = displayedRecommendation.recommendationDate;
-    description.innerText = displayedRecommendation.description;
-    toggleModal();
-});
-closeButton.addEventListener("click", toggleModal);
-window.addEventListener("click", windowOnClick);
+  try {
+    const formData = new FormData(form);
+    const responseData = await postFormDataAsJson({url, formData});
+    console.log(responseData);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-let closePastModalButton = document.getElementById("closePastModalButton");
-closePastModalButton.addEventListener("click", togglePastModal);
+async function postFormDataAsJson({url, formData}){
+  const plainFormData = Object.fromEntries(formData.entries());
+  const formDataJsonString = JSON.stringify(plainFormData);
+  const fetchOptions = {
+    method : "POST",
+    headers : {
+      "Content-Type": "application/json",
+			"Accept": "application/json"
+    },
+    body : formDataJsonString,
+  };
+  const response = await fetch (url, fetchOptions);
+  
+  if(!response.ok) {
+    const errorMessage = await response.text();
+    throw new Error(errorMessage);
+  }
 
-let getPastBtn = document.getElementById("getPastBtn");
-getPastBtn.addEventListener("click", async ()=>{
-    let response = await fetch("/getPastDays")
-    response.json().then((pastDays)=>{
-        console.log(pastDays);
-    })
+  return response.json();
+}
+
+async function queryNextRecomendation(displayedID="") {
+  console.log("inside the query next recommendation with the following id in the query:" + displayedID);
+    let response = await fetch("/nextRecommendationQuery", {
+        method : "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body : JSON.stringify({videoID:displayedID, systemStatus:systemStatus})
+    });
+    let recommendationData = await response.json();
+    updateRecommendation(recommendationData);
+}
+
+let pastBtn = document.getElementById("pastSpan");
+pastBtn.addEventListener("click", async ()=>{
+  systemStatus = "past";
+  hideFuture();
+  showSystemDisplay();
+  showPast();
+  let response = await fetch("/pastTimeTravel");
+  let pastData = await response.json();
+  travelToThePast(pastData)
 })
+
+let presentBtn = document.getElementById("presentSpan");
+presentBtn.addEventListener("click", async ()=>{
+  showSystemDisplay();
+  systemStatus = "present";
+  hideFuture();
+  hidePast();
+})
+
+let futureBtn = document.getElementById("futureSpan");
+futureBtn.addEventListener("click", async () => {
+  systemStatus = "future";
+  hidePast();
+  hideSystemDisplay();
+  player.mute();
+  showFuture();
+  setTimeout(goToTheFuture);
+})
+
+let infoBtn = document.getElementById("recommendationInfoBtn");
+infoBtn.addEventListener("click", ()=>{
+  let recommendationInfo = document.getElementById("presentRecommendationInformation");
+  if (recommendationInfo.style.display === "none") {
+    recommendationInfo.style.display = "block";
+  } else {
+    recommendationInfo.style.display = "none";
+  }
+})
+
+function showSystemDisplay() {
+  let systemDisplay = document.getElementById("systemDisplay");
+  if (systemDisplay.style.display === "none") {
+    systemDisplay.style.display = "flex";
+    player.unMute();
+  } 
+}
+
+function hideSystemDisplay() {
+  let systemDisplay = document.getElementById("systemDisplay");
+  systemDisplay.style.display = "none";
+}
+
+function showFuture() {
+  let theFuture = document.getElementById("theFuture");
+  player.mute();
+  if (theFuture.style.display === "none") {
+    theFuture.style.display = "block";
+  } 
+}
+
+function hideFuture() {
+  let theFuture = document.getElementById("theFuture")
+  if (theFuture.style.display === "block") {
+    theFuture.style.display = "none";
+  } 
+}
+
+function showPast() {
+  let thePast = document.getElementById("thePast")
+  if (thePast.style.display === "none") {
+    thePast.style.display = "block";
+  } 
+}
+
+function hidePast() {
+  let thePast = document.getElementById("thePast")
+  if (thePast.style.display === "block") {
+    thePast.style.display = "none";
+  } 
+}
+
+function travelToThePast(pastData) {
+  let pastTableBody = document.getElementById("pastTableBody");
+  while (pastTableBody.firstChild){
+    pastTableBody.removeChild(pastTableBody.lastChild);
+  }
+  for (let i=0; i<pastData.pastRecommendations.length; i++){
+    var tr = document.createElement('tr');
+    var userTd = document.createElement('td');
+    userTd.innerText = pastData.pastRecommendations[i].author.username;
+    var nameTd = document.createElement('td');
+    nameTd.innerText = pastData.pastRecommendations[i].name;
+    nameTd.addEventListener("click", ()=>{
+      getPastRecommendation(pastData.pastRecommendations[i].youtubeID)
+    })
+    nameTd.addEventListener("mouseover", (e)=>{
+       e.target.style.backgroundColor = 'rgb(' + [123,150,50].join(',') + ')';
+    })
+    nameTd.addEventListener("mouseout", (e)=>{
+      e.target.style.backgroundColor = '';
+    })
+    tr.appendChild(userTd);
+    tr.appendChild(nameTd);
+    pastTableBody.appendChild(tr);
+  }
+  if(pastData.pastRecommendations.length>0){
+    let randomRecommendation = pastData.pastRecommendations[(Math.floor(pastData.pastRecommendations.length* Math.random()))]
+    let answer = {recommendation : randomRecommendation}
+    updateRecommendation(answer);
+  } else {
+    alert("There are no recommendations in the past!")
+  }
+}
+
+async function goToTheFuture() {
+  let totalFutureDuration;
+  let response = await fetch("/getFutureRecommendations");
+  let responseJson = await response.json();
+  console.log(responseJson);
+  let futureRecommendations = responseJson.futureRecommendations;
+
+  let spaceDiv = document.getElementById("theFuture");
+  while (spaceDiv.firstChild) {
+    spaceDiv.removeChild(spaceDiv.firstChild);
+  }
+  
+  let timerDisplay = document.createElement("h3");
+  let remainingTime = responseJson.futureDuration;
+
+  var days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+  timerDisplay.innerHTML = "There is enough music in the future for " + days + " days, " + hours + " hours, "
+  + minutes + " minutes, " + seconds + " seconds. ";
+  let button = document.createElement("button");
+  button.innerText = "Add recommendation to the future!"
+  button.addEventListener("click", ()=>{
+    window.location = "/recommendations/new"
+  })
+
+  spaceDiv.appendChild(timerDisplay);
+  spaceDiv.appendChild(button);
+}
+
+async function getPastRecommendation (youtubeID) {
+  let response = await fetch("/getRecommendationInformation", {
+    method : "POST",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({recommendationYTID:youtubeID})
+  });
+  let recommendationData = await response.json();
+  updateRecommendation(recommendationData);
+}
+

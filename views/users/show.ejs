@@ -1,25 +1,18 @@
 <%- include("../partials/header") %>
   
-<div class="box">
+<div class="box" id="systemDisplay">
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
 
         <div class="container text-center content">       
-            <p>Esta es la página personal de <strong><%=foundUser.name%></strong>. Acá está su información de contacto en caso que quieras ponerte en contacto.</p>
+            <p>This is <strong><%=foundUser.name%>'s</strong> personal page.</p>
             <p><strong>País: </strong><%=foundUser.country%></p>
             <p><strong>Idioma: </strong><%=foundUser.language%></p>
             <p><strong>Email: </strong><%=foundUser.email%></p>
         </div>
         
-        <div class="row text-center">
-            <div class="col"></div>
-            <div class="col-4">
-                <a class="btn btn-primary" role="button" href="/users/<%=foundUser.username%>/favorites">Favoritos de @<%=foundUser.username %>'s</a>
-            </div>
-            <div class="col-4">
-                <a class="btn btn-success" role="button" href="/users/<%=foundUser.username%>/recommendations">Recomendaciones de @<%=foundUser.username %>'s</a>
-            </div>
-            <div class="col"></div>
+        <div class="text-center">
+            <a id="favoritesLink" href="/users/<%=foundUser.username%>/favorites">@<%=foundUser.username %>'s favorite music</a>
         </div>
         
     </div>

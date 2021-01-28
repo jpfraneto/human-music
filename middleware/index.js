@@ -70,16 +70,4 @@ middlewareObj.isUser = function(req, res, next){
     }
 }
 
-middlewareObj.isChocapec = function(req, res, next){
-    if(req.user){
-        if(req.user.username !== "chocapec"){
-            res.redirect("/");
-        } else {
-            return next();
-        }
-    } else {
-        res.redirect("/");
-    }
-}
-
 module.exports = middlewareObj;

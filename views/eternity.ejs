@@ -3,86 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="pragma" content="no-cache" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Orbitron:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheets/eternity.css">
-    <title>Human Music</title>
+    <title>Human-Music</title>
 </head>
 <body>
 
-<div class="headers">
-    <h1>HUMAN-MUSIC</h1> 
-</div>
-<div class="box">  
-    <div class="column left">
-    </div>
-    <div id="middleColumn" class="column middle text-center">
+<div class="headerBanner">
+    <h1><a href="/">HUMAN-MUSIC</a></h1>
+    <div class="container text-center">
         <div class="navigationBar">
-            <p><span id="pastSpan"><a id="pastLink">PAST</a></span><span id="presentSpan" class="activeTense"><a id="presentLink">PRESENT</a></span><span id="futureSpan"><a id="futureLink">FUTURE</a></span></p>
+            <p><span id="pastSpan">PAST</span><span id="presentSpan" class="activeTense">PRESENT</span><span id="futureSpan">FUTURE</span></p>
         </div>
-        <div class="televisionContainer">
-            <div class="iFrameContainer" id="mediaContainer">
-                <iframe id="presentPlayer" width="640" height="360"
-                src="https://www.youtube.com/embed/<%= presentRecommendation.youtubeID %>?start=0&autoplay=1&enablejsapi=1&mute=1"
-                allow="autoplay"
-                ></iframe>
-            </div>
-    
-            <div class="controls" id="controlsDiv">
-                <a id="favoriteButton" title="Add/Remove Favorite"><i class="fas fa-heart-broken"></i></a>
-                <a title="Volume Display" id="volumeDisplay"><span id="volumeIcon"><i class="fas fa-volume-mute"></i></span> <span id="currentVolume">00</span></a>
-                <input id="volumeBar" type="range" min="0" max="100" value="100" step="1"></input>
-                <a id="fullscreenButton" title="Fullscreen"><i class="fas fa-expand"></i></a>
-                <a id="informationButton" class="show btn" title="Get information about this recommendation"><i class="fas fa-user-secret"></i></a>
-                <a id="addRecommendationButton" title="Add recommendation to the future"><i class="fas fa-plus"></i></a>
-            </div>
-            <p>This recommendation ends at 18:53:22</p>
-            <button id="nextButton">Next Recommendation</button>
-            <button id="getPastBtn">Get Past</button>
-        </div>
-        <div id="recommendationsOfThisDayContainer">
+    </div>
+</div>
 
-        </div>
-        <br>
+<div id="theFuture" style="display:none">
+    <h1>In the future there is recommendations enough for: <span id="futureDays"></span> days, <span id="futureHours"></span> hours, <span id="futureMinutes"></span> minutes and <span id="futureSeconds"></span> seconds.</h1>
+</div>
 
-        <div id="infoModal" class="modal">
-            <div class="modal-box">
-                <span class="close-button">X</span>
-                <h1><span id="recommendationName"><%= presentRecommendation.name %></span></h1>
-                <p>This recommendation was brought here by @<span id="username"><%= presentRecommendation.author.username %></span>, who is from <span id="userCountry"><%= presentRecommendation.author.country %></span>, on the date <span id="dateOfRecommendation"><%= presentRecommendation.recommendationDate %></span>.</p>
-                <br>
-                <p><span id="recommendationDescription"><%= presentRecommendation.description %></span></p>
-            </div>
+<div class="box" id="systemDisplay">
+    <div class="column left"></div>
+    <div id="middleColumn" class="column middle text-center">
+
+        <div class="iFrameContainer" id="mediaContainer">
+            <iframe id="presentPlayer" width="640" height="360"
+            src="https://www.youtube.com/embed/<%= presentRecommendation.youtubeID %>?start=<%=elapsedSeconds%>&autoplay=1&enablejsapi=1&mute=1"
+            style="border: solid 4px #37474F"
+            allow="autoplay"
+            allowFullScreen 
+            ></iframe>
         </div>
 
-        <div id="pastModal" class="pastModal">
-            <div class="modal-box">
-                <span id="closePastModalButton" class="close-button">X</span>
-                    <h1>wena compare!</h1>
-            </div>
+        <div class="controls" id="controlsDiv">
+            <% if(!currentUser){ %>
+                <button id="favoritesButton" onclick="alert('Hello, you need to be logged in to add favorites!')">Favorites</button>
+            <% } %> 
+            <button  id="addFavoriteButton" style="display: none;">Add Favorite</button>
+            <button  id="removeFavoriteButton" style="display: none;">Remove Favorite</button>
+            <button id="recommendationInfoBtn">Recommendation Info</button>
         </div>
 
+        <div id="thePast" style="display:none">
+            <p>This are the recommendations that are in the past:</p>
+            <table id="pastTable">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody id="pastTableBody"></tbody>
+            </table>
+        </div>
 
+        <div id="presentRecommendationInformation" style="display:none">
+            <p><strong>User: </strong>@<span id="username"><%= presentRecommendation.author.username %></span></p>
+            <p><strong>Country: </strong><span id="userCountry"><%= presentRecommendation.author.country %></span></p>
+            <p><strong>Date of Recommending: </strong><span id="dateOfRecommendation"><%= presentRecommendation.recommendationDate %></span></p>
+            <p><strong>Name: </strong><span id="recommendationName"><%= presentRecommendation.name %></span></p>
+            <p><strong>Why did you recommend this?: </strong><span id="recommendationDescription"><%= presentRecommendation.description %></span></p>
+        </div>
 
     </div>
     <div class="column right"></div>
 </div>
 
-
-
 <div class="footer">
     <% if (!currentUser){ %>
-        <a href="/login">Iniciar Sesión</a>
-        <a href="/register">Registrarse</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
     <% } %>
     <% if (currentUser) { %>
-        <a href="/logout">Cerrar Sesión</a>
+        <a href="/logout">Log Out</a>
         <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
     <% } %>
-    <a href="/recommendations/nueva">Agregar Recomendación</a>
-    <a href="/future/feedback">Feedback</a>
-    <a href="/future/nextsteps">Ayudar</a>
+    <a href="/recommendations/new">Add Recommendation</a>
+    <a id="emailTag" href="mailto:hola@human-music.com">hola@human-music.com</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

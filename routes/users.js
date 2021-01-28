@@ -7,7 +7,6 @@ var User = require("../models/user");
 let chiita = require("../middleware/chiita");
 
 let today = new Date();
-let todayDay = chiita.changeDateFormat(today);
 
 router.get("/:username", middleware.isLoggedIn, function(req,res){
     User.findOne({username:req.params.username}).populate("recommendations").exec(function(err, foundUser){
@@ -16,12 +15,12 @@ router.get("/:username", middleware.isLoggedIn, function(req,res){
                 res.redirect("/");
             } else {
                 if(!foundUser){
-                    res.render("users/unknown", {username:req.params.username, today: todayDay});
+                    res.render("users/unknown", {username:req.params.username, today: today});
                 } else {
                     if(foundUser.recommendations[0]){
-                        res.render("users/show", {foundUser: foundUser, today: todayDay, recommendation:foundUser.recommendations[0]});
+                        res.render("users/show", {foundUser: foundUser, today: today, recommendation:foundUser.recommendations[0]});
                     } else {
-                        res.render("users/show", {foundUser: foundUser, today: todayDay, recommendation:{}});
+                        res.render("users/show", {foundUser: foundUser, today: today, recommendation:{}});
                     }
                 }
             }
@@ -39,15 +38,17 @@ router.get("/:username/recommendations", middleware.isLoggedIn, function(req, re
     Recommendation.find({"author.username":req.params.username}, function(err, foundRecommendations){
         if(err){console.log(err)}
         else {
-            res.render("users/recommendations/recommendations", {username:req.params.username, userRecommendations:foundRecommendations, today: todayDay});
+            res.render("users/recommendations/recommendations", {username:req.params.username, userRecommendations:foundRecommendations, today: today});
         }
     });
 });
 
 router.get("/:username/favorites", middleware.isLoggedIn, function(req, res){
     User.findOne({"username" : req.params.username}).populate("favoriteRecommendations")
-    .then((foundUser)=>{
-        res.render("users/favorites", {foundUser:foundUser, today: todayDay})
+    .then((foundUser) => {
+        let randomIndex = Math.floor(foundUser.favoriteRecommendations.length * Math.random());
+        let randomRecommendation = foundUser.favoriteRecommendations[randomIndex]
+        res.render("users/favorites", {foundUser:foundUser, randomRecommendation:randomRecommendation})
     });
 });
 

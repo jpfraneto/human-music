@@ -1,57 +1,50 @@
 html {
     overflow-y: scroll;
-    text-align: center;
-    font-family: 'Audiowide', cursive;
 }
 
-a {
-    text-decoration: none;
-}
-
-p {
-    margin: 0;
-}
-
-.iFrameContainer {
-    position : relative;
-    padding-top : 56.25%; /* 16:9 */
-    overflow : hidden;
-    margin-bottom : 5px
-}
-
-.iFrameContainer iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: 0;
-    width: 100%;
+html, body {
     height: 100%;
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+    background-color: black;
+    color: white;
+}
+
+.headerBanner{
+    font-family: 'Monoton', cursive;
+    background-color: black;
+    color: white;
+    text-align: center;
+    flex: 0 1 auto;
+}
+
+#theFuture {
+    flex: 1 1 auto;
+    height: 100%;
+    color: white;
+    background-image: url("https://images.unsplash.com/photo-1464802686167-b939a6910659?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=733&q=80");
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; 
+    text-align: center;
 }
 
 .box {
     display: flex;
+    flex: 0 1 auto;
+    flex-direction: row;
     width: 100%;
     padding-bottom: 38px;
 }
 
-.column {
-    position: relative;
-    float:left;
-    background-color: transparent;
-}
-
-.left {
+.footer {
+    width: 100%;
     text-align: center;
-    width:8%
-}
-
-.right {
-    text-align: center;
-    width:8%
-}
-
-.middle {
-    width:84%
+    background-color: white;
+    flex-shrink: 0;
 }
 
 .navigationBar {
@@ -60,44 +53,70 @@ p {
     margin: 0 auto;
 }
 
-.navigationBar a {
-    font-size: 150%;
-    margin: 0 auto;
-    color: black;
+#systemDisplay {
+    flex: 1 0 auto;
 }
 
-.navigationBar a:hover {
+.iFrameContainer {
+    position : relative;
+    padding-top : 56.25%; /* 16:9 */
+    overflow : hidden;
+}
+
+.iFrameContainer iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    overflow : hidden;
+}
+
+.controls {
+    margin-top: 0.5em;
+}
+
+.column {
+    flex: 0 1 auto;
+    background-color: transparent;
+}
+
+.left {
+    text-align: center;
+    width:22%
+}
+
+.right {
+    text-align: center;
+    width:22%
+}
+
+.middle {
+    text-align: center;
+    width:54%
+}
+
+.navigationBar span {
+    font-size: 150%;
+    margin: 0 auto;
+    font-family: 'Courier New', Courier, monospace;
+    color: rgba(177, 172, 172, 0.685)
+}
+
+.navigationBar span:hover {
     text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-    color: black;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .navigationBar p {
     margin-bottom: 0;
 }
 
-.dayIdentificators {
-    width : 100%;
-    margin: 0 auto;
-    font-size: 100%;
-}
-
-.dayIdentificators p {
-    margin: 0 auto;
-}
-
-.footer {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    text-align: center;
-    background-color: black;
-    height: 6%;
-}
-
 .footer a {
     margin: 2%;
-    color: white;
+    color: black;
     text-decoration: none;
     font-size: 70%;
 }
@@ -107,232 +126,85 @@ p {
     text-shadow: 0 0 20px #0ae678
 }
 
-#dayProgress {
-    width : 100%
+#presentRecommendationInformation{
+    color: white;
+    display: none;
+    font-size: 100%;
+    margin-bottom: 20px;
 }
 
 .activeTense {
-    display: inline-block;
-    padding: 0 4px;
-    font-weight: 900;
+    color: rgb(248, 239, 239) !important;
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
-@media only screen and (min-width: 888px) {
-    .left {
-        width:22%
-    }
-    
-    .right {
-        width:22%
-    }
-    
-    .middle {
-        width:54%
-    }
-
-    .footer a{
-        font-size: 0.5em;
-    }
-
-    .footer {
-        width: 100%;
-        position: fixed;
-        bottom: 0;
-        text-align: center;
-        background-color: black;
-        height: 6%;
-    }
-    
-    .footer a {
-        margin: 1.618em;
-        color: white;
-        text-decoration: none;
-        font-size: 100%;
-    }
-  }
-
-  /* .navigationBar a {
-    font-size: 150%;
-    margin: 0 auto;
-    color: black;
+.table {
+    font-size: 0.8em;
 }
-
-#displayInformation {
-    display : none;
-    background-color: rgb(206, 131, 52);
-    padding: 8px 8px 8px 8px; 
-    border: 1.5px solid black;
-    border-radius: 1%;
-    margin: 1.618em 0;
-}
-
-#tagline {
-    text-align: left;
-    margin:0 0 1em 1.618em;
-}
-
-
-
-h3 {
-    margin: 0;
-}
-
-.televisionContainer {
-    background-color: rgb(206, 131, 52);
-    padding: 8px 8px 8px 8px; 
-    border: 1.5px solid black;
-    border-radius: 1%;
-}
-
-.controls a {
-    font-size: 2em;
-}
-
-.controls a:hover {
-    color: rgb(79, 76, 76);
-    cursor: pointer
-}
-
-#informationButton {
-    margin: 0 0 0 3em;
-}
-
-#favoriteButton {
-    margin: 0 3em 0 0;
-}
-
-#controlsDiv {
-    border: 1.5px dotted black;
-    border-radius: 1%;
-}
-
-.recommendationSquaresDiv {
-    margin-top: 3px;
-    width : 100%;
-    padding : 0;
-}
-
-.recommendationSquaresDiv{
-    display : flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
-}
-
-.recommendationSquare {
-    flex: 1 1 0px;
-    background-color:rgb(206, 131, 52);
-    border: 1px solid black;
-    height: 17px;
-}
-
-.navigationBar {
-    font-size: 1em;
-}
-
-.recommendationSquare:hover {
-    background-color: darkcyan;
-}
-
-.dayProgressDisplayHidden {
-    visibility: hidden;
-}
-
-.dayProgressDisplay {
-    visibility: visible;
-}
-
-.headerContainer {
-    display: inline-block;
-    padding: 0 4px;
-    background-color: rgb(206, 131, 52);
-    border: 1.5px solid black;
-    border-bottom-style: none;
-    border-radius: 1%;
-} */
 
 h1 {
-    margin: 0 ;
+    margin-bottom: 0;
 }
 
-#previousButton {
-    
+a:hover {
+    text-decoration: none;
 }
 
-#nextButton {
-    
+#thePast {
+    display: none;
+    color:white;
+    margin-bottom: 16px;
 }
 
-.recommendationsOfThisDayContainer {
-    display : flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-evenly;
-}
-
-.recommendationContainer {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto;
-    background-color:rgb(206, 131, 52);
-    border: 1px solid black;
-    height: 17px;
-    display : inline;
-}
-
-.recommendationContainer:hover {
-    background-color: cyan;
+#pastTable {
+    width: 100%;
+    font-size: 0.618em;
+    cursor: pointer;
 }
 
 .modal {
-position: fixed;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-overflow-y: scroll;
-background-color: rgba(0, 0, 0, 0.3);
-opacity: 0;
-visibility: hidden;
-}
-.modal-box {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-background-color: pink;
-padding: 1rem 1.5rem;
-width: 24rem;
-border-radius: 0.5rem;
-}
-.close-button {
-float: right;
-width: 1.5rem;
-line-height: 1.5rem;
-text-align: center;
-cursor: pointer;
-border-radius: 0.25rem;
-background-color: lightgray;
-}
-
-.show-modal {
-opacity: 1;
-visibility: visible;
-transform: scale(1.0);
-}
-
-.pastModal {
+    display: none; /* Hidden by default */
+    z-index: 1; /* Sit on top */
     position: fixed;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
-    background-color: rgba(0, 0, 0, 0.3);
-    opacity: 0;
-    visibility: hidden;
+    margin: auto;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    color: black;
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 1% auto; /* 15% from the top and centered */
+    border: 1px solid #888;
+    padding: 18px;
+    width: 44%; /* Could be more or less, depending on screen size */
+  }
+  
+  .closeModal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+.closeModal:hover,
+.closeModal:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.headers {
-    color: white;
-    background-color: black;
+#favoritesLink {
+    border: coral 4px solid;
+    color: cornsilk;
+    font-weight: 600;
+    border-radius: 4%;
+    background-color: coral;
 }

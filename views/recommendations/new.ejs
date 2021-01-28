@@ -1,19 +1,32 @@
-<%- include("../partials/header") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/eternity.css">
+    <title>Human-Music</title>
+</head>
+<body>
 
-<div class="container text-center">
-    <div class="navigationBar">
-        <p><span id="pastSpan"><a href="/past">PAST</a></span><span id="presentSpan"><a href="/">PRESENT</a></span><span id="futureSpan" class="activeTense"><a href="/future">FUTURE</a></span></p>
-    </div>
+<div class="headerBanner">
+    <h1><a href="/">HUMAN-MUSIC</a></h1>
 </div>
 
 <div class="box">
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
-        <h5 class="newMusicPresenter">Add new music to the future of this space</h5>
-            <div class="col-sm-12">
+        <% if(currentUser){ %>
+            <h5 class="newMusicPresenter">Welcome @<%=currentUser.username%>, thank you for adding a new recommendation :)</h5>
+        <% } else { %>
+            <h5 class="newMusicPresenter">Add new music to the future of this space</h5>
+        <% } %>
                 <form id="addRecommendationForm" action="/" method="POST">
-                    <label for="language">In which language do you dream?</label>
-                    <select id="language" name="language">
+                    <% if(!currentUser){ %>
+                        <label for="language">In which language do you dream?</label>
+                        <select id="language" name="language">
                         <option value="af">Afrikaans</option>
                         <option value="sq">Albanian - shqip</option>
                         <option value="am">Amharic - አማርኛ</option>
@@ -157,7 +170,6 @@
                         <option value="yo">Yoruba - Èdè Yorùbá</option>
                         <option value="zu">Zulu - isiZulu</option>
                     </select>
-                    <% if(!currentUser){ %>
                         <div class="row">
                             <div class="col-6 ">
                                 <div class="form-group">
@@ -192,7 +204,6 @@
                     </div>  
                     <a href="/">Go Back</a>
                 </form>   
-            </div>
         </div>
     </div>
     <div class="column right"></div>
@@ -205,13 +216,31 @@
             <iframe id="recommendationIframeSpan" width="640" height="360" src="" style="border: solid 4px #37474F"></iframe>
         </div>
         <div class="recommendationInformation text-center" >
-            <p><strong>User: </strong><span id="usernameSpan"></span></p>
-            <p><strong>Country: </strong><span id="countrySpan"></span></p>
-            <p><strong>Why did you recommend this?: </strong><span id="descriptionSpan"></span></p>
+            <p><strong>User: </strong><span id="usernameSpan">sds</span></p>
+            <p><strong>Country: </strong><span id="countrySpan">dsds</span></p>
+            <p><strong>Why did you recommend this?: </strong><span id="descriptionSpan">dsds</span></p>
             <button id="editBtn">Edit</button>
             <button id="submitToFutureBtn">Send it to the future</button>
         </div>
     </div>
 </div>
 
-<%- include("../partials/footer") %>
+<div class="footer">
+    <% if (!currentUser){ %>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+    <% } %>
+    <% if (currentUser) { %>
+        <a href="/logout">Log Out</a>
+        <a href="/users/<%=currentUser.username%>">@<span id="currentUserSpan"><%=currentUser.username%></span></a>
+    <% } %>
+    <a href="/recommendations/new">Add Recommendation</a>
+    <a id="emailTag" href="mailto:hola@human-music.com">hola@human-music.com</a>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="/scripts/newRecommendation.js"></script>
+  </body>
+  </html>
