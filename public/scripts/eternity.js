@@ -283,6 +283,7 @@ function showPast() {
   if (thePast.style.display === "none") {
     thePast.style.display = "block";
   } 
+  let pastSpan = document.getElementById("pastSpan");
 }
 
 function hidePast() {
@@ -323,7 +324,7 @@ async function goToTheFuture() {
   let totalFutureDuration;
   let response = await fetch("/getFutureRecommendations");
   let responseJson = await response.json();
-  
+
   let futureRecommendations = responseJson.futureRecommendations;
 
   let spaceDiv = document.getElementById("theFuture");
@@ -356,3 +357,4 @@ async function getPastRecommendation (youtubeID) {
   let recommendationData = await response.json();
   updateRecommendation(recommendationData);
 }
+
