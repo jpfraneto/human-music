@@ -100,6 +100,8 @@ router.post("/nextRecommendationQuery", (req,res) => {
         Recommendation.findOne({status:"present"}).exec()
         .then((nextPresentRecommendation)=>{
             answer.recommendation = nextPresentRecommendation;
+            let elapsedTime = (new Date).getTime() - nextPresentRecommendation.startingRecommendationTimestamp;
+            answer.elapsedSeconds = Math.floor(elapsedTime/1000);
             if (req.user) {
                 if (req.user.favoriteRecommendations) {
                     let indexOfRecommendation = req.user.favoriteRecommendations.indexOf(nextPresentRecommendation._id);
@@ -137,6 +139,7 @@ router.post("/nextRecommendationQuery", (req,res) => {
                     } else {
                         answer.isFavorited = undefined;
                     }
+                    answer.elapsedSeconds = 0;
                     res.json(answer);
                 }
             })
@@ -173,7 +176,6 @@ router.get("/pastTimeTravel", (req, res) => {
 
 router.post("/getRecommendationInformation", (req, res) => {
     let answer = {};
-    console.log(req.body);
     Recommendation.findOne({youtubeID:req.body.recommendationID}).exec()
     .then((queriedRecommendation)=>{
         answer.recommendation = queriedRecommendation;
@@ -205,7 +207,6 @@ router.get("/getFutureRecommendations", (req, res) => {
             response.futureRecommendations.push(recommendation.youtubeID);
         })
         response.futureDuration = totalDuration;
-        console.log(response);
         res.json(response);
     })
 })

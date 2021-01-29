@@ -66,6 +66,7 @@ theSource.theMind = () => {
             .then(()=>{
                 console.log('The recommendation ' + newPresentRecommendation.name + ' was brought to the present');
                 setTimeout(theSource.sendRecommendationToPast, newPresentRecommendation.duration);
+                // setTimeout(theSource.sendRecommendationToPast, 4444);
             })
         } else {
             //   console.log("inside the theMind function and the bigBang function will be executed since there were no recommendations in the future")
