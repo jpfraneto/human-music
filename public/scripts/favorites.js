@@ -102,7 +102,6 @@ async function showPast() {
       nameTd.innerText = favoriteRecommendations[i].name;
       let recommendation = favoriteRecommendations[i];
       nameTd.addEventListener("click", ()=>{
-        console.log(recommendation);
         updateRecommendation(recommendation)
       })
       nameTd.addEventListener("mouseover", (e)=>{

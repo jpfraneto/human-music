@@ -58,9 +58,8 @@ function onPlayerStateChange(event) {
 }
 
 function updateRecommendation (recommendationInformation) {
-  console.log(recommendationInformation);
   queriedRecommendation = recommendationInformation.recommendation;
-  player.loadVideoById(queriedRecommendation.youtubeID);
+  player.loadVideoById(queriedRecommendation.youtubeID, recommendationInformation.elapsedSeconds);
   voidInfo = document.getElementById("voidInformation");
 
   let username = document.getElementById("username");
@@ -196,7 +195,10 @@ async function queryNextRecomendation(displayedID="") {
         body : JSON.stringify({videoID:displayedID, systemStatus:systemStatus})
     });
     let recommendationData = await response.json();
-    updateRecommendation(recommendationData);
+    let presentID = player.getVideoData()['video_id']
+    if(recommendationData.recommendation.youtubeID !== presentID){
+      updateRecommendation(recommendationData);
+    }
 }
 
 let pastBtn = document.getElementById("pastSpan");
@@ -216,6 +218,7 @@ presentBtn.addEventListener("click", async ()=>{
   systemStatus = "present";
   hideFuture();
   hidePast();
+  queryNextRecomendation();
 })
 
 let futureBtn = document.getElementById("futureSpan");
@@ -223,7 +226,6 @@ futureBtn.addEventListener("click", async () => {
   systemStatus = "future";
   hidePast();
   hideSystemDisplay();
-  player.mute();
   showFuture();
   setTimeout(goToTheFuture);
 })
@@ -264,7 +266,6 @@ function hideSystemDisplay() {
 
 function showFuture() {
   let theFuture = document.getElementById("theFuture");
-  player.mute();
   if (theFuture.style.display === "none") {
     theFuture.style.display = "block";
   } 
@@ -315,13 +316,7 @@ function travelToThePast(pastData) {
     tr.appendChild(userTd);
     tr.appendChild(nameTd);
     pastTableBody.appendChild(tr);
-  }
-  if(pastData.pastRecommendations.length>0){
-    let randomRecommendation = pastData.pastRecommendations[(Math.floor(pastData.pastRecommendations.length* Math.random()))]
-    let answer = {recommendation : randomRecommendation}
-    updateRecommendation(answer);
-  } else {
-    alert("There are no recommendations in the past!")
+    pastTableBody.scrollIntoView();
   }
 }
 
@@ -347,14 +342,8 @@ async function goToTheFuture() {
 
   timerDisplay.innerHTML = "There is enough music in the future for " + days + " days, " + hours + " hours, "
   + minutes + " minutes, " + seconds + " seconds. ";
-  let button = document.createElement("button");
-  button.innerText = "Add recommendation to the future!"
-  button.addEventListener("click", ()=>{
-    window.location = "/recommendations/new"
-  })
 
   spaceDiv.appendChild(timerDisplay);
-  spaceDiv.appendChild(button);
 }
 
 async function getPastRecommendation (youtubeID) {
@@ -363,7 +352,7 @@ async function getPastRecommendation (youtubeID) {
     headers: {
         'Content-Type': 'application/json'
     },
-    body : JSON.stringify({recommendationYTID:youtubeID})
+    body : JSON.stringify({recommendationID:youtubeID})
   });
   let recommendationData = await response.json();
   updateRecommendation(recommendationData);

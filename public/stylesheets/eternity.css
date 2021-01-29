@@ -21,6 +21,11 @@ body {
     flex: 0 1 auto;
 }
 
+#headerTitle {
+    color: rgb(24, 71, 226);
+    text-decoration: none;
+}
+
 #theFuture {
     flex: 1 1 auto;
     height: 100%;
@@ -41,10 +46,24 @@ body {
 }
 
 .footer {
+    font-family: 'Roboto', sans-serif;
     width: 100%;
     text-align: center;
-    background-color: white;
-    flex-shrink: 0;
+    background-color: rgb(24, 71, 226);
+    position: fixed;
+    bottom: 0;
+}
+
+.footer a {
+    margin: 2%;
+    color: black;
+    text-decoration: none;
+    font-size: 101%;
+}
+
+.footer a:hover {
+    color: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+    text-shadow: 0 0 20px #0ae678
 }
 
 .navigationBar {
@@ -100,7 +119,7 @@ body {
 .navigationBar span {
     font-size: 150%;
     margin: 0 auto;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Roboto', sans-serif;
     color: rgba(177, 172, 172, 0.685)
 }
 
@@ -112,18 +131,6 @@ body {
 
 .navigationBar p {
     margin-bottom: 0;
-}
-
-.footer a {
-    margin: 2%;
-    color: black;
-    text-decoration: none;
-    font-size: 70%;
-}
-
-.footer a:hover {
-    color: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-    text-shadow: 0 0 20px #0ae678
 }
 
 #presentRecommendationInformation{
