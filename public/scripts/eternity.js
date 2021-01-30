@@ -283,6 +283,7 @@ function showPast() {
   if (thePast.style.display === "none") {
     thePast.style.display = "block";
   } 
+  let pastSpan = document.getElementById("pastSpan");
 }
 
 function hidePast() {
@@ -331,7 +332,7 @@ async function goToTheFuture() {
   let totalFutureDuration;
   let response = await fetch("/getFutureRecommendations");
   let responseJson = await response.json();
-  
+
   let futureRecommendations = responseJson.futureRecommendations;
 
   let spaceDiv = document.getElementById("theFuture");
@@ -365,6 +366,7 @@ async function getPastRecommendation (youtubeID) {
   updateRecommendation(recommendationData);
 }
 
+<<<<<<< HEAD
 function sortTable(n, dir="asc") {
   let table, rows, switching, i, x, y, shouldSwitch, switchCount = 0;
   table = document.getElementById("pastTable");
@@ -410,3 +412,5 @@ function durationFormatting (milliseconds){
   if(seconds < 10){seconds = "0" + seconds;};
   return hours + ':' + minutes + ':' + seconds;
 }
+=======
+>>>>>>> 80b2e8b5423800e6bbcb56305bda8cd239c4027f
