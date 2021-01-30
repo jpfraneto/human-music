@@ -46,8 +46,8 @@ if(process.env.NODE_ENV === 'production') {
 
 // theSource.sendRecommendationToPast();
 
-console.log("The app.js file is running again.");
-setTimeout(theSource.checkSystem);
+// console.log("The app.js file is running again.");
+// setTimeout(theSource.checkSystem);
 
 app.use(require("express-session")({
     secret: "Music to nourish your soul and activate your mind",

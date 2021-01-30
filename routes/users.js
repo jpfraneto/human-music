@@ -35,10 +35,14 @@ router.get("/:username/edit", function(req, res){
 });
 
 router.get("/:username/recommendations", middleware.isLoggedIn, function(req, res){
-    Recommendation.find({"author.username":req.params.username}, function(err, foundRecommendations){
-        if(err){console.log(err)}
-        else {
-            res.render("users/recommendations/recommendations", {username:req.params.username, userRecommendations:foundRecommendations, today: today});
+    User.findOne({"username" : req.params.username}).populate("recommendations")
+    .then((foundUser) => {
+        if(foundUser.recommendations.length>0){
+            let randomIndex = Math.floor(foundUser.recommendations.length * Math.random());
+            let randomRecommendation = foundUser.recommendations[randomIndex]
+            res.render("users/recommendations/show", {foundUser:foundUser, randomRecommendation:randomRecommendation})
+        } else{
+            res.redirect("/" + req.params.username);
         }
     });
 });
@@ -46,9 +50,13 @@ router.get("/:username/recommendations", middleware.isLoggedIn, function(req, re
 router.get("/:username/favorites", middleware.isLoggedIn, function(req, res){
     User.findOne({"username" : req.params.username}).populate("favoriteRecommendations")
     .then((foundUser) => {
-        let randomIndex = Math.floor(foundUser.favoriteRecommendations.length * Math.random());
-        let randomRecommendation = foundUser.favoriteRecommendations[randomIndex]
-        res.render("users/favorites", {foundUser:foundUser, randomRecommendation:randomRecommendation})
+        if(foundUser.favoriteRecommendations.length>0){
+            let randomIndex = Math.floor(foundUser.favoriteRecommendations.length * Math.random());
+            let randomRecommendation = foundUser.favoriteRecommendations[randomIndex]
+            res.render("users/favorites", {foundUser:foundUser, randomRecommendation:randomRecommendation})
+        } else{
+            res.redirect("/" + req.params.username);
+        }
     });
 });
 

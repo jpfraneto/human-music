@@ -65,10 +65,10 @@ function updateRecommendation (recommendation) {
 async function queryNextRecomendation(displayedID="") {
     console.log("inside the query next recommendation with the following id in the query:" + displayedID);
     playedRecommendations.push(displayedID);
-    let response = await fetch("/getFavoriteRecommendations");
-    let favoriteRecommendations = await response.json();
+    let response = await fetch("/getUserRecommendations");
+    let userRecommendations = await response.json();
     
-    let randomRecommendation = favoriteRecommendations[Math.floor(Math.random()*favoriteRecommendations.length)]
+    let randomRecommendation = userRecommendations[Math.floor(Math.random()*userRecommendations.length)]
     
     updateRecommendation(randomRecommendation);
 }
@@ -85,21 +85,19 @@ infoBtn.addEventListener("click", ()=>{
 
 
 async function showPast() {
-    let response = await fetch("/getFavoriteRecommendations");
-    let favoriteRecommendations = await response.json();
+    let response = await fetch("/getUserRecommendations");
+    let userRecommendations = await response.json();
 
     let thePast = document.getElementById("thePast")
     let pastTableBody = document.getElementById("pastTableBody");
     while (pastTableBody.firstChild){
       pastTableBody.removeChild(pastTableBody.lastChild);
     }
-    for (let i=0; i<favoriteRecommendations.length; i++){
+    for (let i=0; i<userRecommendations.length; i++){
       var tr = document.createElement('tr');
-      var userTd = document.createElement('td');
-      userTd.innerText = favoriteRecommendations[i].author.username;
       var nameTd = document.createElement('td');
-      nameTd.innerText = favoriteRecommendations[i].name;
-      let recommendation = favoriteRecommendations[i];
+      nameTd.innerText = userRecommendations[i].name;
+      let recommendation = userRecommendations[i];
       nameTd.addEventListener("click", ()=>{
         updateRecommendation(recommendation);
         window.scrollTo(0, 0);
@@ -111,8 +109,7 @@ async function showPast() {
         e.target.style.backgroundColor = '';
       })
       var durationTd = document.createElement('td');
-      durationTd.innerText = durationFormatting(favoriteRecommendations[i].duration);
-      tr.appendChild(userTd);
+      durationTd.innerText = durationFormatting(userRecommendations[i].duration);
       tr.appendChild(nameTd);
       tr.appendChild(durationTd);
       pastTableBody.appendChild(tr);
