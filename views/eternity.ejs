@@ -47,25 +47,27 @@
             <button id="recommendationInfoBtn">Recommendation Info</button>
         </div>
 
-        <div id="thePast" style="display:none">
-            <p>This are the recommendations that are in the past:</p>
-            <table id="pastTable">
-                <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody id="pastTableBody"></tbody>
-            </table>
-        </div>
-
         <div id="presentRecommendationInformation" style="display:none">
             <p><strong>User: </strong>@<span id="username"><%= presentRecommendation.author.username %></span></p>
             <p><strong>Country: </strong><span id="userCountry"><%= presentRecommendation.author.country %></span></p>
             <p><strong>Date of Recommending: </strong><span id="dateOfRecommendation"><%= presentRecommendation.recommendationDate %></span></p>
             <p><strong>Name: </strong><span id="recommendationName"><%= presentRecommendation.name %></span></p>
             <p><strong>Why did you recommend this?: </strong><span id="recommendationDescription"><%= presentRecommendation.description %></span></p>
+        </div>
+
+        <div id="thePast" style="display:none">
+            <p><strong>This are the recommendations that are in the past:</strong></p>
+            <table id="pastTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Index</th>
+                        <th onclick="sortTable(1)">User</th>
+                        <th onclick="sortTable(2)">Name</th>
+                        <th onclick="sortTable(3)">Duration</th>
+                    </tr>
+                </thead>
+                <tbody id="pastTableBody"></tbody>
+            </table>
         </div>
 
     </div>

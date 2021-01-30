@@ -42,21 +42,21 @@
         </div>
 
         <div id="thePast">
-          <h5>Favorite recommendations of @<%=currentUser.username%>:</h5>
+          <h5>Favorite recommendations of <a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a>:</h5>
             <table id="pastTable">
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Name</th>
-                        <th></th>
+                        <th onclick="sortTable(0)">User</th>
+                        <th onclick="sortTable(1)">Name</th>
+                        <th onclick="sortTable(2)">Duration</th>
                     </tr>
                 </thead>
                 <tbody id="pastTableBody">
 
                 </tbody>
             </table>
-            <a href="/users/<%=currentUser.username%>">Go back!</a>
         </div>
+        <a href="/users/<%=currentUser.username%>">Go back!</a>
 
     </div>
     <div class="column right"></div>

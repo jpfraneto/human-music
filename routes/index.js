@@ -281,6 +281,13 @@ router.get("/getFavoriteRecommendations", (req, res) => {
     });
 })
 
+router.get("/getUserRecommendations", (req, res) => {
+    User.findOne({"username" : req.user.username}).populate("recommendations")
+    .then((foundUser) => {
+        res.json(foundUser.recommendations)
+    });
+})
+
 // show register form
 router.get("/register", function(req, res){
     res.render("register", {today: today});

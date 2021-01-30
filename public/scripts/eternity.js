@@ -300,12 +300,15 @@ function travelToThePast(pastData) {
   }
   for (let i=0; i<pastData.pastRecommendations.length; i++){
     var tr = document.createElement('tr');
+    var indexTd = document.createElement('td');
+    indexTd.innerText = pastData.pastRecommendations[i].index;
     var userTd = document.createElement('td');
     userTd.innerText = pastData.pastRecommendations[i].author.username;
     var nameTd = document.createElement('td');
     nameTd.innerText = pastData.pastRecommendations[i].name;
     nameTd.addEventListener("click", ()=>{
-      getPastRecommendation(pastData.pastRecommendations[i].youtubeID)
+      getPastRecommendation(pastData.pastRecommendations[i].youtubeID);
+      window.scrollTo(0, 0);
     })
     nameTd.addEventListener("mouseover", (e)=>{
        e.target.style.backgroundColor = 'rgb(' + [123,150,50].join(',') + ')';
@@ -313,11 +316,16 @@ function travelToThePast(pastData) {
     nameTd.addEventListener("mouseout", (e)=>{
       e.target.style.backgroundColor = '';
     })
+    var durationTd = document.createElement('td');
+    durationTd.innerText = durationFormatting(pastData.pastRecommendations[i].duration);
+    tr.appendChild(indexTd);
     tr.appendChild(userTd);
     tr.appendChild(nameTd);
+    tr.appendChild(durationTd);
     pastTableBody.appendChild(tr);
-    pastTableBody.scrollIntoView();
   }
+  sortTable(0, "desc");
+  pastTableBody.scrollIntoView();
 }
 
 async function goToTheFuture() {
@@ -358,3 +366,51 @@ async function getPastRecommendation (youtubeID) {
   updateRecommendation(recommendationData);
 }
 
+<<<<<<< HEAD
+function sortTable(n, dir="asc") {
+  let table, rows, switching, i, x, y, shouldSwitch, switchCount = 0;
+  table = document.getElementById("pastTable");
+  switching = true;
+  while (switching) {
+      switching = false;
+      rows = table.rows;
+      for (i=1 ; i<(rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("td")[n];
+          y = rows[i+1].getElementsByTagName("td")[n];
+          if (dir == "asc") {
+              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()){
+                  shouldSwitch = true;
+                  break
+              }
+          } else if (dir == "desc") {
+              if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()){
+                  shouldSwitch = true;
+                  break
+              }
+          }
+      }
+      if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+          switching = true;
+          switchCount ++;
+      } else {
+          if (switchCount == 0 && dir == "asc") {
+              dir = "desc";
+              switching = true;
+          }
+      }
+  }
+}
+
+function durationFormatting (milliseconds){
+  let seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+  let minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+  let hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));;
+  if(hours < 10){hours = "0" + hours;};
+  if(minutes < 10){minutes = "0" + minutes;};
+  if(seconds < 10){seconds = "0" + seconds;};
+  return hours + ':' + minutes + ':' + seconds;
+}
+=======
+>>>>>>> 80b2e8b5423800e6bbcb56305bda8cd239c4027f

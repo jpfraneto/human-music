@@ -1,36 +1,61 @@
-<%- include("../../partials/header") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/eternity.css">
+    <title>Human-Music</title>
+</head>
+<body>
 
-<div class="box">
+<div class="headerBanner">
+    <h1><a href="/">HUMAN-MUSIC</a></h1>
+</div>
+
+<div class="box" id="systemDisplay">
     <div class="column left"></div>
     <div id="middleColumn" class="column middle text-center">
-
         <div class="iFrameContainer" id="mediaContainer">
             <iframe id="presentPlayer" width="640" height="360"
-            src="https://www.youtube.com/embed/<%= recommendation.youtubeID %>?start=0&autoplay=1&enablejsapi=1&mute=1&controls=0"
+            src="https://www.youtube.com/embed/<%= randomRecommendation.youtubeID %>?autoplay=1&enablejsapi=1&mute=1"
             style="border: solid 4px #37474F"
             allow="autoplay"
+            allowFullScreen 
             ></iframe>
         </div>
 
         <div class="controls" id="controlsDiv">
-            <% if(currentUser){ %>
-                <button class="btn btn-success btn-sm" id="addFavoriteButton" style="display: none;">Add Favorite</button>
-                <button class="btn btn-danger btn-sm" id="removeFavoriteButton" style="display: none;">Remove Favorite</button>
-            <% } else { %>
-                <a class="btn btn-success btn-sm" href="#" data-toggle="modal" style="display: inline-block;" data-target="#loginModal">Favorites</a>
-            <% } %>
-            <button class="btn btn-dark btn-sm" id="muteButton">(un)Mute</button>
-            <button class="btn btn-dark btn-sm" id="fullscreenButton"   >Go fullscreen</button>
+            <button id="recommendationInfoBtn">Recommendation Info</button>
+            <button id="nextRecommendation">Play next recommendation</button>
         </div>
+
+        <div id="presentRecommendationInformation" style="display:none">
+            <p><strong>User: </strong>@<span id="username"><%= randomRecommendation.author.username %></span></p>
+            <p><strong>Country: </strong><span id="userCountry"><%= randomRecommendation.author.country %></span></p>
+            <p><strong>Date of Recommending: </strong><span id="dateOfRecommendation"><%= randomRecommendation.recommendationDate %></span></p>
+            <p><strong>Name: </strong><span id="recommendationName"><%= randomRecommendation.name %></span></p>
+            <p><strong>Why did you recommend this?: </strong><span id="recommendationDescription"><%= randomRecommendation.description %></span></p>
         <hr>
-        <div id="recommendationInformation">
-            <p><strong>User: </strong>@<span id="username"><%= recommendation.author.username %></span></p>
-            <p><strong>Country of Identification: </strong><span id="userCountry"><%= recommendation.author.country %></span></p>
-            <p><strong>Date of Recommendation: </strong><span id="dateOfRecommendation"><%= recommendation.recommendationDate %></span></p>
-            <p><strong>Name: </strong><span id="recommendationName"><%= recommendation.name %></span></p>
-            <p><strong>Why did you recommend it?: </strong><span id="recommendationDescription"><%= recommendation.description %></span></p>
         </div>
-        <a href="/days/<%=recommendation.daySKU%>">Back to this Day</a>
+
+        <div id="thePast">
+          <h5>Recommendations of <a href="/users/<%=currentUser.username%>">@<%=currentUser.username%></a> :</h5>
+            <table id="pastTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Name</th>
+                        <th onclick="sortTable(1)">Duration</th>
+                    </tr>
+                </thead>
+                <tbody id="pastTableBody">
+
+                </tbody>
+            </table>
+        </div>
+        <a href="/users/<%=currentUser.username%>">Go back!</a>
     </div>
     <div class="column right"></div>
 </div>
@@ -46,12 +71,10 @@
     <% } %>
     <a href="/recommendations/new">Add Recommendation</a>
     <a id="emailTag" href="mailto:hola@human-music.com">hola@human-music.com</a>
-  </div>
-
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="/scripts/eternity.js"></script>
+<script src="/scripts/userRecommendations.js"></script>
 </body>
 </html>
