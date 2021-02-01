@@ -57,11 +57,9 @@ router.post("/", function(req,res){
         newRecommendation.wasCreatedByUser = false;
     }
     let url, duration, name;
-    newRecommendation.url = req.body.url;
-    let videoID = chiita.getYoutubeID(newRecommendation.url);
-    newRecommendation.youtubeID = videoID;
+    newRecommendation.youtubeID = req.body.newRecommendationID;
     let apiKey = process.env.YOUTUBE_APIKEY;
-    let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+videoID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
+    let getRequestURL = "https://www.googleapis.com/youtube/v3/videos?id="+newRecommendation.youtubeID+"&key="+apiKey+"&fields=items(id,snippet(title),statistics,%20contentDetails(duration))&part=snippet,statistics,%20contentDetails";
     axios.get(getRequestURL)
     .then(function(response){
         if (response.data.items.length > 0){
@@ -74,6 +72,7 @@ router.post("/", function(req,res){
             newRecommendation.status = "future";
             newRecommendation.type = "music";
             newRecommendation.save(()=>{
+                console.log(newRecommendation);
                 if(req.user){
                     req.user.recommendations.push(newRecommendation);
                     req.user.save(()=>{
@@ -81,16 +80,14 @@ router.post("/", function(req,res){
                     });
                 }
                 console.log("A new recommendation was saved by " + newRecommendation.author.username + ", with the following youtube ID: " + newRecommendation.youtubeID)
-                res.redirect("/");
+                res.json({answer:"The recommendation " + newRecommendation.name + " was added successfully to the future! Thanks "+ newRecommendation.author.username +" for your support." })
             });
         } else {
-            console.log("There was an error retrieving the recommendation information");
-            res.redirect("/");
+            res.json({answer: "There was an error retrieving the recommendation from youtube. Please try again later, sorry for all the trouble that this means"})
         }
     })
     .catch(()=>{
-        console.log("There was an error calling the youtube API from the database");
-        res.redirect("/");
+        res.json({answer: "There was an error retrieving the recommendation from youtube. Please try again later, sorry for all the trouble that this means"})
     });
 });
 

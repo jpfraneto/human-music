@@ -182,10 +182,8 @@ a:hover {
     top: 0;
     margin: auto;
     width: 100%; /* Full width */
-    height: 100%; /* Full height */
+    height: 80vh; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     color: black;
   }
   
@@ -195,7 +193,7 @@ a:hover {
     margin: 1% auto; /* 15% from the top and centered */
     border: 1px solid #888;
     padding: 18px;
-    width: 44%; /* Could be more or less, depending on screen size */
+    width: 55%; /* Could be more or less, depending on screen size */
   }
   
   .closeModal {
@@ -213,14 +211,44 @@ a:hover {
 }
 
 .recommendationsLink {
-    border: coral 4px solid;
+    border: rgb(24, 71, 226)  4px solid;
     color: cornsilk;
     font-weight: 600;
     border-radius: 4%;
-    background-color: coral;
+    background-color: rgb(24, 71, 226) ;
+}
+
+.recommendationsLink:hover {
+    color: black;
+    font-size: 1.618em;
 }
 
 th {
     border-bottom:rgb(24, 71, 226) solid 2px;
     margin-bottom: 3px;
+}
+
+#language {
+    width: 100%;
+}
+
+@media (max-width:666px){
+    .left {
+        text-align: center;
+        width:2%
+    }
+    
+    .right {
+        text-align: center;
+        width:2%
+    }
+    
+    .middle {
+        text-align: center;
+        width:96%
+    }
+
+    #headerTitle {
+        font-size: 80%;
+    }
 }

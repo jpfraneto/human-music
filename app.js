@@ -42,6 +42,8 @@ if(process.env.NODE_ENV === 'production') {
 
 /////////////////////SET FUNCTIONS////////////////////////////
 
+// setTimeout(theSource.bigBang);
+
 console.log("The app.js file is running again.");
 setTimeout(theSource.checkSystem);
 
