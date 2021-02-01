@@ -137,6 +137,319 @@ var dataRecs = [
         status: "future",
         youtubeID: "ug1oh9JG_DQ",
         duration: 5353000,
+    }, {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "The Quintet' - The Complete Jazz at Massey Hall [FULL ALBUM]",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=H8fnoVgNSvc",
+        description:"This is considered the greatest jazz live album. How could we disagree?",
+        status: "future",
+        youtubeID: "H8fnoVgNSvc",
+        duration: 4392000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "C̲a̲ravan - In T̲h̲e̲ L̲and of Grey̲ and P̲ink (Full Album) 1971",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=_Ums52IOFLg",
+        description:"My dad had this LP in the 70s and I used to listen to it. My bedroom was decorated as The Land of Grey and Pink when I was about 6 in about 1980. No wonder I'm a prog fan!",
+        status: "future",
+        youtubeID: "_Ums52IOFLg",
+        duration: 4488000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Estas Tonne - Internal Flight",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=WGTxqhSN8bE",
+        description:"This masterpiece should be heard by everyone on this planet.",
+        status: "future",
+        youtubeID: "WGTxqhSN8bE",
+        duration: 3878000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Weather Report - Live at Montreux (1976) [Remastered]",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=LT0ICclq8sQ",
+        description:"One of their best performances, thank you",
+        status: "future",
+        youtubeID: "LT0ICclq8sQ",
+        duration: 5015000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Tim Hecker - Virgins full album HD",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=Cu-ihs4BkAs&t",
+        description:"Yo, I just stared at a candle for 30 minutes and it wasn't even lit.",
+        status: "future",
+        youtubeID: "Cu-ihs4BkAs",
+        duration: 2937000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Hypnagog - Thematic Mathematics | Full Album",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=GoXZrMFCNbw",
+        description:"For me this is some of the best music that has been composed in the last decade, thank you Hypnagog, you have an amazing mind. I am deeply in love with this album.",
+        status: "future",
+        youtubeID: "GoXZrMFCNbw",
+        duration: 4235000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Mahler: Symphony No. 9 (Bernstein, Koninklijk Concertgebouworkest)",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=ug1oh9JG_DQ",
+        description:"This sounds the best (performance and audio quality) of Bernstein's several recordings of the Mahler Ninth. Another commenter praised the contrapuntal clarity of this performance. I agree! But, interpretively, I still favor the 1971 recording, with the Vienna Philharmonic. Luckily, one can own several Bernstein recordings (and others - it's good to compare one conductor's performance with those of other conductors) in order to decide, at a particular moment in time, which is best.",
+        status: "future",
+        youtubeID: "ug1oh9JG_DQ",
+        duration: 5353000,
+    }, 
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "The Quintet' - The Complete Jazz at Massey Hall [FULL ALBUM]",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=H8fnoVgNSvc",
+        description:"This is considered the greatest jazz live album. How could we disagree?",
+        status: "future",
+        youtubeID: "H8fnoVgNSvc",
+        duration: 4392000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "C̲a̲ravan - In T̲h̲e̲ L̲and of Grey̲ and P̲ink (Full Album) 1971",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=_Ums52IOFLg",
+        description:"My dad had this LP in the 70s and I used to listen to it. My bedroom was decorated as The Land of Grey and Pink when I was about 6 in about 1980. No wonder I'm a prog fan!",
+        status: "future",
+        youtubeID: "_Ums52IOFLg",
+        duration: 4488000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Estas Tonne - Internal Flight",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=WGTxqhSN8bE",
+        description:"This masterpiece should be heard by everyone on this planet.",
+        status: "future",
+        youtubeID: "WGTxqhSN8bE",
+        duration: 3878000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Weather Report - Live at Montreux (1976) [Remastered]",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=LT0ICclq8sQ",
+        description:"One of their best performances, thank you",
+        status: "future",
+        youtubeID: "LT0ICclq8sQ",
+        duration: 5015000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Tim Hecker - Virgins full album HD",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=Cu-ihs4BkAs&t",
+        description:"Yo, I just stared at a candle for 30 minutes and it wasn't even lit.",
+        status: "future",
+        youtubeID: "Cu-ihs4BkAs",
+        duration: 2937000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Hypnagog - Thematic Mathematics | Full Album",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=GoXZrMFCNbw",
+        description:"For me this is some of the best music that has been composed in the last decade, thank you Hypnagog, you have an amazing mind. I am deeply in love with this album.",
+        status: "future",
+        youtubeID: "GoXZrMFCNbw",
+        duration: 4235000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Mahler: Symphony No. 9 (Bernstein, Koninklijk Concertgebouworkest)",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=ug1oh9JG_DQ",
+        description:"This sounds the best (performance and audio quality) of Bernstein's several recordings of the Mahler Ninth. Another commenter praised the contrapuntal clarity of this performance. I agree! But, interpretively, I still favor the 1971 recording, with the Vienna Philharmonic. Luckily, one can own several Bernstein recordings (and others - it's good to compare one conductor's performance with those of other conductors) in order to decide, at a particular moment in time, which is best.",
+        status: "future",
+        youtubeID: "ug1oh9JG_DQ",
+        duration: 5353000,
+    }, {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "The Quintet' - The Complete Jazz at Massey Hall [FULL ALBUM]",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=H8fnoVgNSvc",
+        description:"This is considered the greatest jazz live album. How could we disagree?",
+        status: "future",
+        youtubeID: "H8fnoVgNSvc",
+        duration: 4392000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "C̲a̲ravan - In T̲h̲e̲ L̲and of Grey̲ and P̲ink (Full Album) 1971",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=_Ums52IOFLg",
+        description:"My dad had this LP in the 70s and I used to listen to it. My bedroom was decorated as The Land of Grey and Pink when I was about 6 in about 1980. No wonder I'm a prog fan!",
+        status: "future",
+        youtubeID: "_Ums52IOFLg",
+        duration: 4488000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Estas Tonne - Internal Flight",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=WGTxqhSN8bE",
+        description:"This masterpiece should be heard by everyone on this planet.",
+        status: "future",
+        youtubeID: "WGTxqhSN8bE",
+        duration: 3878000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Weather Report - Live at Montreux (1976) [Remastered]",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=LT0ICclq8sQ",
+        description:"One of their best performances, thank you",
+        status: "future",
+        youtubeID: "LT0ICclq8sQ",
+        duration: 5015000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Tim Hecker - Virgins full album HD",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=Cu-ihs4BkAs&t",
+        description:"Yo, I just stared at a candle for 30 minutes and it wasn't even lit.",
+        status: "future",
+        youtubeID: "Cu-ihs4BkAs",
+        duration: 2937000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Hypnagog - Thematic Mathematics | Full Album",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=GoXZrMFCNbw",
+        description:"For me this is some of the best music that has been composed in the last decade, thank you Hypnagog, you have an amazing mind. I am deeply in love with this album.",
+        status: "future",
+        youtubeID: "GoXZrMFCNbw",
+        duration: 4235000,
+    },
+    {
+        author: { 
+            username: "chocapec",
+            country: "Chile",
+            language: "Spanish"
+        },
+        type: "music",
+        name: "Mahler: Symphony No. 9 (Bernstein, Koninklijk Concertgebouworkest)",
+        recommendationDate: "042020IX",
+        url: "https://www.youtube.com/watch?v=ug1oh9JG_DQ",
+        description:"This sounds the best (performance and audio quality) of Bernstein's several recordings of the Mahler Ninth. Another commenter praised the contrapuntal clarity of this performance. I agree! But, interpretively, I still favor the 1971 recording, with the Vienna Philharmonic. Luckily, one can own several Bernstein recordings (and others - it's good to compare one conductor's performance with those of other conductors) in order to decide, at a particular moment in time, which is best.",
+        status: "future",
+        youtubeID: "ug1oh9JG_DQ",
+        duration: 5353000,
     },
     // {
     //     author: { 

@@ -66,7 +66,7 @@ theSource.theMind = () => {
             .then(()=>{
                 console.log('The recommendation ' + newPresentRecommendation.name + ' was brought to the present, and the timeout will send this recommendation to the past in ' + newPresentRecommendation.duration/1000 + ' seconds');
                 setTimeout(theSource.sendRecommendationToPast, newPresentRecommendation.duration);
-                // setTimeout(theSource.sendRecommendationToPast, 4444);
+                // setTimeout(theSource.sendRecommendationToPast, 1111);
             })
         } else {
             theSource.bigBang();

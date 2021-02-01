@@ -77,6 +77,108 @@ function updateRecommendation (recommendationInformation) {
   recommendationDescription.innerText = queriedRecommendation.description;
 }
 
+let newRecommendationBtn = document.getElementById("addRecommendationBtn");
+newRecommendationBtn.addEventListener("click", (e)=>{
+  e.preventDefault();
+  let modal = document.getElementById("recommendationModal");
+  modal.style.display = "block";
+  let youtubeInput = document.getElementById("videoURL");
+  youtubeInput.addEventListener('blur', () => {
+    let youtubeID = (getYoutubeID(youtubeInput.value));
+    if(youtubeID.length !== 11){
+      alert("That URL is not valid, please try a new one.");
+    } else {
+      console.log("The link works, and the youtube ID is: " + youtubeID); 
+    }
+  });
+  let closeModalBtn = document.getElementById("closeModalBtn");
+  closeModalBtn.addEventListener("click", ()=>{
+    document.getElementById("modalResponse").style.display = "none";
+    modal.style.display = "none"
+    // document.getElementById("recommendationIframeSpan").src = "";
+  })
+  window.onclick = (e) => {
+    if(e.target == modal) {
+      document.getElementById("modalResponse").style.display = "none";
+      modal.style.display = "none"
+      // document.getElementById("recommendationIframeSpan").src = "";
+    }
+  }
+  let previewBtn = document.getElementById("previewBtn");
+  previewBtn.addEventListener("click", ()=>{
+    updateModalPreview()
+  });
+})
+
+async function updateModalPreview (){
+  let iFrame = document.getElementById("recommendationIframeSpan");
+  let usernameSpan = document.getElementById("usernameSpan");
+  let countrySpan = document.getElementById("countrySpan");
+  let descriptionSpan = document.getElementById("descriptionSpan");
+  let userData;
+  if (document.getElementById("username") && document.getElementById("country")){
+    usernameSpan.innerText = document.getElementById("usernameInput").value;
+    countrySpan.innerText = document.getElementById("country").value;
+  } else {
+    const response = await fetch("/getUserInfo");
+    userData = await response.json();
+    usernameSpan.innerText = userData.username;
+    countrySpan.innerText = userData.country;
+  }
+  descriptionSpan.innerText = document.getElementById("descriptionTextArea").value;
+  let wasCreatedByUser = document.getElementById("userCheckbox").value;
+  let youtubeID = getYoutubeID(document.getElementById("videoURL").value)
+  iFrame.src = "https://www.youtube.com/embed/" + youtubeID + "?autoplay=1";
+
+  let modalInput = document.getElementById("modalInput");
+  modalInput.style.display = "none";
+  let modalPreview = document.getElementById("modalPreview")
+  modalPreview.style.display = "block";
+  let editBtn = document.getElementById("editBtn");
+  editBtn.addEventListener("click", ()=>{
+    modalInput.style.display = "block";
+    modalPreview.style.display = "none";
+    iFrame.src = "";
+  });
+  let submitBtn = document.getElementById("submitBtn");
+  let modalResponse = document.getElementById("modalResponse");
+  let closeModalBtn2 = document.getElementById("closeButtonInResponseModal");
+  let modal = document.getElementById("recommendationModal");
+  closeModalBtn2.addEventListener("click", ()=>{
+    modalInput.style.display = "block";
+    document.getElementById("responseFromServer").innerText = "The recommendation is being sent to the future...";
+    modalResponse.style.display = "none";
+    modal.style.display = "none";
+  })
+  submitBtn.addEventListener("click", async ()=>{
+    modalPreview.style.display = "none";
+    modalResponse.style.display = "block";
+    let response = "";
+    let saveRecommendationQuery = await fetch("/", {
+      method : "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body : JSON.stringify({newRecommendationID:youtubeID, description:descriptionSpan.innerText, username:usernameSpan.innerText, country:countrySpan.innerText, wasCreatedByUser:wasCreatedByUser})
+    });
+    response = await saveRecommendationQuery.json();
+    
+    let responseFromServer = document.getElementById("responseFromServer");
+    responseFromServer.innerText = response.answer;
+    clearModal();
+  })
+}
+
+function clearModal () {
+  if(document.getElementById("usernameInput") && document.getElementById("country")){
+    document.getElementById("usernameInput").value = "";
+    document.getElementById("country").value = "";
+  }
+  document.getElementById("videoURL").value = "";
+  document.getElementById("descriptionTextArea").value = "";
+  document.getElementById("recommendationIframeSpan").src = "";
+}
+
 favoriteButton.addEventListener("click", async function(e){
   console.log("The favorite button was clicked");
   let presentID = player.getVideoData()['video_id'];
@@ -143,46 +245,6 @@ async function checkIfRecommendationIsInDatabase(videoID){
   if(data.isRepeated){
     alert("Holy shit! That video was already recommended by @" + data.author.username)
   }
-}
-
-const recommendationForm = document.getElementById("newRecommendationForm");
-if (recommendationForm){
-  recommendationForm.addEventListener("submit", handleFormSubmit);
-}
-
-async function handleFormSubmit(event){
-  event.preventDefault();
-  const form = event.currentTarget;
-  const url = form.action;
-
-  try {
-    const formData = new FormData(form);
-    const responseData = await postFormDataAsJson({url, formData});
-    console.log(responseData);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function postFormDataAsJson({url, formData}){
-  const plainFormData = Object.fromEntries(formData.entries());
-  const formDataJsonString = JSON.stringify(plainFormData);
-  const fetchOptions = {
-    method : "POST",
-    headers : {
-      "Content-Type": "application/json",
-			"Accept": "application/json"
-    },
-    body : formDataJsonString,
-  };
-  const response = await fetch (url, fetchOptions);
-  
-  if(!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(errorMessage);
-  }
-
-  return response.json();
 }
 
 async function queryNextRecomendation(displayedID="") {
@@ -366,9 +428,8 @@ async function getPastRecommendation (youtubeID) {
   updateRecommendation(recommendationData);
 }
 
-<<<<<<< HEAD
 function sortTable(n, dir="asc") {
-  let table, rows, switching, i, x, y, shouldSwitch, switchCount = 0;
+  let table, rows, switching, i, x, y, a, b, shouldSwitch, switchCount = 0;
   table = document.getElementById("pastTable");
   switching = true;
   while (switching) {
@@ -378,13 +439,15 @@ function sortTable(n, dir="asc") {
           shouldSwitch = false;
           x = rows[i].getElementsByTagName("td")[n];
           y = rows[i+1].getElementsByTagName("td")[n];
+          a = isNaN(parseInt(x.innerHTML))?x.innerHTML.toLowerCase():parseInt(x.innerHTML);
+          b = isNaN(parseInt(y.innerHTML))?y.innerHTML.toLowerCase():parseInt(y.innerHTML);
           if (dir == "asc") {
-              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()){
+              if (a > b){
                   shouldSwitch = true;
                   break
               }
           } else if (dir == "desc") {
-              if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()){
+              if (a < b){
                   shouldSwitch = true;
                   break
               }
@@ -412,5 +475,8 @@ function durationFormatting (milliseconds){
   if(seconds < 10){seconds = "0" + seconds;};
   return hours + ':' + minutes + ':' + seconds;
 }
-=======
->>>>>>> 80b2e8b5423800e6bbcb56305bda8cd239c4027f
+
+function getYoutubeID(url){
+  url = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  return undefined !== url[2]?url[2].split(/[^0-9a-z_\-]/i)[0]:url[0];
+}
