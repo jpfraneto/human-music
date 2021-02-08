@@ -22,7 +22,6 @@
 </div>
 
 <div id="theFuture" style="display:none">
-    <h1>In the future there is recommendations enough for: <span id="futureDays"></span> days, <span id="futureHours"></span> hours, <span id="futureMinutes"></span> minutes and <span id="futureSeconds"></span> seconds.</h1>
 </div>
 
 <div class="box" id="systemDisplay">
@@ -56,20 +55,24 @@
         </div>
 
         <div id="thePast" style="display:none">
-            <p><strong>This are the recommendations that are in the past:</strong></p>
-            <table id="pastTable">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable(0)">Index</th>
-                        <th onclick="sortTable(1)">User</th>
-                        <th onclick="sortTable(2)">Name</th>
-                        <th onclick="sortTable(3)">Duration</th>
-                    </tr>
-                </thead>
-                <tbody id="pastTableBody"></tbody>
-            </table>
+            <div id="pastLoading">
+                <p>The past is loading...</p>
+            </div>
+            <div id="pastTableSpan" style="display:none">
+                <p><strong>This are the recommendations that are in the past:</strong></p>
+                <table id="pastTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Index</th>
+                            <th onclick="sortTable(1)">User</th>
+                            <th onclick="sortTable(2)">Name</th>
+                            <th onclick="sortTable(3)">Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pastTableBody"></tbody>
+                </table>
+            </div>
         </div>
-
     </div>
     <div class="column right"></div>
 </div>
@@ -260,9 +263,9 @@
                 <iframe id="recommendationIframeSpan" width="640" height="360" src="" style="border: solid 4px #37474F"></iframe>
             </div>
             <div class="recommendationInformation text-center" >
-                <p><strong>User: </strong><span id="usernameSpan">sds</span></p>
-                <p><strong>Country: </strong><span id="countrySpan">dsds</span></p>
-                <p><strong>Why did you recommend this?: </strong><span id="descriptionSpan">dsds</span></p>
+                <p><strong>User: </strong><span id="usernameSpan"></span></p>
+                <p><strong>Country: </strong><span id="countrySpan"></span></p>
+                <p><strong>Why did you recommend this?: </strong><span id="descriptionSpan"></span></p>
                 <button id="editBtn">Edit</button>
                 <button id="submitBtn">Send Recommendation To The Future!</button>
             </div>
