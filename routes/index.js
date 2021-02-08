@@ -20,7 +20,6 @@ router.get("/", (req, res) => {
         if (presentRecommendation) {
             let elapsedTime = now - presentRecommendation.startingRecommendationTimestamp;
             let elapsedSeconds = Math.floor(elapsedTime/1000);
-            let endingTime = (new Date(presentRecommendation.endingRecommendationTimestamp)).toUTCString().substring(17,25)
             res.render("eternity", {
                 youtubeID : presentRecommendation.youtubeID,
                 elapsedSeconds : elapsedSeconds, 
@@ -38,7 +37,7 @@ router.get("/", (req, res) => {
 router.post("/", function(req,res){
     let newRecommendation = new Recommendation();
     let author;
-    newRecommendation.type = "music";
+    newRecommendation.type = req.body.recommendationType;
     if(req.user){
         newRecommendation.author = {
             id: req.user._id,
@@ -51,11 +50,12 @@ router.post("/", function(req,res){
             country: req.body.country
         }
     };
-    if(req.body.wasCreatedByUser){
-        newRecommendation.wasCreatedByUser = req.body.wasCreatedByUser;
-    } else {
-        newRecommendation.wasCreatedByUser = false;
-    }
+    newRecommendation.wasCreatedByUser = req.body.wasCreatedByUser;
+    newRecommendation.description = req.body.description;
+    newRecommendation.language = req.body.language;
+    newRecommendation.status = "future";
+    newRecommendation.type = "music";
+    newRecommendation.recommendationDate = new Date();
     let url, duration, name;
     newRecommendation.youtubeID = req.body.newRecommendationID;
     let apiKey = process.env.YOUTUBE_APIKEY;
@@ -66,11 +66,6 @@ router.post("/", function(req,res){
             let durationISO = response.data.items[0].contentDetails.duration;
             newRecommendation.name = response.data.items[0].snippet.title;
             newRecommendation.duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
-            newRecommendation.recommendationDate = new Date();
-            newRecommendation.description = req.body.description;
-            newRecommendation.language = req.body.language;
-            newRecommendation.status = "future";
-            newRecommendation.type = "music";
             newRecommendation.save(()=>{
                 console.log(newRecommendation);
                 if(req.user){
@@ -208,10 +203,6 @@ router.get("/getFutureRecommendations", (req, res) => {
     })
 })
 
-router.get("/mobile", (req, res) => {
-    res.render("mobile");
-});
-
 router.post("/favorited", (req, res) => {
     let answer = {};
     if (req.user){
@@ -258,17 +249,15 @@ router.post("/checkIfRepeated", (req, res) => {
     let response = {
         isRepeated : false,
     }
-    Recommendation.find({type:"music"})
-    .then((foundRecommendations)=>{
-        foundRecommendations.forEach((recommendation)=>{
-            if(videoID === recommendation.url.slice(-11)){
-                response.isRepeated = true;
-                response.author = recommendation.author
-            }
-        })
+    Recommendation.findOne({youtubeID:req.body.videoID})
+    .then((repeatedRecommendation)=>{
+        if (repeatedRecommendation) {
+            response.isRepeated = true;
+            response.author = repeatedRecommendation.author
+        }
         res.json(response)
     })
-    .catch(err => console.log("There was an error!"))
+    .catch(err => console.log("There was an error checking if the video is repeated!"))
 });
 
 router.get("/getFavoriteRecommendations", (req, res) => {
