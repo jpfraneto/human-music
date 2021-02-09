@@ -139,6 +139,14 @@ router.post("/nextRecommendationQuery", (req,res) => {
     }
 })
 
+router.get("/randomRecommendation", (req, res) => {
+    Recommendation.find({status:"past"}).exec()
+    .then((allPastRecommendations) =>{
+        let randomIndex = Math.floor(Math.random()*allPastRecommendations.length);
+        res.json({recommendation:allPastRecommendations[randomIndex]});
+    })
+})
+
 router.get("/getUserInfo", (req, res) => {
     if(req.user){
         res.send({username:req.user.username, country:req.user.country, language:req.user.language})

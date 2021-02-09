@@ -48,6 +48,7 @@ function onPlayerStateChange(event) {
     //Do something when the player state changes. When the video is over, update it with the next one.
     let displayedID = player.getVideoData()['video_id']
     if (event.data === 0) {
+      alert("The video ended and the next recommendation will come!")
         setTimeout(()=>{
             queryNextRecomendation(displayedID);
         }, 1618)
@@ -139,6 +140,7 @@ async function checkIfRecommendationIsInDatabase(videoID){
 }
 
 async function queryNextRecomendation(displayedID="") {
+  console.log("inside the query next recommendaiton function " + displayedID);
     let response = await fetch("/nextRecommendationQuery", {
         method : "POST",
         headers: {
@@ -201,6 +203,13 @@ infoBtn.addEventListener("click", ()=>{
   }
 })
 
+let randomRecommendationBtn = document.getElementById("randomRecommendationBtn");
+randomRecommendationBtn.addEventListener("click", async () => {
+  let response = await fetch("/randomRecommendation");
+  let queryResponse = await response.json();
+  updateRecommendation(queryResponse);
+});
+
 function showSystemDisplay() {
   let systemDisplay = document.getElementById("systemDisplay");
   if (systemDisplay.style.display === "none") {
@@ -230,8 +239,10 @@ function hideFuture() {
 
 function showPast() {
   let thePast = document.getElementById("thePast")
+  let pastButtons = document.getElementById("pastButtons");
   if (thePast.style.display === "none") {
     thePast.style.display = "block";
+    pastButtons.style.display = "inline";
   } 
   let pastLoading = document.getElementById("pastLoading");
   pastLoading.style.display = "block";
@@ -239,8 +250,10 @@ function showPast() {
 
 function hidePast() {
   let thePast = document.getElementById("thePast")
+  let pastButtons = document.getElementById("pastButtons");
   if (thePast.style.display === "block") {
     thePast.style.display = "none";
+    pastButtons.style.display = "none";
   } 
 }
 
@@ -415,16 +428,17 @@ newRecommendationBtn.addEventListener("click", (e)=>{
   })
 
   let previewBtn = document.getElementById("previewBtn");
-  previewBtn.removeEventListener("click", ()=>{
-    if(document.getElementById("videoURL").value.length>0 && document.getElementById("descriptionTextArea").value.length >0){
-      updateModalPreview()
-    }  
-  });
   previewBtn.addEventListener("click", ()=>{
     if(document.getElementById("videoURL").value.length>0 && document.getElementById("descriptionTextArea").value.length >0){
       updateModalPreview()
     }
   });
+
+  let cancelBtn = document.getElementById("cancelBtn");
+  cancelBtn.addEventListener("click", ()=>{
+    modal.style.display = "none";
+    clearModal();
+  })
 
   let editBtn = document.getElementById("editBtn");
   editBtn.addEventListener("click", ()=>{
@@ -443,7 +457,7 @@ newRecommendationBtn.addEventListener("click", (e)=>{
   })
 
   let submitBtn = document.getElementById("submitBtn");
-  submitBtn.addEventListener("click", sendRecommendationToDB)
+  submitBtn.addEventListener("click", sendRecommendationToDB);
 
   function clearModal () {
     if(document.getElementById("usernameInput") && document.getElementById("country")){
