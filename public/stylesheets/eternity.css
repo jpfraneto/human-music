@@ -251,4 +251,18 @@ th {
     #headerTitle {
         font-size: 80%;
     }
+
+    .modal-content {
+        width: 88%; /* Could be more or less, depending on screen size */
+      }
+}
+
+#registerForm {
+    margin: 16px auto;
+    padding: 8px 8px;
+    border: rgb(24, 71, 226) groove 6px;
+}
+
+.disclaimerDiv {
+    margin-bottom: 30px;
 }
