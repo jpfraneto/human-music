@@ -48,7 +48,6 @@ function onPlayerStateChange(event) {
     //Do something when the player state changes. When the video is over, update it with the next one.
     let displayedID = player.getVideoData()['video_id']
     if (event.data === 0) {
-      alert("The video ended and the next recommendation will come!")
         setTimeout(()=>{
             queryNextRecomendation(displayedID);
         }, 1618)
