@@ -42,10 +42,10 @@ if(process.env.NODE_ENV === 'production') {
 
 /////////////////////SET FUNCTIONS////////////////////////////
 
-// setTimeout(theSource.bigBang);
+setTimeout(theSource.bigBang);
 
-console.log("The app.js file is running again.");
-setTimeout(theSource.checkSystem);
+// console.log("The app.js file is running again.");
+// setTimeout(theSource.checkSystem);
 
 app.use(require("express-session")({
     secret: "Music to nourish your soul and activate your mind",
