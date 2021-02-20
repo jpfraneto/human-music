@@ -157,7 +157,6 @@ async function queryNextRecomendation(displayedID="") {
 let pastBtn = document.getElementById("pastSpan");
 pastBtn.addEventListener("click", async ()=>{
   systemStatus = "past";
-  hideFuture();
   showSystemDisplay();
   showPast();
   travelToThePast();
@@ -167,7 +166,6 @@ let presentBtn = document.getElementById("presentSpan");
 presentBtn.addEventListener("click", async ()=>{
   systemStatus = "present";
   showSystemDisplay();
-  hideFuture();
   hidePast();
   queryNextRecomendation();
 })
