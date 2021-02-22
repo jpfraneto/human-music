@@ -176,10 +176,10 @@ futureBtn.addEventListener("click", ()=>{
 })
 
 let navigationBarElements = document.querySelectorAll(".navigationBar span");
-for (let i=0; i< navigationBarElements.length; i++) {
+for (let i=0; i< navigationBarElements.length-1; i++) {
   navigationBarElements[i].onclick = ()=>{
     var c = 0;
-    while (c < navigationBarElements.length) {
+    while (c < navigationBarElements.length-1) {
       navigationBarElements[c++].className = "";
     }
     navigationBarElements[i].className = "activeTense"

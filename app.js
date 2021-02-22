@@ -7,6 +7,7 @@ let express       = require("express"),
     mongoose      = require("mongoose"),
     flash         = require("connect-flash"),
     passport      = require("passport"),
+    session       = require("express-session"),
     LocalStrategy = require("passport-local"),
     methodOverride = require("method-override"),
     Recommendation = require("./models/recommendation"),
@@ -23,7 +24,12 @@ const recommendationRoutes = require("./routes/recommendations"),
       userRoutes           = require("./routes/users");
 
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(process.env.DATABASE_MONGODB, { useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect(process.env.DATABASE_MONGODB, { 
+  useNewUrlParser: true, 
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
@@ -47,13 +53,22 @@ if(process.env.NODE_ENV === 'production') {
 console.log("The app.js file is running again.");
 setTimeout(theSource.checkSystem);
 
-app.use(require("express-session")({
+const sessionConfig = {
     secret: "Music to nourish your soul and activate your mind",
     resave : false,
-    saveUninitialized: false
-}));
+    saveUninitialized: true,
+    cookie: {
+      httpOnly : true,
+      expires: Date.now() + 1000*60*60*24*7,
+      maxAge : 1000 * 60 * 60 * 24 * 7
+    }
+}
+
+app.use(session(sessionConfig));
+
 app.use(passport.initialize());
 app.use(passport.session());
+
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());

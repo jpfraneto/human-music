@@ -292,34 +292,28 @@ router.get("/about", function(req, res){
 });
 
 //handle sign up logic
-router.post("/register", function(req,res){
-    let newUser = new User({name:req.body.name, email:req.body.email, username:req.body.username, country: req.body.country, language:req.body.language});
-    User.find({username:newUser.username}, function(err,foundUser){
-        if(foundUser.length === 0){
-            User.register(newUser, req.body.password, function(err, user){
-                if(err){
-                    console.log(err)
-                    return res.render("register", {today: today});
-                } else {
-                    passport.authenticate("local")(req, res, function(){
-                    req.flash("success", "Welcome to Human Music "+user.username);
-                    res.redirect("/");
-                    });
-                }
-            });
-        } else {
-            return res.render("register", {today: today});
-        }
-    });
+router.post("/register", async function (req,res, next) {
+    try {
+        const user = new User({name:req.body.name, email:req.body.email, username:req.body.username, country: req.body.country, language:req.body.language});
+        const registeredUser = await User.register(user, req.body.password);
+        console.log(registeredUser);
+        req.login(registeredUser, err=>{
+            if(err) return next(err);
+            req.flash('success', 'Welcome to Human Music');
+            res.redirect('/');
+        })
+    } catch (e) {
+        req.flash('error', e.message);
+        res.redirect('register');
+    }
 });
 
 // show login form
 router.get("/login", function(req, res){
     if(req.isAuthenticated()) {
-        res.redirect("/");
-    } else {
-        res.render("login", {today: today})
-    }
+        return res.redirect("/");
+    } 
+    res.render("login")
 });
 
 router.get("/loginFailure", function(req,res){
@@ -327,11 +321,12 @@ router.get("/loginFailure", function(req,res){
 })
 
 // handling login logic
-router.post("/login", passport.authenticate("local",
-    {
-        successRedirect: "/",
-        failureRedirect: "/loginFailure"
-    }), function(req, res){
+
+router.post('/login', passport.authenticate('local', {failureFlash:true, failureRedirect:'/login'}), (req, res)=>{
+    req.flash('success', 'welcome back');
+    const redirectUrl = req.session.returnTo || '/';
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
 });
 
 // logout route
