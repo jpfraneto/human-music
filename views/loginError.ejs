@@ -17,12 +17,9 @@
     <p><strong>The Most Diverse Music Recommendation Algorythm in The World</strong></p>      
 </div>
 
-<div class="loginWelcome">
-  <p>Welcome Back. You can log in here, or also <a href="/register">register</a> if you don't have an account.</p>
-</div>
-
 <div id="loginDiv">
       <form id="loginForm" action="/login" method="POST">
+        <p id="errorMessage">I'm sorry, but your account credentials don't match with the ones that you have set before. Please try again!</p>
           <label for="loginUsername" class="clock">Username or Email</label>
           <input type="text" name="username" placeholder="Username / Email" id="loginUsername" required><br>
           <label for="loginPassword" class="clock">Password</label>
@@ -38,7 +35,7 @@
           <button type="submit">Get new Password!</button>
         </form>
       </div>
-      <div id="serverAnswer" style="display: none;">
+      <div id="serverAnswer">
         <p id="answerMessage"></p>
       </div>
 </div>
