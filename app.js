@@ -53,8 +53,8 @@ if(process.env.NODE_ENV === 'production') {
 
 // setTimeout(theSource.bigBang);
 
-// console.log("The app.js file is running again.");
-// setTimeout(theSource.checkSystem);
+console.log("The app.js file is running again.");
+setTimeout(theSource.checkSystem);
 
 const sessionConfig = {
     secret: "Music to nourish your soul and activate your mind",
@@ -90,5 +90,5 @@ app.use("/users", userRoutes);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
-  console.log("The Human Music Server Has Started!");
+  console.log("The Human Music Server Has Started");
 });
