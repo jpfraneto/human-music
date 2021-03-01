@@ -456,7 +456,6 @@ if(newRecommendationBtn){
     }
     
     async function sendRecommendationToDB () {
-      let wasCreatedByUser = document.getElementById("userCheckbox").checked;
       let youtubeID = getYoutubeID(document.getElementById("videoURL").value);
       let usernameSpan = document.getElementById("usernameSpan");
       let countrySpan = document.getElementById("countrySpan");
@@ -473,7 +472,6 @@ if(newRecommendationBtn){
           description:descriptionSpan.innerText, 
           username:usernameSpan.innerText, 
           country:countrySpan.innerText, 
-          wasCreatedByUser:wasCreatedByUser,
           recommendationType:"music",
         })
       });
