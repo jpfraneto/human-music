@@ -1,38 +1,91 @@
 let modal = document.getElementById("recommendationModal");
-let editBtn = document.getElementById("editBtn");
-let submitToFutureBtn = document.getElementById("submitToFutureBtn");
-let previewBtn = document.getElementById("previewBtn");
-let addRecommendationForm = document.getElementById("addRecommendationForm");
-let closeModalBtn = document.getElementById("closeModalBtn");
+  
+let modalInput = document.getElementById("modalInput");
+let youtubeInput = document.getElementById("videoURL");
+youtubeInput.removeEventListener('blur', checkYoutubeInput);
 
-submitToFutureBtn.addEventListener("click", ()=>{
-  alert("Your recommendation is now in the future! Thank you for helping build this space")
-  addRecommendationForm.submit();
-});
-editBtn.addEventListener("click", ()=>{
-  modal.style.display = "none"
-});
-closeModalBtn.addEventListener("click", ()=>{
-  modal.style.display = "none"
-})
-window.onclick = (e) => {
-  if(e.target == modal) {
-    modal.style.display = "none"
+let modalPreview = document.getElementById("modalPreview");
+let iFrame = document.getElementById("recommendationIframeSpan");
+
+let modalResponse = document.getElementById("modalResponse");
+
+modal.style.display = "block";
+
+youtubeInput.addEventListener('blur', checkYoutubeInput);
+
+async function checkYoutubeInput () {
+  let youtubeID = (getYoutubeID(youtubeInput.value));
+  if(youtubeID.length !== 11 && youtubeID.length>0){
+    alert("That URL is not valid, please try a new one.");
+    youtubeInput.value = "";
+  } else {
+    await checkIfRecommendationIsInDatabase(youtubeID);
   }
 }
 
-previewBtn.addEventListener("click", async () => {
-  let iFrame = document.getElementById("recommendationIframeSpan");
+let closeModalBtn = document.getElementById("closeModalBtn");
+closeModalBtn.addEventListener("click", ()=>{
+  modal.style.display = "none"
+  modalInput.style.display = "block";
+  modalPreview.style.display = "none";
+  modalResponse.style.display = "none";
+  iFrame.src = "";
+})
+
+let previewBtn = document.getElementById("previewBtn");
+previewBtn.addEventListener("click", ()=>{
+  if(document.getElementById("videoURL").value.length>0 && document.getElementById("descriptionTextArea").value.length >0){
+    updateModalPreview()
+  }
+});
+
+let cancelBtn = document.getElementById("cancelBtn");
+cancelBtn.addEventListener("click", ()=>{
+  modal.style.display = "none";
+  clearModal();
+})
+
+let editBtn = document.getElementById("editBtn");
+editBtn.addEventListener("click", ()=>{
+  modalInput.style.display = "block";
+  modalPreview.style.display = "none";
+  iFrame.src = "";
+});
+
+let closeModalBtn2 = document.getElementById("closeButtonInResponseModal");
+closeModalBtn2.addEventListener("click", ()=>{
+  modalInput.style.display = "block";
+  modalResponse.style.display = "none";
+  document.getElementById("responseFromServer").innerText = "The recommendation is being sent to the future...";
+  modal.style.display = "none";
+  iFrame.src = "";
+})
+
+let submitBtn = document.getElementById("submitBtn");
+submitBtn.addEventListener("click", sendRecommendationToDB);
+
+function clearModal () {
+  if(document.getElementById("usernameInput") && document.getElementById("country")){
+    document.getElementById("usernameInput").value = "";
+    document.getElementById("country").value = "";
+  }
+  document.getElementById("videoURL").value = "";
+  document.getElementById("descriptionTextArea").value = "";
+  document.getElementById("recommendationIframeSpan").src = "";
+  document.getElementById("userCheckbox").checked = false;
+}
+
+async function updateModalPreview (){
   let usernameSpan = document.getElementById("usernameSpan");
   let countrySpan = document.getElementById("countrySpan");
   let descriptionSpan = document.getElementById("descriptionSpan");
+  let userData;
   if (document.getElementById("username") && document.getElementById("country")){
-    usernameSpan.innerText = document.getElementById("username").value;
+    usernameSpan.innerText = document.getElementById("usernameInput").value;
     countrySpan.innerText = document.getElementById("country").value;
   } else {
     const response = await fetch("/getUserInfo");
-    const userData = await response.json();
-    console.log(userData);
+    userData = await response.json();
     usernameSpan.innerText = userData.username;
     countrySpan.innerText = userData.country;
   }
@@ -40,30 +93,35 @@ previewBtn.addEventListener("click", async () => {
   let youtubeID = getYoutubeID(document.getElementById("videoURL").value)
   iFrame.src = "https://www.youtube.com/embed/" + youtubeID + "?autoplay=1";
 
-  if(descriptionSpan.innerText.length>0 && countrySpan.innerText && usernameSpan.innerText && youtubeID){
-    modal.style.display = "block";
-  } else {
-    alert("Please fill in all the elements :)")
-  }
-})
+  modalInput.style.display = "none";
+  modalPreview.style.display = "block";
+}
 
-addRecommendationForm.addEventListener("submit", (e)=>{
-  e.preventDefault();
-  alert("Your recommendation is now in the future! Thank you for helping build this space")
-  addRecommendationForm.submit();
-})
-
-let youtubeInput = document.getElementById("videoURL");
-youtubeInput.addEventListener('blur', () => {
-  let youtubeID = (getYoutubeID(youtubeInput.value));
-  if(youtubeID.length !== 11){
-    alert("That URL is not valid, please try a new one.");
-  } else {
-    console.log("The link works, and the youtube ID is: " + youtubeID); 
-  }
-});
-
-function getYoutubeID(url){
-  url = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-  return undefined !== url[2]?url[2].split(/[^0-9a-z_\-]/i)[0]:url[0];
+async function sendRecommendationToDB () {
+  let wasCreatedByUser = document.getElementById("userCheckbox").checked;
+  let youtubeID = getYoutubeID(document.getElementById("videoURL").value);
+  let usernameSpan = document.getElementById("usernameSpan");
+  let countrySpan = document.getElementById("countrySpan");
+  let descriptionSpan = document.getElementById("descriptionSpan");
+  modalPreview.style.display = "none";
+  modalResponse.style.display = "block";
+  let saveRecommendationQuery = await fetch("/", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({
+      newRecommendationID:youtubeID, 
+      description:descriptionSpan.innerText, 
+      username:usernameSpan.innerText, 
+      country:countrySpan.innerText, 
+      wasCreatedByUser:wasCreatedByUser,
+      recommendationType:"music",
+    })
+  });
+  let response = await saveRecommendationQuery.json();
+  
+  let responseFromServer = document.getElementById("responseFromServer");
+  responseFromServer.innerText = response.answer;
+  clearModal();
 }

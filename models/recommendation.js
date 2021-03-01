@@ -22,7 +22,6 @@ var recommendationSchema = new mongoose.Schema({
     language : String,
     status: String,
     duration: Number,
-    wasCreatedByUser: Boolean,
     startingRecommendationTimestamp: Number,
     endingRecommendationTimestamp: Number,
     timestampDifference: Number

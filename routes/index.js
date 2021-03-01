@@ -10,6 +10,8 @@ const middleware = require("../middleware");
 let chiita = require("../middleware/chiita");
 let theSource = require("../middleware/theSource");
 const middlewareObj = require("../middleware");
+const cryptoRandomString = require('crypto-random-string');
+const { removeListener } = require("../models/recommendation");
 
 let today = new Date();
 // Root Route
@@ -34,23 +36,15 @@ router.get("/", (req, res) => {
 })
 
 //CREATE - add new recommendation to db
-router.post("/", function(req,res){
+router.post("/", middleware.isLoggedIn, function(req,res){
     let newRecommendation = new Recommendation();
     let author;
     newRecommendation.type = req.body.recommendationType;
-    if(req.user){
-        newRecommendation.author = {
-            id: req.user._id,
-            username: req.user.username,
-            country: req.user.country
-        }
-    } else {
-        newRecommendation.author = {
-            username: req.body.username,
-            country: req.body.country
-        }
-    };
-    newRecommendation.wasCreatedByUser = req.body.wasCreatedByUser;
+    newRecommendation.author = {
+        id: req.user._id,
+        username: req.user.username,
+        country: req.user.country
+    }
     newRecommendation.description = req.body.description;
     newRecommendation.language = req.body.language;
     newRecommendation.status = "future";
@@ -67,7 +61,6 @@ router.post("/", function(req,res){
             newRecommendation.name = response.data.items[0].snippet.title;
             newRecommendation.duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
             newRecommendation.save(()=>{
-                console.log(newRecommendation);
                 if(req.user){
                     req.user.recommendations.push(newRecommendation);
                     req.user.save(()=>{
@@ -291,20 +284,154 @@ router.get("/about", function(req, res){
    res.render("about", {today: today}); 
 });
 
+router.get("/registerSuccess", function(req, res){
+    res.render("registerSuccess");
+})
+
 //handle sign up logic
 router.post("/register", async function (req,res, next) {
     try {
-        const user = new User({name:req.body.name, email:req.body.email, username:req.body.username, country: req.body.country, language:req.body.language});
-        const registeredUser = await User.register(user, req.body.password);
-        console.log(registeredUser);
-        req.login(registeredUser, err=>{
-            if(err) return next(err);
-            req.flash('success', 'Welcome to Human Music');
-            res.redirect('/');
-        })
+        const randomString = cryptoRandomString({length: 128});
+        const { email, username, password } = req.body;
+        const user = new User({ email, username });
+        const registeredUser = await User.register(user,password);
+        registeredUser.name = req.body.name;
+        registeredUser.country = req.body.country;
+        registeredUser.language = req.body.language;
+        registeredUser.active = false;
+        registeredUser.activeExpires = Date.now() + 24*3600*1000;
+        registeredUser.activeToken = randomString;
+        middlewareObj.sendVerificationEmail(registeredUser.username ,registeredUser.email, registeredUser.activeToken);
+        registeredUser.save(()=>{
+            res.redirect('/registerSuccess');
+        });
     } catch (e) {
         req.flash('error', e.message);
         res.redirect('register');
+    }
+});
+
+router.get("/password_reset/:resetCode", function (req, res) {
+    res.render("password_reset");
+});
+
+router.post("/password_reset_verification", (req, res)=>{
+    let answer = {};
+    let nowTimestamp = (new Date()).getTime();
+    User.findOne({email:req.body.email})
+    .then((foundUser)=>{
+        if(foundUser.passResetString === req.body.resetCode){
+            if (foundUser.passResetExpires>nowTimestamp){
+                answer.status = true;
+                answer.message = "All OK with this account, proceed to update the password"
+            } else {
+                answer.status = false;
+                answer.message = "Your code for creating a new password has expired, please click the following link to get a new one."
+            }
+        } else {
+            answer.status = false;
+            answer.message = "I'm sorry, but the email you provided does not match the one in our end. Try again, or click the following link to get a new code."
+        }
+    })
+})
+
+router.post("/password_reset", (req, res) => {
+    User.findOne({email:req.body.email})
+    .then((foundUser)=>{
+        if(foundUser){
+            foundUser.setPassword(req.body.newPassword, ()=> {
+                foundUser.passResetString = "";
+                foundUser.passResetExpires = "";
+                foundUser.save()
+                .then(()=>{
+                    req.login(foundUser, (err)=>{
+                        if(err){console.log(err)}
+                        res.redirect("/");
+                    })
+                })
+            })
+        } else {
+            res.redirect("error");
+        }
+    })
+})
+
+router.get("/error", (req, res)=>{
+    res.render("error");
+})
+
+router.post("/pass_reset", async function(req, res){
+    let answer = {};
+    const randomCode = cryptoRandomString({length: 128});
+    if(middlewareObj.validateEmail(req.body.passReset)){
+        User.findOne({email:req.body.passReset})
+        .then((foundUser)=>{
+            foundUser.passResetString = randomCode;
+            foundUser.passResetExpires = (new Date()).getTime() + 7200000;
+            foundUser.save(async ()=>{
+                console.log("The user was saved with the string that resets the password");
+                middlewareObj.sendResetEmail(foundUser.username, foundUser.email, randomCode);
+                answer.message = "The email with the link for resetting the password was sent!";
+                res.json(answer);
+            })
+        })
+    } else {
+        User.findOne({username:req.body.passReset})
+        .then((foundUser)=>{
+            foundUser.passResetString = randomCode;
+            foundUser.passResetExpires = (new Date()).getTime() + 7200000;
+            foundUser.save(async ()=>{
+                console.log("The user was saved with the string that resets the password");
+                middlewareObj.sendResetEmail(foundUser.username, foundUser.email, randomCode);
+                answer.message = "The email with the link for resetting the password was sent!";
+                res.json(answer);
+            })
+        })
+    }
+})
+
+router.get("/verifyAccount", function(req, res){
+    res.render("verifyAccount");
+})
+
+router.get("/verified", (req, res)=>{
+    res.render("verified");
+})
+
+router.get("/verifyEmail/:code", function(req, res){
+    User.findOne({activeToken:req.params.code, activeExpires:{$gt: Date.now()}})
+    .then((foundUser)=>{
+        if(!foundUser.active){
+            foundUser.active = true;
+            foundUser.save(()=>{
+                console.log("The user " + foundUser.username + " was activated!");
+                req.login(foundUser, (err)=>{
+                    if(err){console.log(err)}
+                    res.redirect("/verified");
+                })
+            })
+        } else {
+            req.login(foundUser, (err)=>{
+                if(err){console.log(err)}
+                res.redirect("/");
+            })
+        }
+    })
+    .catch((err)=>{
+        console.log(err);
+        res.redirect("error");
+    })
+})
+
+router.get('/api/user_data', function(req, res) {
+    if (req.user === undefined) {
+        res.json({status:"notLoggedIn"});
+    } else {
+        res.json({
+            username: req.user.username,
+            verificationStatus: req.user.active,
+            status:"loggedIn"
+        });
     }
 });
 
@@ -316,13 +443,21 @@ router.get("/login", function(req, res){
     res.render("login")
 });
 
+// router.post("/login/sso", function(req, res){
+//     console.log(req.query);
+// })
+
+router.get("/login/error", function(req, res){
+    res.render("loginError")
+})
+
 router.get("/loginFailure", function(req,res){
     res.render("loginFailure", {today: today});
 })
 
 // handling login logic
 
-router.post('/login', passport.authenticate('local', {failureFlash:true, failureRedirect:'/login'}), (req, res)=>{
+router.post('/login', middlewareObj.isVerified, passport.authenticate('local', {failureFlash:true, failureRedirect:'/login/error'}), (req, res)=>{
     req.flash('success', 'welcome back');
     const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;

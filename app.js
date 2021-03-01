@@ -15,6 +15,7 @@ let express       = require("express"),
     Cycle           = require("./models/cycle"),
     chiita        = require("./middleware/chiita"),
     theSource     = require("./middleware/theSource"),
+    nodemailer    = require('nodemailer'),
     seedDB        = require("./seeds2");
 
 let systemStatus;
@@ -31,12 +32,14 @@ mongoose.connect(process.env.DATABASE_MONGODB, {
   useFindAndModify: false
 });
 
-app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.set("view engine", "ejs");
-app.use(express.static(__dirname + "/public"));
+
+app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
-app.use(flash());
+app.use(express.static(__dirname + "/public"));
+
+
 if(process.env.NODE_ENV === 'production') {
     app.use((req, res, next) => {
       if (req.header('x-forwarded-proto') !== 'https')
@@ -50,8 +53,8 @@ if(process.env.NODE_ENV === 'production') {
 
 // setTimeout(theSource.bigBang);
 
-console.log("The app.js file is running again.");
-setTimeout(theSource.checkSystem);
+// console.log("The app.js file is running again.");
+// setTimeout(theSource.checkSystem);
 
 const sessionConfig = {
     secret: "Music to nourish your soul and activate your mind",
@@ -65,11 +68,12 @@ const sessionConfig = {
 }
 
 app.use(session(sessionConfig));
+app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 passport.use(new LocalStrategy(User.authenticate()));
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 

@@ -27,22 +27,22 @@ router.get("/:username", middleware.isLoggedIn, function(req,res){
         });
 });
 
-router.get("/:username/edit", function(req, res){
-    User.findOne(req.params.username)
+router.get("/:username/edit", middleware.isUser, function(req, res){
+    User.findOne({username:req.params.username})
     .then((foundUser)=>{
-        res.render("users/edit", {user:foundUser, today: todayDay})
+        res.render("users/edit")
     })
 });
 
 router.get("/:username/recommendations", middleware.isLoggedIn, function(req, res){
     User.findOne({"username" : req.params.username}).populate("recommendations")
     .then((foundUser) => {
-        if(foundUser.recommendations.length>0){
+        if(foundUser.recommendations.length > 0){
             let randomIndex = Math.floor(foundUser.recommendations.length * Math.random());
             let randomRecommendation = foundUser.recommendations[randomIndex]
             res.render("users/recommendations/show", {foundUser:foundUser, randomRecommendation:randomRecommendation})
         } else{
-            res.redirect("/" + req.params.username);
+            res.render('users/notYet');
         }
     });
 });
@@ -50,12 +50,12 @@ router.get("/:username/recommendations", middleware.isLoggedIn, function(req, re
 router.get("/:username/favorites", middleware.isLoggedIn, function(req, res){
     User.findOne({"username" : req.params.username}).populate("favoriteRecommendations")
     .then((foundUser) => {
-        if(foundUser.favoriteRecommendations.length>0){
+        if(foundUser.favoriteRecommendations.length > 0){
             let randomIndex = Math.floor(foundUser.favoriteRecommendations.length * Math.random());
             let randomRecommendation = foundUser.favoriteRecommendations[randomIndex]
             res.render("users/favorites", {foundUser:foundUser, randomRecommendation:randomRecommendation})
         } else{
-            res.redirect("/" + req.params.username);
+            res.render('users/notYet');
         }
     });
 });

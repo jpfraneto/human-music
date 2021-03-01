@@ -11,7 +11,7 @@ let chiita = require("../middleware/chiita");
 var today = new Date();
 
 //NEW - show form to create a new recommendation
-router.get("/new", function(req,res){
+router.get("/new", middleware.isLoggedIn, function(req,res){
     if (req.user){
         res.render("recommendations/new", {user:req.user, today:today});
     } else {
