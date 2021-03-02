@@ -1,10 +1,29 @@
-// let registerForm = document.getElementById("registerForm");
-// let registerMessage = document.getElementById("registerMessage");
-// registerForm.addEventListener("submit", async (e) => {
-//     e.preventDefault();
-//     registerForm.style.display = "none";
+let sources = {
+    "EN" : "FzZGwkD3Ti8",
+    "ES" : "_Lb8l4868xk"
+}
 
-//     let registerAnswer = document.getElementById("registerAnswer");
-//     registerAnswer.innerText = "Welcome! An email was sent to you so that you can activate your account."
-//     registerMessage.style.display = "block";
-// });
+let languageInput = document.getElementById("languageInput");
+let registerIframe = document.getElementById("registerIframe");
+let iframeBox = document.getElementById("iframeBox");
+languageInput.addEventListener("input", ()=>{
+    let newSource = "https://www.youtube.com/embed/";
+    let p = document.querySelector("#iframeBox p");
+    if(p){
+        iframeBox.removeChild(p);
+    }
+    if(languageInput.value in sources){
+        newSource += sources[languageInput.value];
+    } else {
+        newSource += sources["EN"];  
+        let text = document.createElement("p");
+        text.innerText = "I'm sorry, but a welcoming video in your language doesn't exist yet. I tried to keep it accesible and that's why I made it in english. All help is great."
+        iframeBox.append(text);
+    }
+    registerIframe.src = newSource;
+    registerIframe.style.display = "block";
+    // else if (languageInput.value === "ES") {
+    //     newSource += "FzZGwkD3Ti8";
+    // }
+    // 
+})

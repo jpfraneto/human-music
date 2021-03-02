@@ -311,6 +311,7 @@ label {
 
 .registerDiv {
     margin: 0 auto;
+    width: 369px;
 }
 
 #registerIframe {
@@ -347,4 +348,8 @@ label {
 .aboutText {
     font-size: 0.8em;
     color: rgb(219, 213, 213);
+}
+
+#registerIframe {
+    display: none;
 }
