@@ -1,7 +1,7 @@
 let systemInformation, iFrameGlobalElement, delay, recommendationInfo, voidInfo, currentUser;
 
 let systemStatus = "present";
-let recommmendationType = "video";
+let recommmendationType = "music";
 
 let player, iframe;
 var tag = document.createElement('script');
@@ -407,7 +407,7 @@ if(newRecommendationBtn){
           email: emailSpan.value,
           language: languageSpan.value,
           country:countrySpan.value, 
-          recommendationType:"video",
+          recommendationType:"music",
         })
       });
       let response = await saveRecommendationQuery.json();

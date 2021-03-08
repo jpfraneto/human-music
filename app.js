@@ -90,5 +90,5 @@ app.use("/users", userRoutes);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
-  console.log("The Human Music Server Has Started!");
+  console.log("The Human Music Server Has Started");
 });
