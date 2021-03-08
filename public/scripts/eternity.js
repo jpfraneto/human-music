@@ -1,10 +1,7 @@
 let systemInformation, iFrameGlobalElement, delay, recommendationInfo, voidInfo, currentUser;
 
-const favoriteButton = document.getElementById("addFavoriteButton");
-const unFavoriteButton = document.getElementById("removeFavoriteButton");
-const favoritesButton = document.getElementById("favoritesButton");
 let systemStatus = "present";
-let recommmendationType = "music";
+let recommmendationType = "video";
 
 let player, iframe;
 var tag = document.createElement('script');
@@ -24,20 +21,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-  let presentID = player.getVideoData()['video_id']
-  showControls(presentID);
-}
-
-async function showControls(youtubeID) {
-  let response = await fetch("/getRecommendationInformation", {
-    method : "POST",
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body : JSON.stringify({recommendationID:youtubeID})
-  });
-  let recommendationData = await response.json();
-  toggleButtons(recommendationData.isFavorited)
+  
 }
 
 function onPlayerError(event) {
@@ -50,7 +34,7 @@ function onPlayerStateChange(event) {
     if (event.data === 0) {
         setTimeout(()=>{
             queryNextRecomendation(displayedID);
-        }, 1618)
+        }, 0)
     } 
 }
 
@@ -58,70 +42,17 @@ function updateRecommendation (recommendationInformation) {
   queriedRecommendation = recommendationInformation.recommendation;
   player.loadVideoById(queriedRecommendation.youtubeID, recommendationInformation.elapsedSeconds);
 
-  let username = document.getElementById("username");
-  username.innerText = queriedRecommendation.author.username;
-
   let userCountry = document.getElementById("userCountry");
   userCountry.innerText = queriedRecommendation.author.country;
 
-  let dateOfRecommendation = document.getElementById("dateOfRecommendation");
-  dateOfRecommendation.innerText = queriedRecommendation.recommendationDate;
+  let recommenderName = document.getElementById("recommenderName");
+  recommenderName.innerText = queriedRecommendation.author.name;
 
   let recommendationName = document.getElementById("recommendationName");
   recommendationName.innerText = queriedRecommendation.name;
 
   let recommendationDescription = document.getElementById("recommendationDescription");
   recommendationDescription.innerText = queriedRecommendation.description;
-
-  toggleButtons(recommendationInformation.isFavorited);
-}
-
-favoriteButton.addEventListener("click", async function(e){
-  let presentID = player.getVideoData()['video_id'];
-
-  const response = await fetch("/favorited", {
-    method : "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body : JSON.stringify({recommendationID:presentID})
-  });
-  const data = await response.json();
-  if ( data.user ) {
-    toggleButtons(true);
-  } else {
-    alert("You need to be logged in to add that recommendation to your profile!")
-  }
-})
-
-unFavoriteButton.addEventListener("click", async function(e){
-  let presentID = player.getVideoData()['video_id'];
-
-  const response = await fetch("/unfavorited", {
-    method : "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body : JSON.stringify({recommendationID:presentID})
-  });
-  const data = await response.json();
-  if ( data.user ) {
-    toggleButtons(false);
-  } else {
-    alert("You need to be logged in to add that recommendation to your profile!")
-  }
-})
-
-function toggleButtons (isFavorited) {
-  if(isFavorited != null){
-    if(isFavorited){
-      favoriteButton.style.display = "none";
-      unFavoriteButton.style.display = "inline-block";
-    } else {
-      favoriteButton.style.display = "inline-block";
-      unFavoriteButton.style.display = "none";
-    }
-}
 }
 
 async function checkIfRecommendationIsInDatabase(videoID){
@@ -134,7 +65,7 @@ async function checkIfRecommendationIsInDatabase(videoID){
   });
   const data = await response.json();
   if(data.isRepeated){
-    alert("What a coincidence! That video was already recommended by @" + data.author.username)
+    alert("What a coincidence! That video was already recommended by " + data.author.name)
   }
 }
 
@@ -159,6 +90,8 @@ pastBtn.addEventListener("click", async ()=>{
   showSystemDisplay();
   showPast();
   travelToThePast();
+  hidePodcast();
+  document.getElementById("recommendationFrame").style.display = "none";
 })
 
 let presentBtn = document.getElementById("presentSpan");
@@ -167,24 +100,29 @@ presentBtn.addEventListener("click", async ()=>{
   showSystemDisplay();
   hidePast();
   queryNextRecomendation();
+  hidePodcast();
+  document.getElementById("recommendationFrame").style.display = "block";
 })
 
 let futureBtn = document.getElementById("futureSpan");
 futureBtn.addEventListener("click", async ()=>{
-  let response = await fetch("/api/user_data");
-  let userInfo = await response.json();
-  if(userInfo.status === "loggedIn"){
-    if(userInfo.verificationStatus){
-      window.open("https://future.human-music.com");
-    } else {
-      alert("Please verify your account. Click on the link on the email that we sent you!")
-    }
-  } else {
-    alert("You need to be logged in to jump into the future!");
-  }
-});
+  window.open("https://community.human-music.com");
+})
 
-let navigationBarElements = document.querySelectorAll(".navigationBar span");
+let podcastBtn = document.getElementById("podcastSpan");
+podcastBtn.addEventListener("click", ()=>{
+  document.getElementById("thePodcast").style.display = "block";
+  document.getElementById("recommendationFrame").style.display = "none";
+})
+
+function hidePodcast() {
+  let thePodcast = document.getElementById("thePodcast")
+  if (thePodcast.style.display === "block") {
+    thePodcast.style.display = "none";
+  } 
+}
+
+let navigationBarElements = document.querySelectorAll(".headerBanner span");
 for (let i=0; i< navigationBarElements.length-1; i++) {
   navigationBarElements[i].onclick = ()=>{
     var c = 0;
@@ -257,7 +195,7 @@ async function travelToThePast() {
     var indexTd = document.createElement('td');
     indexTd.innerText = pastData.pastRecommendations[i].index;
     var userTd = document.createElement('td');
-    userTd.innerText = pastData.pastRecommendations[i].author.username;
+    userTd.innerText = pastData.pastRecommendations[i].author.country;
     var nameTd = document.createElement('td');
     nameTd.innerText = pastData.pastRecommendations[i].name;
     nameTd.addEventListener("click", ()=>{
@@ -296,6 +234,7 @@ async function getPastRecommendation (youtubeID) {
   });
   let recommendationData = await response.json();
   updateRecommendation(recommendationData);
+  document.getElementById("recommendationFrame").style.display = "block";
 }
 
 function sortTable(n, dir="asc") {
@@ -388,6 +327,7 @@ if(newRecommendationBtn){
       modalPreview.style.display = "none";
       modalResponse.style.display = "none";
       iFrame.src = "";
+      clearModal();
     })
   
     let previewBtn = document.getElementById("previewBtn");
@@ -420,34 +360,25 @@ if(newRecommendationBtn){
     })
   
     let submitBtn = document.getElementById("submitBtn");
+    submitBtn.removeEventListener("click", sendRecommendationToDB);
     submitBtn.addEventListener("click", sendRecommendationToDB);
   
     function clearModal () {
-      if(document.getElementById("usernameInput") && document.getElementById("country")){
-        document.getElementById("usernameInput").value = "";
-        document.getElementById("country").value = "";
-      }
+      document.getElementById("nameSpan").value = "";
+      document.getElementById("emailSpan").value = "";
       document.getElementById("videoURL").value = "";
       document.getElementById("descriptionTextArea").value = "";
       document.getElementById("recommendationIframeSpan").src = "";
-      document.getElementById("userCheckbox").checked = false;
     }
     
     async function updateModalPreview (){
-      let usernameSpan = document.getElementById("usernameSpan");
-      let countrySpan = document.getElementById("countrySpan");
-      let descriptionSpan = document.getElementById("descriptionSpan");
-      let userData;
-      if (document.getElementById("username") && document.getElementById("country")){
-        usernameSpan.innerText = document.getElementById("usernameInput").value;
-        countrySpan.innerText = document.getElementById("country").value;
-      } else {
-        const response = await fetch("/getUserInfo");
-        userData = await response.json();
-        usernameSpan.innerText = userData.username;
-        countrySpan.innerText = userData.country;
-      }
-      descriptionSpan.innerText = document.getElementById("descriptionTextArea").value;
+      let previewNameSpan = document.getElementById("previewNameSpan");
+      let previewCountrySpan = document.getElementById("previewCountrySpan");
+      let previewDescriptionSpan = document.getElementById("previewDescriptionSpan");
+
+      previewNameSpan.innerText = document.getElementById("nameSpan").value;
+      previewCountrySpan.innerText = document.getElementById("countrySpan").value;
+      previewDescriptionSpan.innerText = document.getElementById("descriptionTextArea").value;
       let youtubeID = getYoutubeID(document.getElementById("videoURL").value)
       iFrame.src = "https://www.youtube.com/embed/" + youtubeID + "?autoplay=1";
     
@@ -456,11 +387,12 @@ if(newRecommendationBtn){
     }
     
     async function sendRecommendationToDB () {
-      let wasCreatedByUser = document.getElementById("userCheckbox").checked;
       let youtubeID = getYoutubeID(document.getElementById("videoURL").value);
-      let usernameSpan = document.getElementById("usernameSpan");
+      let nameSpan = document.getElementById("nameSpan");
+      let languageSpan = document.getElementById("languageSpan");
+      let emailSpan = document.getElementById("emailSpan");
       let countrySpan = document.getElementById("countrySpan");
-      let descriptionSpan = document.getElementById("descriptionSpan");
+      let descriptionTextArea = document.getElementById("descriptionTextArea");
       modalPreview.style.display = "none";
       modalResponse.style.display = "block";
       let saveRecommendationQuery = await fetch("/", {
@@ -470,11 +402,12 @@ if(newRecommendationBtn){
         },
         body : JSON.stringify({
           newRecommendationID:youtubeID, 
-          description:descriptionSpan.innerText, 
-          username:usernameSpan.innerText, 
-          country:countrySpan.innerText, 
-          wasCreatedByUser:wasCreatedByUser,
-          recommendationType:"music",
+          description:descriptionTextArea.value, 
+          name:nameSpan.value, 
+          email: emailSpan.value,
+          language: languageSpan.value,
+          country:countrySpan.value, 
+          recommendationType:"video",
         })
       });
       let response = await saveRecommendationQuery.json();
@@ -485,4 +418,5 @@ if(newRecommendationBtn){
     }
   })
 }
+
 
