@@ -19,27 +19,31 @@ a {
 }
 
 .headerBanner{
-    font-family: 'Monoton', cursive;
     background-color: black;
-    color: white;
     text-align: center;
     flex: 0 1 auto;
-}
-
-#headerTitle {
-    color: rgb(24, 71, 226);
+    color: rgba(177, 172, 172, 0.685);
     text-decoration: none;
 }
 
-#theFuture {
-    flex: 1 1 auto;
-    height: 100%;
-    color: white;
-    background-image: url("https://images.unsplash.com/photo-1462332420958-a05d1e002413?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1040&q=80");
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Do not repeat the image */
-    background-size: cover; 
-    text-align: center;
+.headerBanner span {
+    margin: 0 8px;
+    font-family: 'Fredoka One', cursive;
+}
+
+.headerBanner span:hover {
+    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.activeTense {
+    color: rgb(39, 95, 160) !important;
+}
+
+#headerTitle{
+    font-family: 'Monoton', cursive;
+    color: rgb(39, 95, 160) !important;
 }
 
 .box {
@@ -54,7 +58,7 @@ a {
     font-family: 'Roboto', sans-serif;
     width: 100%;
     text-align: center;
-    background-color: rgb(24, 71, 226);
+    background-color: rgb(39, 95, 160);
     position: fixed;
     bottom: 0;
 }
@@ -69,12 +73,6 @@ a {
 .footer a:hover {
     color: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
     text-shadow: 0 0 20px #0ae678
-}
-
-.navigationBar {
-    width : 100%;
-    height: auto;
-    margin: 0 auto;
 }
 
 #systemDisplay {
@@ -121,35 +119,12 @@ a {
     width:54%
 }
 
-.navigationBar span {
-    font-size: 150%;
-    margin: 0 auto;
-    font-family: 'Roboto', sans-serif;
-    color: rgba(177, 172, 172, 0.685)
-}
-
-.navigationBar span:hover {
-    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.navigationBar p {
-    margin-bottom: 0;
-}
-
 #presentRecommendationInformation{
     color: white;
     display: none;
-    margin: 16px auto;
+    margin: 16px auto 55px;
     padding: 8px 0;
-    border: rgb(24, 71, 226) groove 6px;
-}
-
-.activeTense {
-    color: rgb(248, 239, 239) !important;
-    font-weight: bold;
-    font-size: 1.1em;
+    border: rgb(76, 12, 150) groove 6px;
 }
 
 .table {
@@ -167,15 +142,27 @@ a:hover {
 #thePast {
     display: none;
     color:white;
-    margin: 16px auto;
+    margin: 16px auto 55px;
     padding: 8px 0;
-    border: rgb(24, 71, 226) groove 6px;
+    border: rgb(76, 12, 150) groove 6px;
+}
+
+#theFuture {
+    display: none;
+    color:white;
+    margin: 16px auto 55px;
+    padding: 8px 0;
+    border: rgb(76, 12, 150) groove 6px;
 }
 
 #pastTable {
     width: 100%;
     font-size: 0.618em;
     cursor: pointer;
+}
+
+#futureDiv {
+    display: none;
 }
 
 .modal {
@@ -214,19 +201,6 @@ a:hover {
   cursor: pointer;
 }
 
-.recommendationsLink {
-    border: rgb(24, 71, 226)  4px solid;
-    color: cornsilk;
-    font-weight: 600;
-    border-radius: 4%;
-    background-color: rgb(24, 71, 226) ;
-}
-
-.recommendationsLink:hover {
-    color: black;
-    font-size: 1.618em;
-}
-
 th {
     border-bottom:rgb(24, 71, 226) solid 2px;
     margin-bottom: 3px;
@@ -261,24 +235,6 @@ th {
       }
 }
 
-#registerForm {
-    margin: 0 auto 12px auto;
-    padding: 8px 8px;
-    border: rgb(24, 71, 226) groove 6px;
-}
-
-.disclaimerDiv {
-    margin-bottom: 30px;
-}
-
-#loginDiv {
-    width: 359px;
-    margin: 1.6px auto;
-    padding: 0  8px;
-    border: rgb(24, 71, 226) groove 6px;
-    text-align: center;
-}
-
 label {
     margin-top: 8px;
     display: block;
@@ -286,21 +242,6 @@ label {
     font-size: 0.8em;
 }
 
-#loginDiv input {
-    text-align: center;
-}
-
-.loginWelcome {
-    text-align: center;
-}
-
-.forgotPass {
-    display: block;
-    text-align: left;
-    font-size: 0.8em;
-    color: rgb(24, 71, 226);
-    cursor: pointer;
-}
 
 .row {
     display: flex;
@@ -309,47 +250,20 @@ label {
     width: 100%;
   }
 
-.registerDiv {
-    margin: 0 auto;
-    width: 369px;
-}
 
-#registerIframe {
-    border: solid 2px black;
-    width: 100%;
-}
-
-#retrievePasswordForm {
-    padding: 0 auto;
-}
-
-#retrievePassDiv {
-    display: none;
+#footerMessage{
     text-align: center;
-    margin: 0 auto;
-    padding: 0 auto;
+    margin: 0;
+    font-size: 88%;
 }
 
-#loginDiv button {
-    margin: 6px auto 6px auto ;
-    display: block;
+#addRecommendationBtn {
+    font-size: 1.5em;
+    margin: 0;
 }
 
-#getNewCode {
-    display: none;
-}
-
-#bioText {
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
-}
-
-.aboutText {
-    font-size: 0.8em;
-    color: rgb(219, 213, 213);
-}
-
-#registerIframe {
-    display: none;
+#addRecommendationBtn:hover {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 0;
 }
