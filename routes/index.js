@@ -197,22 +197,27 @@ router.get("/reviewer", (req, res)=>{
 })
 
 router.post("/reviewer", (req, res)=>{
-    Recommendation.findById(req.body.recommendationID)
-    .then((foundRecommendation)=>{
-        foundRecommendation.reviewed = true;
-        if(req.body.reviewerRadioBtn === "true"){
-            foundRecommendation.save(()=>{
-                console.log("The recommendation " + foundRecommendation.name + " was reviewed and sent to the future");
-                res.redirect("/reviewer")
-            })
-        } else {
-            foundRecommendation.status = "void";
-            foundRecommendation.save(()=>{
-                console.log("The recommendation " + foundRecommendation.name + " doesn't work and was sent to the void");
-                res.redirect("/reviewer")
-            })
-        }
-    })
+    if (req.body.password === process.env.REVIEWER_PASS){
+        Recommendation.findById(req.body.recommendationID)
+        .then((foundRecommendation)=>{
+            foundRecommendation.reviewed = true;
+            if(req.body.reviewerRadioBtn === "true"){
+                foundRecommendation.save(()=>{
+                    console.log("The recommendation " + foundRecommendation.name + " was reviewed and sent to the future");
+                    res.redirect("/reviewer")
+                })
+            } else {
+                foundRecommendation.status = "void";
+                foundRecommendation.save(()=>{
+                    console.log("The recommendation " + foundRecommendation.name + " doesn't work and was sent to the void");
+                    res.redirect("/reviewer")
+                })
+            }
+        })
+    } else {
+        console.log("The password is incorrect")
+        res.redirect("/reviewer")
+    }
 })
 
 router.get("/error", (req, res)=>{

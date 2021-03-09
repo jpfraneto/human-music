@@ -142,7 +142,7 @@ a:hover {
 #thePast {
     display: none;
     color:white;
-    margin: 16px auto 55px;
+    margin: 0 auto 55px;
     padding: 8px 0;
     border: rgb(76, 12, 150) groove 6px;
 }
@@ -150,7 +150,7 @@ a:hover {
 #theFuture {
     display: none;
     color:white;
-    margin: 16px auto 55px;
+    margin: 0 auto 55px;
     padding: 8px 0;
     border: rgb(76, 12, 150) groove 6px;
 }
@@ -272,4 +272,11 @@ label {
     margin: 16px;
     width: 300px;
     height: auto;
+}
+
+#reviewerForm label {
+    margin-top: 0px;
+    display: inline-block;
+    text-align: center;
+    font-size: 1em;
 }

@@ -30,7 +30,7 @@
                 ></iframe>
             </div>
     
-            <div class="controls" id="controlsDiv">
+            <div id="reviewerForm">
                 <form action="/reviewer" method="POST">
                     <p>Does the recommendation work?:</p>
 
@@ -44,9 +44,15 @@
                     </div>
 
                     <div>
-                        <label for="no">Nope. Erase it forever</label>
+                        <label for="no">Nope. Send it to the void</label>
                         <input type="radio" id="no" name="reviewerRadioBtn" value="false">
                     </div>
+
+                    <div>
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password">
+                    </div>
+
                     <button type="submit">Submit</button>
                 </form>
             </div>
