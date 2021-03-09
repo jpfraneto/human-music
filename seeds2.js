@@ -1,6 +1,5 @@
 var mongoose = require("mongoose");
-var Recommendation = require("./models/recommendation"),
-    User          = require("./models/user");
+var Recommendation = require("./models/recommendation");
 
 var dataRecs = [
     {
