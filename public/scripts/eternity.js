@@ -1,7 +1,7 @@
 let systemInformation, iFrameGlobalElement, delay, recommendationInfo, voidInfo, currentUser;
 
 let systemStatus = "present";
-let recommmendationType = "video";
+let recommmendationType = "music";
 
 let player, iframe;
 var tag = document.createElement('script');
