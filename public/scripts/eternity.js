@@ -111,6 +111,7 @@ futureBtn.addEventListener("click", async ()=>{
 
 let podcastBtn = document.getElementById("podcastSpan");
 podcastBtn.addEventListener("click", ()=>{
+  hidePast();
   document.getElementById("thePodcast").style.display = "block";
   document.getElementById("recommendationFrame").style.display = "none";
 })
@@ -299,7 +300,6 @@ if(newRecommendationBtn){
   
     let modalInput = document.getElementById("modalInput");
     let youtubeInput = document.getElementById("videoURL");
-    youtubeInput.removeEventListener('blur', checkYoutubeInput);
   
     let modalPreview = document.getElementById("modalPreview");
     let iFrame = document.getElementById("recommendationIframeSpan");
@@ -308,6 +308,7 @@ if(newRecommendationBtn){
   
     modal.style.display = "block";
   
+    youtubeInput.removeEventListener('blur', checkYoutubeInput);
     youtubeInput.addEventListener('blur', checkYoutubeInput);
   
     async function checkYoutubeInput () {
@@ -331,6 +332,11 @@ if(newRecommendationBtn){
     })
   
     let previewBtn = document.getElementById("previewBtn");
+    previewBtn.removeEventListener("click", ()=>{
+      if(document.getElementById("videoURL").value.length>0 && document.getElementById("descriptionTextArea").value.length >0){
+        updateModalPreview()
+      }
+    });
     previewBtn.addEventListener("click", ()=>{
       if(document.getElementById("videoURL").value.length>0 && document.getElementById("descriptionTextArea").value.length >0){
         updateModalPreview()
@@ -387,6 +393,7 @@ if(newRecommendationBtn){
     }
     
     async function sendRecommendationToDB () {
+      console.log("inside the sendRecommendation to DB function");
       let youtubeID = getYoutubeID(document.getElementById("videoURL").value);
       let nameSpan = document.getElementById("nameSpan");
       let languageSpan = document.getElementById("languageSpan");

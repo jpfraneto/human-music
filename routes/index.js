@@ -5,7 +5,6 @@ let router = express.Router();
 let Recommendation = require("../models/recommendation");
 let PodcastEmail = require("../models/podcast");
 let Cycle = require("../models/cycle");
-let chiita = require("../middleware/chiita");
 let theSource = require("../middleware/theSource");
 
 let today = new Date();
@@ -20,7 +19,12 @@ router.get("/", (req, res) => {
             res.render("eternity", {
                 youtubeID : presentRecommendation.youtubeID,
                 elapsedSeconds : elapsedSeconds, 
-                presentRecommendation: presentRecommendation,
+                presentRecommendation: {
+                    name: presentRecommendation.name,
+                    recommenderName : presentRecommendation.author.name || presentRecommendation.author.username,
+                    country : presentRecommendation.author.country,
+                    description : presentRecommendation.description
+                },
             })
         } else {
             console.log("There was not a recommendation in the present. The check system function will run now");
@@ -33,18 +37,15 @@ router.get("/", (req, res) => {
 //CREATE - add new recommendation to db
 router.post("/", function(req,res){
     let newRecommendation = new Recommendation();
-    let author;
-    newRecommendation.type = req.body.recommendationType;
     newRecommendation.author = {
         name: req.body.name,
         country: req.body.country,
         email: req.body.email,
-        discourseUsername: req.body.username,
     }
     newRecommendation.description = req.body.description;
     newRecommendation.language = req.body.language;
     newRecommendation.status = "future";
-    newRecommendation.type = "video";
+    newRecommendation.type = "music";
     newRecommendation.reviewed = false;
     newRecommendation.recommendationDate = new Date();
     let url, duration, name;
@@ -59,7 +60,6 @@ router.post("/", function(req,res){
             newRecommendation.duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
             newRecommendation.save(()=>{
                 console.log("A new recommendation was saved by " + newRecommendation.author.name + ", with the following youtube ID: " + newRecommendation.youtubeID)
-                console.log(newRecommendation);
                 res.json({answer:"The recommendation " + newRecommendation.name + " was added successfully to the future! Thanks "+ newRecommendation.author.name +" for your support." })
             });
         } else {
@@ -88,8 +88,7 @@ router.post("/nextRecommendationQuery", (req,res) => {
         Recommendation.findOne({status:"present"}).exec()
         .then((nextPresentRecommendation)=>{
             answer.recommendation = nextPresentRecommendation;
-            let elapsedTime = (new Date).getTime() - nextPresentRecommendation.startingRecommendationTimestamp;
-            answer.elapsedSeconds = Math.floor(elapsedTime/1000);
+            let elapsedSeconds = 0;
             res.json(answer);
         })
     } else {
@@ -175,6 +174,46 @@ router.post("/checkIfRepeated", (req, res) => {
     .catch(err => console.log("There was an error checking if the video is repeated!"))
 });
 
+router.get("/reviewer", (req, res)=>{
+    Recommendation.findOne({reviewed:false})
+    .then((recommendationForReview)=>{
+        if(recommendationForReview){
+            res.render("reviewer", {
+                youtubeID : recommendationForReview.youtubeID,
+                elapsedSeconds : 0, 
+                recommendation: {
+                    name: recommendationForReview.name,
+                    recommenderName : recommendationForReview.author.name || recommendationForReview.author.username,
+                    country : recommendationForReview.author.country,
+                    description : recommendationForReview.description,
+                    recommendationID : recommendationForReview._id
+                },
+            })
+        } else {
+            console.log("There are not any more recommendations that need to be reviewed, you are going to be redirected to the present")
+            res.redirect("/")
+        }
+    })
+})
+
+router.post("/reviewer", (req, res)=>{
+    Recommendation.findById(req.body.recommendationID)
+    .then((foundRecommendation)=>{
+        foundRecommendation.reviewed = true;
+        if(req.body.reviewerRadioBtn === "true"){
+            foundRecommendation.save(()=>{
+                console.log("The recommendation " + foundRecommendation.name + " was reviewed and sent to the future");
+                res.redirect("/reviewer")
+            })
+        } else {
+            foundRecommendation.status = "void";
+            foundRecommendation.save(()=>{
+                console.log("The recommendation " + foundRecommendation.name + " doesn't work and was sent to the void");
+                res.redirect("/reviewer")
+            })
+        }
+    })
+})
 
 router.get("/error", (req, res)=>{
     res.render("error");
@@ -183,6 +222,5 @@ router.get("/error", (req, res)=>{
 router.get("/:anything", function(req, res) {
     res.render("nonExisting", {today: today});
 })
-
 
 module.exports = router;
