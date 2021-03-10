@@ -72,7 +72,11 @@ a {
 
 .footer a:hover {
     color: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-    text-shadow: 0 0 20px #0ae678
+    text-shadow: 0 0 20px #0ae678;
+}
+
+#addRecommendationBtn:hover {
+    cursor: pointer;
 }
 
 #systemDisplay {
@@ -123,6 +127,13 @@ a {
     color: white;
     display: none;
     margin: 16px auto 55px;
+    padding: 8px 0;
+    border: rgb(76, 12, 150) groove 6px;
+}
+
+#reviewerRecommendationInformation {
+    color: white;
+    margin: 16px auto;
     padding: 8px 0;
     border: rgb(76, 12, 150) groove 6px;
 }
