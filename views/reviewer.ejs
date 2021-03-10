@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Dancing+Script&family=DotGothic16&family=Shippori+Mincho+B1&display=swap" rel="stylesheet">    <link rel="stylesheet" href="/stylesheets/eternity.css">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Dancing+Script&family=DotGothic16&family=Shippori+Mincho+B1&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="/stylesheets/eternity.css">
     <title>Human Music</title>
 </head>
 <body>
@@ -28,6 +29,13 @@
                 allow="autoplay"
                 allowFullScreen 
                 ></iframe>
+            </div>
+
+            <div id="reviewerRecommendationInformation">
+                <p><strong><span id="recommendationName"><%= recommendation.name %></span></strong></p>
+                <p><strong>Recommender: </strong><span id="recommenderName"><%= recommendation.recommenderName %></span></p>
+                <p><strong>Country: </strong><span id="userCountry"><%= recommendation.country %></span></p>
+                <p><strong>Why did you recommend this?: </strong><span id="recommendationDescription"><%= recommendation.description %></span></p>
             </div>
     
             <div id="reviewerForm">
@@ -56,13 +64,7 @@
                     <button type="submit">Submit</button>
                 </form>
             </div>
-    
-            <div id="presentRecommendationInformation" style="display:none">
-                <p><strong><span id="recommendationName"><%= recommendation.name %></span></strong></p>
-                <p><strong>Recommender: </strong><span id="recommenderName"><%= recommendation.recommenderName %></span></p>
-                <p><strong>Country: </strong><span id="userCountry"><%= recommendation.country %></span></p>
-                <p><strong>Why did you recommend this?: </strong><span id="recommendationDescription"><%= recommendation.description %></span></p>
-            </div>
+
         </div>
     </div>
     <div class="column right"></div>

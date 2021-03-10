@@ -1,5 +1,6 @@
 let systemInformation, iFrameGlobalElement, delay, recommendationInfo, voidInfo, currentUser;
 
+let btnSetup = false;
 let systemStatus = "present";
 let recommmendationType = "music";
 
@@ -106,7 +107,10 @@ presentBtn.addEventListener("click", async ()=>{
 
 let futureBtn = document.getElementById("futureSpan");
 futureBtn.addEventListener("click", async ()=>{
-  window.open("https://community.human-music.com");
+  var answer = window.confirm("A new tab with the page of our community will open.");
+  if (answer) {
+    window.open("https://community.human-music.com");
+  }
 })
 
 let podcastBtn = document.getElementById("podcastSpan");
@@ -291,139 +295,127 @@ function getYoutubeID(url){
   return undefined !== url[2]?url[2].split(/[^0-9a-z_\-]/i)[0]:url[0];
 }
 
+let modal = document.getElementById("recommendationModal");
+let modalInput = document.getElementById("modalInput");
+let youtubeInput = document.getElementById("videoURL");
+let modalPreview = document.getElementById("modalPreview");
+let iFrame = document.getElementById("recommendationIframeSpan");
+let modalResponse = document.getElementById("modalResponse");
 let newRecommendationBtn = document.getElementById("addRecommendationBtn");
-if(newRecommendationBtn){
-  newRecommendationBtn.addEventListener("click", (e)=>{
-    e.preventDefault();
-  
-    let modal = document.getElementById("recommendationModal");
-  
-    let modalInput = document.getElementById("modalInput");
-    let youtubeInput = document.getElementById("videoURL");
-  
-    let modalPreview = document.getElementById("modalPreview");
-    let iFrame = document.getElementById("recommendationIframeSpan");
-  
-    let modalResponse = document.getElementById("modalResponse");
-  
-    modal.style.display = "block";
-  
-    youtubeInput.removeEventListener('blur', checkYoutubeInput);
-    youtubeInput.addEventListener('blur', checkYoutubeInput);
-  
-    async function checkYoutubeInput () {
-      let youtubeID = (getYoutubeID(youtubeInput.value));
-      if(youtubeID.length !== 11 && youtubeID.length>0){
-        alert("That URL is not valid, please try a new one.");
-        youtubeInput.value = "";
-      } else {
-        await checkIfRecommendationIsInDatabase(youtubeID);
-      }
-    }
-  
-    let closeModalBtn = document.getElementById("closeModalBtn");
-    closeModalBtn.addEventListener("click", ()=>{
-      modal.style.display = "none"
-      modalInput.style.display = "block";
-      modalPreview.style.display = "none";
-      modalResponse.style.display = "none";
-      iFrame.src = "";
-      clearModal();
-    })
-  
-    let previewBtn = document.getElementById("previewBtn");
-    previewBtn.removeEventListener("click", ()=>{
-      if(document.getElementById("videoURL").value.length>0 && document.getElementById("descriptionTextArea").value.length >0){
-        updateModalPreview()
-      }
-    });
-    previewBtn.addEventListener("click", ()=>{
-      if(document.getElementById("videoURL").value.length>0 && document.getElementById("descriptionTextArea").value.length >0){
-        updateModalPreview()
-      }
-    });
-  
-    let cancelBtn = document.getElementById("cancelBtn");
-    cancelBtn.addEventListener("click", ()=>{
-      modal.style.display = "none";
-      clearModal();
-    })
-  
-    let editBtn = document.getElementById("editBtn");
-    editBtn.addEventListener("click", ()=>{
-      modalInput.style.display = "block";
-      modalPreview.style.display = "none";
-      iFrame.src = "";
-    });
-  
-    let closeModalBtn2 = document.getElementById("closeButtonInResponseModal");
-    closeModalBtn2.addEventListener("click", ()=>{
-      modalInput.style.display = "block";
-      modalResponse.style.display = "none";
-      document.getElementById("responseFromServer").innerText = "The recommendation is being sent to the future...";
-      modal.style.display = "none";
-      iFrame.src = "";
-    })
-  
-    let submitBtn = document.getElementById("submitBtn");
-    submitBtn.removeEventListener("click", sendRecommendationToDB);
-    submitBtn.addEventListener("click", sendRecommendationToDB);
-  
-    function clearModal () {
-      document.getElementById("nameSpan").value = "";
-      document.getElementById("emailSpan").value = "";
-      document.getElementById("videoURL").value = "";
-      document.getElementById("descriptionTextArea").value = "";
-      document.getElementById("recommendationIframeSpan").src = "";
-    }
-    
-    async function updateModalPreview (){
-      let previewNameSpan = document.getElementById("previewNameSpan");
-      let previewCountrySpan = document.getElementById("previewCountrySpan");
-      let previewDescriptionSpan = document.getElementById("previewDescriptionSpan");
 
-      previewNameSpan.innerText = document.getElementById("nameSpan").value;
-      previewCountrySpan.innerText = document.getElementById("countrySpan").value;
-      previewDescriptionSpan.innerText = document.getElementById("descriptionTextArea").value;
-      let youtubeID = getYoutubeID(document.getElementById("videoURL").value)
-      iFrame.src = "https://www.youtube.com/embed/" + youtubeID + "?autoplay=1";
-    
-      modalInput.style.display = "none";
-      modalPreview.style.display = "block";
+newRecommendationBtn.addEventListener("click", (e)=>{
+  modal.style.display = "block";
+})
+
+let previewBtn = document.getElementById("previewBtn");
+previewBtn.addEventListener("click", ()=>{
+  if(document.getElementById("videoURL").value.length>0 && document.getElementById("descriptionTextArea").value.length >0){
+    updateModalPreview()
+  } else {
+    if(document.getElementById("videoURL").value.length>0){
+      alert("Please fill the description of your recommendation!")
+    } else {
+      alert("Please enter the youtube URL of your recommendation!")
     }
-    
-    async function sendRecommendationToDB () {
-      console.log("inside the sendRecommendation to DB function");
-      let youtubeID = getYoutubeID(document.getElementById("videoURL").value);
-      let nameSpan = document.getElementById("nameSpan");
-      let languageSpan = document.getElementById("languageSpan");
-      let emailSpan = document.getElementById("emailSpan");
-      let countrySpan = document.getElementById("countrySpan");
-      let descriptionTextArea = document.getElementById("descriptionTextArea");
-      modalPreview.style.display = "none";
-      modalResponse.style.display = "block";
-      let saveRecommendationQuery = await fetch("/", {
-        method : "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body : JSON.stringify({
-          newRecommendationID:youtubeID, 
-          description:descriptionTextArea.value, 
-          name:nameSpan.value, 
-          email: emailSpan.value,
-          language: languageSpan.value,
-          country:countrySpan.value, 
-          recommendationType:"music",
-        })
-      });
-      let response = await saveRecommendationQuery.json();
-      
-      let responseFromServer = document.getElementById("responseFromServer");
-      responseFromServer.innerText = response.answer;
-      clearModal();
-    }
-  })
+  }
+});
+
+let submitBtn = document.getElementById("submitBtn");
+submitBtn.addEventListener("click", sendRecommendationToDB);
+  
+async function updateModalPreview (){
+  let previewNameSpan = document.getElementById("previewNameSpan");
+  let previewCountrySpan = document.getElementById("previewCountrySpan");
+  let previewDescriptionSpan = document.getElementById("previewDescriptionSpan");
+
+  previewNameSpan.innerText = document.getElementById("nameSpan").value;
+  previewCountrySpan.innerText = document.getElementById("countrySpan").value;
+  previewDescriptionSpan.innerText = document.getElementById("descriptionTextArea").value;
+  let youtubeID = getYoutubeID(document.getElementById("videoURL").value)
+  iFrame.src = "https://www.youtube.com/embed/" + youtubeID + "?autoplay=1";
+
+  modalInput.style.display = "none";
+  modalPreview.style.display = "block";
 }
+  
+async function sendRecommendationToDB () {
+  let youtubeID = getYoutubeID(document.getElementById("videoURL").value);
+  let nameSpan = document.getElementById("nameSpan");
+  let languageSpan = document.getElementById("languageSpan");
+  let emailSpan = document.getElementById("emailSpan");
+  let countrySpan = document.getElementById("countrySpan");
+  let descriptionTextArea = document.getElementById("descriptionTextArea");
+  modalPreview.style.display = "none";
+  modalResponse.style.display = "block";
+  let saveRecommendationQuery = await fetch("/", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({
+      newRecommendationID:youtubeID, 
+      description:descriptionTextArea.value, 
+      name:nameSpan.value, 
+      email: emailSpan.value,
+      language: languageSpan.value,
+      country:countrySpan.value, 
+      recommendationType:"music",
+    })
+  });
+  let response = await saveRecommendationQuery.json();
+  
+  let responseFromServer = document.getElementById("responseFromServer");
+  responseFromServer.innerText = response.answer;
+}
+
+function clearModal () {
+  document.getElementById("nameSpan").value = "";
+  document.getElementById("emailSpan").value = "";
+  document.getElementById("videoURL").value = "";
+  document.getElementById("descriptionTextArea").value = "";
+  document.getElementById("recommendationIframeSpan").src = "";
+  document.getElementById("responseFromServer").innerText = "The recommendation is being sent to the future..."
+}
+
+youtubeInput.addEventListener('blur', checkYoutubeInput);
+
+async function checkYoutubeInput () {
+  let youtubeID = (getYoutubeID(youtubeInput.value));
+  if(youtubeID.length !== 11 && youtubeID.length>0){
+    alert("That URL is not valid, please try a new one.");
+    youtubeInput.value = "";
+  } else {
+    await checkIfRecommendationIsInDatabase(youtubeID);
+  }
+}
+
+let closeModalBtn = document.getElementById("closeModalBtn");
+closeModalBtn.addEventListener("click", ()=>{
+  modal.style.display = "none"
+  modalInput.style.display = "block";
+  modalPreview.style.display = "none";
+  modalResponse.style.display = "none";
+})
+
+let cancelBtn = document.getElementById("cancelBtn");
+cancelBtn.addEventListener("click", ()=>{
+  modal.style.display = "none";
+  clearModal();
+})
+
+let editBtn = document.getElementById("editBtn");
+editBtn.addEventListener("click", ()=>{
+  modalInput.style.display = "block";
+  modalPreview.style.display = "none";
+  iFrame.src = "";
+});
+
+let closeModalBtn2 = document.getElementById("closeButtonInResponseModal");
+closeModalBtn2.addEventListener("click", ()=>{
+  modalInput.style.display = "block";
+  modalResponse.style.display = "none";
+  modal.style.display = "none";
+  clearModal();
+})
 
 

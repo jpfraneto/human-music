@@ -59,6 +59,7 @@ router.post("/", function(req,res){
             newRecommendation.name = response.data.items[0].snippet.title;
             newRecommendation.duration = (moment.duration(durationISO, moment.ISO_8601)).asMilliseconds();
             newRecommendation.save(()=>{
+                console.log(newRecommendation);
                 console.log("A new recommendation was saved by " + newRecommendation.author.name + ", with the following youtube ID: " + newRecommendation.youtubeID)
                 res.json({answer:"The recommendation " + newRecommendation.name + " was added successfully to the future! Thanks "+ newRecommendation.author.name +" for your support." })
             });
