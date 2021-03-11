@@ -126,16 +126,16 @@ a {
 #presentRecommendationInformation{
     color: white;
     display: none;
-    margin: 16px auto 55px;
+    margin: 16px auto 22px;
     padding: 8px 0;
-    border: rgb(76, 12, 150) groove 6px;
+    border: rgb(39, 95, 160) groove 6px;
 }
 
 #reviewerRecommendationInformation {
     color: white;
     margin: 16px auto;
     padding: 8px 0;
-    border: rgb(76, 12, 150) groove 6px;
+    border: rgb(39, 95, 160) groove 6px;
 }
 
 .table {
@@ -153,9 +153,9 @@ a:hover {
 #thePast {
     display: none;
     color:white;
-    margin: 0 auto 55px;
+    margin: 16px auto 55px;
     padding: 8px 0;
-    border: rgb(76, 12, 150) groove 6px;
+    border: rgb(39, 95, 160) groove 6px;
 }
 
 #theFuture {
@@ -163,13 +163,22 @@ a:hover {
     color:white;
     margin: 0 auto 55px;
     padding: 8px 0;
-    border: rgb(76, 12, 150) groove 6px;
+    border: rgb(39, 95, 160) groove 6px;
 }
 
 #pastTable {
     width: 100%;
     font-size: 0.618em;
     cursor: pointer;
+}
+
+#pastTable tr {
+    border-bottom: 0.1px dotted rgb(39, 95, 160);
+}
+
+#pastTable tr:hover {
+    color: black;
+    background-color: rgb(39, 95, 160);
 }
 
 #futureDiv {
