@@ -363,8 +363,6 @@ async function sendRecommendationToDB () {
 }
 
 function clearModal () {
-  document.getElementById("nameSpan").value = "";
-  document.getElementById("emailSpan").value = "";
   document.getElementById("videoURL").value = "";
   document.getElementById("descriptionTextArea").value = "";
   document.getElementById("recommendationIframeSpan").src = "";
