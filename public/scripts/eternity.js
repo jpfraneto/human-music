@@ -79,7 +79,10 @@ async function queryNextRecomendation(displayedID="") {
         body : JSON.stringify({videoID:displayedID, systemStatus:systemStatus})
     });
     let recommendationData = await response.json();
-    let presentID = player.getVideoData()['video_id']
+    let presentID = player.getVideoData()['video_id'];
+    if(recommendationData.recommendation.status === "present"){
+      recommendationData.elapsedSeconds = ((new Date()).getTime() - recommendationData.recommendation.startingRecommendationTimestamp)/1000;
+    }
     if(recommendationData.recommendation.youtubeID !== presentID){
       updateRecommendation(recommendationData);
     }
@@ -175,8 +178,6 @@ function showPast() {
     thePast.style.display = "block";
     pastButtons.style.display = "inline";
   } 
-  let pastLoading = document.getElementById("pastLoading");
-  pastLoading.style.display = "block";
 }
 
 function hidePast() {
@@ -207,12 +208,6 @@ async function travelToThePast() {
       getPastRecommendation(pastData.pastRecommendations[i].youtubeID);
       window.scrollTo(0, 0);
     })
-    nameTd.addEventListener("mouseover", (e)=>{
-       e.target.style.backgroundColor = 'rgb(' + [123,150,50].join(',') + ')';
-    })
-    nameTd.addEventListener("mouseout", (e)=>{
-      e.target.style.backgroundColor = '';
-    })
     var durationTd = document.createElement('td');
     durationTd.innerText = durationFormatting(pastData.pastRecommendations[i].duration);
     tr.appendChild(indexTd);
@@ -223,8 +218,7 @@ async function travelToThePast() {
   }
   sortTable(0, "desc");
   pastTableBody.scrollIntoView();
-  let pastLoading = document.getElementById("pastLoading");
-  pastLoading.style.display = "none";
+  document.getElementById("pastLoading").remove();
   let pastTableSpan = document.getElementById("pastTableSpan");
   pastTableSpan.style.display = "block";
 }
@@ -369,8 +363,6 @@ async function sendRecommendationToDB () {
 }
 
 function clearModal () {
-  document.getElementById("nameSpan").value = "";
-  document.getElementById("emailSpan").value = "";
   document.getElementById("videoURL").value = "";
   document.getElementById("descriptionTextArea").value = "";
   document.getElementById("recommendationIframeSpan").src = "";
