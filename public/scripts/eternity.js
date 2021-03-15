@@ -201,14 +201,14 @@ supportBtn.addEventListener("click", ()=>{
 let loginBtn = document.getElementById("loginSpan");
 if(loginBtn){
   loginBtn.addEventListener("click", ()=>{
-    window.location.href = "http://localhost:3000/login";
+    window.location.href = "https://www.human-music.com/login";
   });
 }
 
 let logoutBtn = document.getElementById("logoutSpan");
 if(logoutBtn){
   logoutBtn.addEventListener("click", ()=>{
-    window.location.href = "http://localhost:3000/logout";
+    window.location.href = "https://www.human-music.com/logout";
   });
 }
 
