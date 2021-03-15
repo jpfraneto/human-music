@@ -8,7 +8,9 @@ var recommendationSchema = new mongoose.Schema({
             ref: "User"
         },
         username: String,
-        country: String
+        country: String,
+        name: String,
+        language: String
     },
     name: String,
     reviewed: Boolean,
