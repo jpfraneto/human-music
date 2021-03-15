@@ -1,5 +1,9 @@
 let systemInformation, iFrameGlobalElement, delay, recommendationInfo, voidInfo, currentUser;
 
+const favoriteButton = document.getElementById("addFavoriteButton");
+const unFavoriteButton = document.getElementById("removeFavoriteButton");
+const favoritesButton = document.getElementById("favoritesButton");
+
 let btnSetup = false;
 let systemStatus = "present";
 let recommmendationType = "music";
@@ -22,7 +26,20 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-  
+  let presentID = player.getVideoData()['video_id']
+  showControls(presentID);
+}
+
+async function showControls(youtubeID) {
+  let response = await fetch("/getRecommendationInformation", {
+    method : "POST",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({recommendationID:youtubeID})
+  });
+  let recommendationData = await response.json();
+  toggleButtons(recommendationData.isFavorited)
 }
 
 function onPlayerError(event) {
@@ -54,6 +71,56 @@ function updateRecommendation (recommendationInformation) {
 
   let recommendationDescription = document.getElementById("recommendationDescription");
   recommendationDescription.innerText = queriedRecommendation.description;
+
+  toggleButtons(recommendationInformation.isFavorited);
+}
+
+favoriteButton.addEventListener("click", async function(e){
+  let presentID = player.getVideoData()['video_id'];
+
+  const response = await fetch("/favorited", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({recommendationID:presentID})
+  });
+  const data = await response.json();
+  if ( data.user ) {
+    toggleButtons(true);
+  } else {
+    alert("You need to be logged in to add that recommendation to your profile!")
+  }
+})
+
+unFavoriteButton.addEventListener("click", async function(e){
+  let presentID = player.getVideoData()['video_id'];
+
+  const response = await fetch("/unfavorited", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({recommendationID:presentID})
+  });
+  const data = await response.json();
+  if ( data.user ) {
+    toggleButtons(false);
+  } else {
+    alert("You need to be logged in to add that recommendation to your profile!")
+  }
+})
+
+function toggleButtons (isFavorited) {
+  if(isFavorited != null){
+    if(isFavorited){
+      favoriteButton.style.display = "none";
+      unFavoriteButton.style.display = "inline-block";
+    } else {
+      favoriteButton.style.display = "inline-block";
+      unFavoriteButton.style.display = "none";
+    }
+}
 }
 
 async function checkIfRecommendationIsInDatabase(videoID){
@@ -93,7 +160,9 @@ pastBtn.addEventListener("click", async ()=>{
   systemStatus = "past";
   showSystemDisplay();
   showPast();
+  hideUser();
   travelToThePast();
+  hideSupport();
   hidePodcast();
   document.getElementById("recommendationFrame").style.display = "none";
 })
@@ -103,24 +172,68 @@ presentBtn.addEventListener("click", async ()=>{
   systemStatus = "present";
   showSystemDisplay();
   hidePast();
+  hideUser();
   queryNextRecomendation();
   hidePodcast();
+  hideSupport();
   document.getElementById("recommendationFrame").style.display = "block";
 })
 
-let futureBtn = document.getElementById("futureSpan");
-futureBtn.addEventListener("click", async ()=>{
-  var answer = window.confirm("A new tab with the page of our community will open.");
-  if (answer) {
-    window.open("https://community.human-music.com");
-  }
-})
 
 let podcastBtn = document.getElementById("podcastSpan");
 podcastBtn.addEventListener("click", ()=>{
   hidePast();
+  hideSupport();
+  hideUser();
   document.getElementById("thePodcast").style.display = "block";
   document.getElementById("recommendationFrame").style.display = "none";
+})
+
+let supportBtn = document.getElementById("supportSpan");
+supportBtn.addEventListener("click", ()=>{
+  hidePast();
+  hidePodcast();
+  hideUser();
+  document.getElementById("theSupport").style.display = "block";
+  document.getElementById("recommendationFrame").style.display = "none";
+});
+
+let loginBtn = document.getElementById("loginSpan");
+if(loginBtn){
+  loginBtn.addEventListener("click", ()=>{
+    window.location.href = "http://localhost:3000/login";
+  });
+}
+
+let logoutBtn = document.getElementById("logoutSpan");
+if(logoutBtn){
+  logoutBtn.addEventListener("click", ()=>{
+    window.location.href = "http://localhost:3000/logout";
+  });
+}
+
+let userBtn = document.getElementById("loggedUserSpan");
+if(userBtn){
+  userBtn.addEventListener("click", async ()=>{
+    systemStatus = "user";
+    showSystemDisplay();
+    showUser();
+    travelToTheUser("favorites");
+    hidePast();
+    hideSupport();
+    hidePodcast();
+    document.getElementById("recommendationFrame").style.display = "none";
+  })
+}
+
+let userFavoritesBtn = document.getElementById("userFavoritesSpan");
+userFavoritesBtn.addEventListener("click", ()=>{
+  travelToTheUser("favorites");
+})
+
+let userRecommendationsBtn = document.getElementById("userRecommendationsSpan");
+userRecommendationsBtn.addEventListener("click", ()=>{
+  travelToTheUser("recommendations");
 })
 
 function hidePodcast() {
@@ -130,14 +243,32 @@ function hidePodcast() {
   } 
 }
 
+function hideSupport() {
+  let theSupport = document.getElementById("theSupport")
+  if (theSupport.style.display === "block") {
+    theSupport.style.display = "none";
+  } 
+}
+
 let navigationBarElements = document.querySelectorAll(".headerBanner span");
-for (let i=0; i< navigationBarElements.length-1; i++) {
+for (let i=0; i< navigationBarElements.length; i++) {
   navigationBarElements[i].onclick = ()=>{
     var c = 0;
-    while (c < navigationBarElements.length-1) {
+    while (c < navigationBarElements.length) {
       navigationBarElements[c++].className = "";
     }
     navigationBarElements[i].className = "activeTense"
+  }
+}
+
+let userButtonElements = document.querySelectorAll(".userButtons span");
+for (let i=0; i< userButtonElements.length; i++) {
+  userButtonElements[i].onclick = ()=>{
+    var c = 0;
+    while (c < userButtonElements.length) {
+      userButtonElements[c++].className = "";
+    }
+    userButtonElements[i].className = "activeTense"
   }
 }
 
@@ -218,7 +349,9 @@ async function travelToThePast() {
   }
   sortTable(0, "desc");
   pastTableBody.scrollIntoView();
-  document.getElementById("pastLoading").remove();
+  if(document.getElementById("pastLoading")){
+    document.getElementById("pastLoading").remove();
+  }
   let pastTableSpan = document.getElementById("pastTableSpan");
   pastTableSpan.style.display = "block";
 }
@@ -235,6 +368,72 @@ async function getPastRecommendation (youtubeID) {
   updateRecommendation(recommendationData);
   document.getElementById("recommendationFrame").style.display = "block";
 }
+
+//************* */
+function showUser() {
+  let theUser = document.getElementById("theUser")
+  if (theUser.style.display === "none") {
+    theUser.style.display = "block";
+  } 
+}
+
+function hideUser() {
+  let theUser = document.getElementById("theUser")
+  if (theUser.style.display === "block") {
+    theUser.style.display = "none";
+  } 
+}
+
+async function travelToTheUser(queryType) {
+  let response = await fetch("/userTimeTravel", {
+    method : "POST",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({userQuery:queryType})
+  });
+
+  let userData = await response.json();
+  let userTableBody = document.getElementById("userTableBody");
+  while (userTableBody.firstChild){
+    userTableBody.removeChild(userTableBody.lastChild);
+  }
+  for (let i=0; i<userData.userRecommendations.length; i++){
+    var tr = document.createElement('tr');
+    var nameTd = document.createElement('td');
+    nameTd.innerText = userData.userRecommendations[i].name;
+    nameTd.addEventListener("click", ()=>{
+      getPastRecommendation(userData.userRecommendations[i].youtubeID);
+      window.scrollTo(0, 0);
+    })
+    var durationTd = document.createElement('td');
+    durationTd.innerText = durationFormatting(userData.userRecommendations[i].duration);
+    tr.appendChild(nameTd);
+    tr.appendChild(durationTd);
+    userTableBody.appendChild(tr);
+  }
+  sortTable(0, "desc");
+  userTableBody.scrollIntoView();
+  if(document.getElementById("userLoading")){
+    document.getElementById("userLoading").remove();
+  }
+  let userTableSpan = document.getElementById("userTableSpan");
+  userTableSpan.style.display = "block";
+}
+
+async function getPastRecommendation (youtubeID) {
+  let response = await fetch("/getRecommendationInformation", {
+    method : "POST",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({recommendationID:youtubeID})
+  });
+  let recommendationData = await response.json();
+  updateRecommendation(recommendationData);
+  document.getElementById("recommendationFrame").style.display = "block";
+}
+//************* */
 
 function sortTable(n, dir="asc") {
   let table, rows, switching, i, x, y, a, b, shouldSwitch, switchCount = 0;
