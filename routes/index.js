@@ -51,7 +51,9 @@ router.post("/", function(req,res){
         newRecommendation.author = {
             id: req.user._id,
             username: req.user.username,
-            country: req.user.country
+            country: req.user.country,
+            name: req.user.username,
+            language: req.user.language
         }
     }
     newRecommendation.description = req.body.description;

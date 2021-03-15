@@ -261,16 +261,16 @@ for (let i=0; i< navigationBarElements.length; i++) {
   }
 }
 
-let userButtonElements = document.querySelectorAll(".userButtons span");
-for (let i=0; i< userButtonElements.length; i++) {
-  userButtonElements[i].onclick = ()=>{
-    var c = 0;
-    while (c < userButtonElements.length) {
-      userButtonElements[c++].className = "";
-    }
-    userButtonElements[i].className = "activeTense"
-  }
-}
+// let userButtonElements = document.querySelectorAll(".userButtons span");
+// for (let i=0; i< userButtonElements.length; i++) {
+//   userButtonElements[i].onclick = ()=>{
+//     var c = 0;
+//     while (c < userButtonElements.length) {
+//       userButtonElements[c++].className = "";
+//     }
+//     userButtonElements[i].className = "activeTense"
+//   }
+// }
 
 let infoBtn = document.getElementById("recommendationInfoBtn");
 infoBtn.addEventListener("click", ()=>{
@@ -521,8 +521,14 @@ async function updateModalPreview (){
   let previewCountrySpan = document.getElementById("previewCountrySpan");
   let previewDescriptionSpan = document.getElementById("previewDescriptionSpan");
 
-  previewNameSpan.innerText = document.getElementById("nameSpan").value;
-  previewCountrySpan.innerText = document.getElementById("countrySpan").value;
+  if(document.getElementById("nameSpan")){
+    previewNameSpan.innerText = document.getElementById("nameSpan").value;
+    previewCountrySpan.innerText = document.getElementById("countrySpan").value;
+  } else {
+    previewNameSpan.innerText = "Your Name";
+    previewCountrySpan.innerText = "Your Country";
+  }
+
   previewDescriptionSpan.innerText = document.getElementById("descriptionTextArea").value;
   let youtubeID = getYoutubeID(document.getElementById("videoURL").value)
   iFrame.src = "https://www.youtube.com/embed/" + youtubeID + "?autoplay=1";
@@ -533,10 +539,13 @@ async function updateModalPreview (){
   
 async function sendRecommendationToDB () {
   let youtubeID = getYoutubeID(document.getElementById("videoURL").value);
-  let nameSpan = document.getElementById("nameSpan");
-  let languageSpan = document.getElementById("languageSpan");
-  let emailSpan = document.getElementById("emailSpan");
-  let countrySpan = document.getElementById("countrySpan");
+  let name, language, email, country;
+  if( document.getElementById("nameSpan") ){
+    name = document.getElementById("nameSpan").value;
+    language = document.getElementById("languageSpan").value;
+    email = document.getElementById("emailSpan").value;
+    country = document.getElementById("countrySpan").value;
+  }
   let descriptionTextArea = document.getElementById("descriptionTextArea");
   modalPreview.style.display = "none";
   modalResponse.style.display = "block";
@@ -548,10 +557,10 @@ async function sendRecommendationToDB () {
     body : JSON.stringify({
       newRecommendationID:youtubeID, 
       description:descriptionTextArea.value, 
-      name:nameSpan.value, 
-      email: emailSpan.value,
-      language: languageSpan.value,
-      country:countrySpan.value, 
+      name: name, 
+      email: email,
+      language: language,
+      country: country, 
       recommendationType:"music",
     })
   });
