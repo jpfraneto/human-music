@@ -14,7 +14,11 @@
 
 <div class="headerBanner">
     <h1><a id="headerTitle" href="/">HUMAN-MUSIC</a></h1>
-    <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="podcastSpan">Podcast</span><span id="futureSpan">Community</span></p>
+    <% if(!currentUser){ %>
+        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="podcastSpan">Podcast</span><span id="supportSpan">Support</span><span id="futureSpan"><a id="loginSpan">Login</a></span></p>
+    <% } else { %>
+        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="podcastSpan">Podcast</span><span id="supportSpan">Support</span><span id="loggedUserSpan">@<%=currentUser.username%></span><span id="logoutSpan">Logout</span></p>
+    <% } %> 
 </div>
 
 <div class="box" id="systemDisplay">
@@ -32,6 +36,11 @@
             </div>
     
             <div class="controls" id="controlsDiv">
+                <% if(!currentUser){ %>
+                    <button id="favoritesButton" onclick="alert('Hello, you need to be logged in to add favorites!')">Favorites</button>
+                <% } %> 
+                <button  id="addFavoriteButton" style="display: none;">Add Favorite</button>
+                <button  id="removeFavoriteButton" style="display: none;">Remove Favorite</button>
                 <button id="recommendationInfoBtn">Recommendation Info</button>
                 <div id="pastButtons" style="display: none;">
                     <button id="randomRecommendationBtn">Random</button>
@@ -52,7 +61,7 @@
             </div>
             <div id="pastTableSpan" style="display:none">
                 <p><strong>This are the recommendations that have been played in the past:</strong></p>
-                <table id="pastTable">
+                <table id="pastTable" class="systemTable">
                     <thead>
                         <tr>
                             <th onclick="sortTable(0)">Index</th>
@@ -66,26 +75,40 @@
             </div>
         </div>
 
-        <div id="theFuture" style="display:none">
-            <div id="futureLoading">
-                <p>The community is loading...</p>
-            </div>
-            <div id="futureDiv">
-                <a href="community.human-music.com" id="discourseButton">Discourse</a> <br>
-                <a id="participateButton">Participate</a><br>
-                <a id="aboutButton">About</a><br>
-                <a id="podcastButton">Podcast</a>
-            </div>
-        </div>
-
         <div id="thePodcast" style="display:none">
-            <p>The first episode of the Human Music Podcast will be released the 1 of April of 2021.</p>
+            <p>The first episode of the Human Music Podcast will be released the 1 of May of 2021.</p>
             <p>If you want to receive news, submit your email down here.</p>
             <form action="/podcast" method="POST">
                 <input type="email" id="podcastEmail" placeholder="Email" name="podcastEmail">
                 <button type="submit">Stay tuned!</button>
             </form>
         </div>
+
+        <div id="theSupport" style="display:none">
+            <p>If you like this place and it adds value to your life, you can support me on Patreon by <a target="_blank" href="https://www.patreon.com/jpfraneto">clicking here</a>.</p>
+        </div>
+
+        <div id="theUser" style="display:none">
+            <div id="userLoading">
+                <p>Your information is loading...</p>
+            </div>
+            <div id="userTableSpan" style="display:none">
+                <p><strong>This are the recommendations that are connected to you:</strong></p>
+                <div class="userButtons">
+                    <p><span id="userFavoritesSpan" class="activeTense">Your Favorites</span><span id="userRecommendationsSpan">Your Recommendations</span>
+                </div>
+                <table id="userTable" class="systemTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(2)">Name</th>
+                            <th onclick="sortTable(3)">Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
     <div class="column right"></div>
 </div>

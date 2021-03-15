@@ -41,6 +41,25 @@ a {
     color: rgb(39, 95, 160) !important;
 }
 
+.userButtons {
+    background-color: black;
+    text-align: center;
+    flex: 0 1 auto;
+    color: rgba(177, 172, 172, 0.685);
+    text-decoration: none;
+}
+
+.userButtons span {
+    margin: 0 8px;
+    font-family: 'Fredoka One', cursive;
+}
+
+.userButtons span:hover {
+    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+    text-decoration: none;
+    cursor: pointer;
+}
+
 #headerTitle{
     font-family: 'Monoton', cursive;
     color: rgb(39, 95, 160) !important;
@@ -166,17 +185,25 @@ a:hover {
     border: rgb(39, 95, 160) groove 6px;
 }
 
-#pastTable {
+#theUser {
+    display: none;
+    color:white;
+    margin: 16px auto 55px;
+    padding: 8px 0;
+    border: rgb(39, 95, 160) groove 6px;
+}
+
+.systemTable {
     width: 100%;
     font-size: 0.618em;
     cursor: pointer;
 }
 
-#pastTable tr {
+.systemTable tr {
     border-bottom: 0.1px dotted rgb(39, 95, 160);
 }
 
-#pastTable tr:hover {
+.systemTable tr:hover {
     color: black;
     background-color: rgb(39, 95, 160);
 }
@@ -299,4 +326,101 @@ label {
     display: inline-block;
     text-align: center;
     font-size: 1em;
+}
+
+#futureSpan a {
+    text-decoration: none;
+}
+
+#registerForm {
+    margin: 0 auto 12px auto;
+    padding: 8px 8px;
+    border: rgb(24, 71, 226) groove 6px;
+}
+
+.disclaimerDiv {
+    margin-bottom: 30px;
+}
+
+#loginDiv {
+    width: 359px;
+    margin: 1.6px auto;
+    padding: 0  8px;
+    border: rgb(24, 71, 226) groove 6px;
+    text-align: center;
+}
+
+label {
+    margin-top: 8px;
+    display: block;
+    text-align: left;
+    font-size: 0.8em;
+}
+
+#loginDiv input {
+    text-align: center;
+}
+
+.loginWelcome {
+    text-align: center;
+}
+
+.forgotPass {
+    display: block;
+    text-align: left;
+    font-size: 0.8em;
+    color: rgb(24, 71, 226);
+    cursor: pointer;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+.registerDiv {
+    margin: 0 auto;
+    width: 369px;
+}
+
+#registerIframe {
+    border: solid 2px black;
+    width: 100%;
+}
+
+#retrievePasswordForm {
+    padding: 0 auto;
+}
+
+#retrievePassDiv {
+    display: none;
+    text-align: center;
+    margin: 0 auto;
+    padding: 0 auto;
+}
+
+#loginDiv button {
+    margin: 6px auto 6px auto ;
+    display: block;
+}
+
+#getNewCode {
+    display: none;
+}
+
+#bioText {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.aboutText {
+    font-size: 0.8em;
+    color: rgb(219, 213, 213);
+}
+
+#registerIframe {
+    display: none;
 }
