@@ -212,6 +212,10 @@ a:hover {
     display: none;
 }
 
+#userTable {
+    display: none;
+}
+
 .modal {
     display: none; /* Hidden by default */
     z-index: 1; /* Sit on top */
