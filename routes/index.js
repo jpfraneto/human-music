@@ -126,7 +126,7 @@ router.post("/nextRecommendationQuery", (req,res) => {
             }
             res.json(answer);
         })
-    } else {
+    } else if (req.body.systemStatus === "past") {
         Recommendation.findOne({youtubeID:req.body.videoID}).exec()
         .then((queriedVideo) => { 
             Recommendation.findOne({index: queriedVideo.index+1}).exec()
@@ -152,6 +152,24 @@ router.post("/nextRecommendationQuery", (req,res) => {
                 }
             })
         })   
+    } else if (req.body.systemStatus === "favorites"){
+        User.findOne({username:req.user.username}).populate("favoriteRecommendations")
+        .then((foundUser)=>{
+            let favoriteRecommendations = foundUser.favoriteRecommendations;
+            answer.recommendation = favoriteRecommendations[Math.floor(Math.random()*favoriteRecommendations.length)]
+            answer.isFavorited = true;
+            answer.elapsedSeconds = 0;
+            res.json(answer);
+        })
+    } else if (req.body.systemStatus === "recommendations"){
+        User.findOne({username:req.user.username}).populate("recommendations")
+        .then((foundUser)=>{
+            let userRecommendations = foundUser.recommendations;
+            answer.recommendation = userRecommendations[Math.floor(Math.random()*userRecommendations.length)]
+            answer.isFavorited = true;
+            answer.elapsedSeconds = 0;
+            res.json(answer);
+        })
     }
 })
 

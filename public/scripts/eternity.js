@@ -215,10 +215,11 @@ if(logoutBtn){
 let userBtn = document.getElementById("loggedUserSpan");
 if(userBtn){
   userBtn.addEventListener("click", async ()=>{
-    systemStatus = "user";
     showSystemDisplay();
     showUser();
     travelToTheUser("favorites");
+    document.getElementById("userFavoritesSpan").className = "activeTense";
+    document.getElementById("userRecommendationsSpan").className = "";
     hidePast();
     hideSupport();
     hidePodcast();
@@ -260,17 +261,6 @@ for (let i=0; i< navigationBarElements.length; i++) {
     navigationBarElements[i].className = "activeTense"
   }
 }
-
-// let userButtonElements = document.querySelectorAll(".userButtons span");
-// for (let i=0; i< userButtonElements.length; i++) {
-//   userButtonElements[i].onclick = ()=>{
-//     var c = 0;
-//     while (c < userButtonElements.length) {
-//       userButtonElements[c++].className = "";
-//     }
-//     userButtonElements[i].className = "activeTense"
-//   }
-// }
 
 let infoBtn = document.getElementById("recommendationInfoBtn");
 infoBtn.addEventListener("click", ()=>{
@@ -384,7 +374,21 @@ function hideUser() {
   } 
 }
 
+
+let userButtonElements = document.querySelectorAll(".userButtons span");
+for (let i=0; i< userButtonElements.length; i++) {
+  userButtonElements[i].onclick = ()=>{
+    var c = 0;
+    while (c < userButtonElements.length) {
+      userButtonElements[c++].className = "";
+    }
+    userButtonElements[i].className = "activeTense"
+  }
+}
+
 async function travelToTheUser(queryType) {
+  systemStatus = queryType;
+  document.getElementById("userTable").style.display = "none"
   let response = await fetch("/userTimeTravel", {
     method : "POST",
     headers: {
@@ -419,6 +423,7 @@ async function travelToTheUser(queryType) {
   }
   let userTableSpan = document.getElementById("userTableSpan");
   userTableSpan.style.display = "block";
+  document.getElementById("userTable").style.display = "inline"
 }
 
 async function getPastRecommendation (youtubeID) {
