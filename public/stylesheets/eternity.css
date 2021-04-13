@@ -193,6 +193,14 @@ a:hover {
     border: rgb(39, 95, 160) groove 6px;
 }
 
+#theSupport {
+    font-size: 0.8em;
+}
+
+#thePodcast {
+    font-size: 0.8em;
+}
+
 .systemTable {
     width: 100%;
     font-size: 0.618em;
@@ -427,4 +435,8 @@ label {
 
 #registerIframe {
     display: none;
+}
+
+#p5 {
+    margin-bottom: 18px;
 }
