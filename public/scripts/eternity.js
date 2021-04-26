@@ -163,7 +163,7 @@ pastBtn.addEventListener("click", async ()=>{
   hideUser();
   travelToThePast();
   hideSupport();
-  hidePodcast();
+
   document.getElementById("recommendationFrame").style.display = "none";
 })
 
@@ -174,25 +174,13 @@ presentBtn.addEventListener("click", async ()=>{
   hidePast();
   hideUser();
   queryNextRecomendation();
-  hidePodcast();
   hideSupport();
   document.getElementById("recommendationFrame").style.display = "block";
-})
-
-
-let podcastBtn = document.getElementById("podcastSpan");
-podcastBtn.addEventListener("click", ()=>{
-  hidePast();
-  hideSupport();
-  hideUser();
-  document.getElementById("thePodcast").style.display = "block";
-  document.getElementById("recommendationFrame").style.display = "none";
 })
 
 let supportBtn = document.getElementById("supportSpan");
 supportBtn.addEventListener("click", ()=>{
   hidePast();
-  hidePodcast();
   hideUser();
   document.getElementById("theSupport").style.display = "block";
   document.getElementById("recommendationFrame").style.display = "none";
@@ -222,7 +210,6 @@ if(userBtn){
     document.getElementById("userRecommendationsSpan").className = "";
     hidePast();
     hideSupport();
-    hidePodcast();
     document.getElementById("recommendationFrame").style.display = "none";
   })
 }
@@ -236,13 +223,6 @@ let userRecommendationsBtn = document.getElementById("userRecommendationsSpan");
 userRecommendationsBtn.addEventListener("click", ()=>{
   travelToTheUser("recommendations");
 })
-
-function hidePodcast() {
-  let thePodcast = document.getElementById("thePodcast")
-  if (thePodcast.style.display === "block") {
-    thePodcast.style.display = "none";
-  } 
-}
 
 function hideSupport() {
   let theSupport = document.getElementById("theSupport")

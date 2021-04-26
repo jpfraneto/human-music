@@ -15,9 +15,9 @@
 <div class="headerBanner">
     <h1><a id="headerTitle" href="/">HUMAN-MUSIC</a></h1>
     <% if(!currentUser){ %>
-        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="podcastSpan">Podcast</span><span id="supportSpan">About</span><span id="futureSpan"><a id="loginSpan">Login</a></span></p>
+        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span id="futureSpan"><a id="loginSpan">Login</a></span></p>
     <% } else { %>
-        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="podcastSpan">Podcast</span><span id="supportSpan">About</span><span id="loggedUserSpan">@<%=currentUser.username%></span><span id="logoutSpan">Logout</span></p>
+        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span id="loggedUserSpan">@<%=currentUser.username%></span><span id="logoutSpan">Logout</span></p>
     <% } %> 
 </div>
 
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div id="thePodcast" style="display:none">
+<!--         <div id="thePodcast" style="display:none">
             <p>The Human Music Podcast is an exploration of what it means to be a human being. I will hold the space for a conversation around what has music been in the life of the invitee, which particular pieces have been of more importance, and through that explore what music means for us.</p>
             <p>The first episode will be released the 1 of May of 2021.</p>
             <p>If you want to receive news, submit your email down here.</p>
@@ -83,7 +83,7 @@
                 <input type="email" id="podcastEmail" placeholder="Email" name="podcastEmail">
                 <button type="submit">Stay tuned!</button>
             </form>
-        </div>
+        </div> -->
 
         <div id="theSupport" style="display:none">
             <p id="p1">Human Music is a project that starts with the dream of a better future. I experience joy through the listening of music that I have never heard before, and I experience joy
