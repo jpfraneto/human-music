@@ -150,6 +150,10 @@ a {
     border: rgb(39, 95, 160) groove 6px;
 }
 
+#presentRecommendationInformation label {
+    text-align: center;
+}
+
 #reviewerRecommendationInformation {
     color: white;
     margin: 16px auto;
@@ -439,4 +443,20 @@ label {
 
 #p5 {
     margin-bottom: 18px;
+}
+
+#commentsDiv {
+    border: rgb(39, 95, 160) groove 6px;
+    text-align: center;
+    margin: 10px 0 55px 0;
+}
+
+#commentsDiv label {
+    text-align: center;
+}
+
+.commentDiv {
+    border: 1px solid rgb(39, 95, 160);
+    background-color: rgba(45, 45, 45, 0.605);
+    margin: 8px;
 }

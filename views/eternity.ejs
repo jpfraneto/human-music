@@ -15,9 +15,9 @@
 <div class="headerBanner">
     <h1><a id="headerTitle" href="/">HUMAN-MUSIC</a></h1>
     <% if(!currentUser){ %>
-        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span id="futureSpan"><a id="loginSpan">Login</a></span></p>
+        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="communitySpan">Community</span><span id="supportSpan">About</span><span id="futureSpan"><a id="loginSpan">Login</a></span></p>
     <% } else { %>
-        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span id="loggedUserSpan">@<%=currentUser.username%></span><span id="logoutSpan">Logout</span></p>
+        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="communitySpan">Community</span><span id="supportSpan">About</span><span id="loggedUserSpan">@<%=currentUser.username%></span><span id="logoutSpan">Logout</span></p>
     <% } %> 
 </div>
 
@@ -52,7 +52,30 @@
                 <p><strong>Recommender: </strong><span id="recommenderName"><%= presentRecommendation.recommenderName %></span></p>
                 <p><strong>Country: </strong><span id="userCountry"><%= presentRecommendation.country %></span></p>
                 <p><strong>Why did you recommend this?: </strong><span id="recommendationDescription"><%= presentRecommendation.description %></span></p>
-            </div>
+                <hr>
+                <h4>Comments:</h4>
+                    <div id="commentsDisplay">
+                        <% presentRecommendation.comments.forEach((comment)=>{ %>
+                            <div class="commentDiv">
+                                <p class='recommendationComment'> <%= comment.comment %></p>
+                                <p><strong>Author: </strong> <%= comment.author%> </p>
+                                <p><strong>Date: <%= comment.date %></strong></p>
+                            </div>
+                        <% }) %>
+                    </div>
+                    <form id="newCommentForm" name="newCommentForm">
+                        <div>
+                            <label for="newComment">Add Comment:</label>
+                            <textarea name="newComment" id="newComment" cols="30" rows="10"></textarea>
+                        </div>
+                        <div>
+                            <label for="commenterName">Name:</label>
+                            <input type="text" id="commenterName" name="commenterName">
+                        </div><br>
+                        <input type="submit" value="Comment">
+                    </form>
+                    <br>
+                </div>
         </div>
 
         <div id="thePast" style="display:none">

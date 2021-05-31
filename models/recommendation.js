@@ -12,6 +12,11 @@ var recommendationSchema = new mongoose.Schema({
         name: String,
         language: String
     },
+    comments: [{
+        author: String,
+        date: {type: Date, default: Date.now},
+        comment: String
+    }],
     name: String,
     reviewed: Boolean,
     type: String,

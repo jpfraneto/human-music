@@ -73,6 +73,10 @@ function updateRecommendation (recommendationInformation) {
   recommendationDescription.innerText = queriedRecommendation.description;
 
   toggleButtons(recommendationInformation.isFavorited);
+  clearRecommendationComments();
+  queriedRecommendation.comments.forEach((comment) => {
+    addNewCommentToDisplay(comment)
+  })
 }
 
 favoriteButton.addEventListener("click", async function(e){
@@ -184,6 +188,14 @@ supportBtn.addEventListener("click", ()=>{
   hideUser();
   document.getElementById("theSupport").style.display = "block";
   document.getElementById("recommendationFrame").style.display = "none";
+});
+
+let communityBtn = document.getElementById('communitySpan');
+communityBtn.addEventListener("click", ()=>{
+  hidePast();
+  hideUser();
+  alert('This functionality is aaaalmost ready!')
+  // window.open("https://community.human-music.com")
 });
 
 let loginBtn = document.getElementById("loginSpan");
@@ -602,5 +614,55 @@ closeModalBtn2.addEventListener("click", ()=>{
   modal.style.display = "none";
   clearModal();
 })
+
+var newCommentForm = document.getElementById('newCommentForm');
+newCommentForm.onsubmit = async (e) => {
+  e.preventDefault();
+  let newComment = {};
+  newComment.commenterName = document.getElementById('commenterName').value;
+  newComment.comment = document.getElementById('newComment').value;
+  var recommendationID = player.getVideoData()['video_id'];
+  fetch("/addNewCommentToRecommendation", {
+    method : "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({
+      recommendationID : recommendationID,
+      commenter : newComment.commenterName,
+      comment : newComment.comment
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data.success) {
+      document.getElementById('commenterName').value = "";
+      document.getElementById('newComment').value = "";
+      addNewCommentToDisplay(newComment)
+    } else {
+      alert('Oops, there was a problem saving your comment. Please try again.')
+    }
+  })
+}
+
+function addNewCommentToDisplay (comment){
+  let newDiv = document.createElement('div')
+  newDiv.classList.add('commentDiv');
+  let newCommentP = document.createElement('p');
+  newCommentP.classList.add('recommendationComment');
+  newCommentP.innerText = comment.comment;
+  let newAuthorP = document.createElement('p');
+  newAuthorP.innerHTML = '<p><strong>Author: </strong> ' + comment.commenterName + '</p>';
+  let newDateP = document.createElement('p');
+  newDateP.innerHTML = '<p><strong>Date: </strong> ' + new Date() + '</p>';
+  newDiv.appendChild(newCommentP);
+  newDiv.appendChild(newAuthorP);
+  newDiv.appendChild(newDateP);
+  document.getElementById('commentsDisplay').appendChild(newDiv);
+}
+
+function clearRecommendationComments () {
+  document.getElementById('commentsDisplay').innerHTML = "";
+}
 
 

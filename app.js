@@ -50,8 +50,13 @@ if(process.env.NODE_ENV === 'production') {
 
 // setTimeout(theSource.bigBang);
 
-console.log("The app.js file is running again.");
-setTimeout(theSource.checkSystem);
+// console.log("The app.js file is running again.");
+// setTimeout(theSource.checkSystem);
+
+Recommendation.findOne({status:'present'})
+.then((presentRecommendation) => {
+  console.log(presentRecommendation);
+})
 
 const sessionConfig = {
   secret: "Music to nourish your soul and activate your mind",

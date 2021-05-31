@@ -14,7 +14,7 @@ const cryptoRandomString = require('crypto-random-string');
 let today = new Date();
 // Root Route
 router.get("/", (req, res) => {
-    Recommendation.findOne({status:"present"}).exec()
+    Recommendation.findOne({status:"present"}).populate('comments').exec()
     .then((presentRecommendation) => {
         let now = (new Date).getTime();
         if (presentRecommendation) {
@@ -27,7 +27,8 @@ router.get("/", (req, res) => {
                     name: presentRecommendation.name,
                     recommenderName : presentRecommendation.author.name || presentRecommendation.author.username,
                     country : presentRecommendation.author.country,
-                    description : presentRecommendation.description
+                    description : presentRecommendation.description,
+                    comments : presentRecommendation.comments
                 },
             })
         } else {
@@ -544,6 +545,26 @@ router.get('/api/user_data', function(req, res) {
         });
     }
 });
+
+router.post('/addNewCommentToRecommendation', (req, res) => {
+    let newComment = {
+        author : req.body.commenter,
+        comment: req.body.comment
+    }
+    Recommendation.findOne({youtubeID: req.body.recommendationID})
+    .then((thisRecommendation) => {
+        thisRecommendation.comments.push(newComment);
+        thisRecommendation.save()
+        .then(()=>{
+            console.log('The comment by ' + newComment.author + ' was saved to this recommendation');
+            res.json({success:true, message : 'Comment added to the recommendation'})
+        })
+        .catch((error) => {
+            console.log('There was a problem adding the comment');
+            res.json({success:false, message : 'Comment NOT added to the recommendation'})
+        })
+    })
+})
 
 // show login form
 router.get("/login", function(req, res){
