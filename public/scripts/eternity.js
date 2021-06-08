@@ -47,7 +47,7 @@ function onPlayerError(event) {
 }
 
 function onPlayerStateChange(event) {
-    //Do something when the player state changes. When the video is over, update it with the next one.
+    //When the video is over, update it with the next one.
     let displayedID = player.getVideoData()['video_id']
     if (event.data === 0) {
         setTimeout(()=>{
@@ -59,6 +59,9 @@ function onPlayerStateChange(event) {
 function updateRecommendation (recommendationInformation) {
   queriedRecommendation = recommendationInformation.recommendation;
   player.loadVideoById(queriedRecommendation.youtubeID, recommendationInformation.elapsedSeconds);
+  if(recommendationInformation.recommendation.status === 'past') {
+    player.seekTo(0);
+  };
 
   let userCountry = document.getElementById("userCountry");
   userCountry.innerText = queriedRecommendation.author.country;
@@ -142,21 +145,22 @@ async function checkIfRecommendationIsInDatabase(videoID){
 }
 
 async function queryNextRecomendation(displayedID="") {
-    let response = await fetch("/nextRecommendationQuery", {
-        method : "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body : JSON.stringify({videoID:displayedID, systemStatus:systemStatus})
-    });
-    let recommendationData = await response.json();
-    let presentID = player.getVideoData()['video_id'];
-    if(recommendationData.recommendation.status === "present"){
-      recommendationData.elapsedSeconds = ((new Date()).getTime() - recommendationData.recommendation.startingRecommendationTimestamp)/1000;
-    }
-    if(recommendationData.recommendation.youtubeID !== presentID){
-      updateRecommendation(recommendationData);
-    }
+  let response = await fetch("/nextRecommendationQuery", {
+      method : "POST",
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body : JSON.stringify({videoID:displayedID, systemStatus:systemStatus})
+  });
+  let recommendationData = await response.json();
+  let presentID = player.getVideoData()['video_id'];
+  if(recommendationData.recommendation.status === "present"){
+    recommendationData.elapsedSeconds = ((new Date()).getTime() - recommendationData.recommendation.startingRecommendationTimestamp)/1000;
+  }
+  if(recommendationData.recommendation.youtubeID !== presentID){
+    recommendationData.elapsedSeconds = 0;
+    updateRecommendation(recommendationData);
+  }
 }
 
 let pastBtn = document.getElementById("pastSpan");
@@ -167,7 +171,6 @@ pastBtn.addEventListener("click", async ()=>{
   hideUser();
   travelToThePast();
   hideSupport();
-
   document.getElementById("recommendationFrame").style.display = "none";
 })
 
@@ -188,14 +191,6 @@ supportBtn.addEventListener("click", ()=>{
   hideUser();
   document.getElementById("theSupport").style.display = "block";
   document.getElementById("recommendationFrame").style.display = "none";
-});
-
-let communityBtn = document.getElementById('communitySpan');
-communityBtn.addEventListener("click", ()=>{
-  hidePast();
-  hideUser();
-  alert('This functionality is aaaalmost ready!')
-  // window.open("https://community.human-music.com")
 });
 
 let loginBtn = document.getElementById("loginSpan");
@@ -259,8 +254,10 @@ infoBtn.addEventListener("click", ()=>{
   let recommendationInfo = document.getElementById("presentRecommendationInformation");
   if (recommendationInfo.style.display === "none") {
     recommendationInfo.style.display = "block";
+    infoBtn.classList.toggle('activeTense');
   } else {
     recommendationInfo.style.display = "none";
+    infoBtn.classList.toggle('activeTense');
   }
 })
 

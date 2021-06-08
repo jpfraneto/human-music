@@ -460,3 +460,17 @@ label {
     background-color: rgba(45, 45, 45, 0.605);
     margin: 8px;
 }
+
+.controlsBtn {
+    margin: 0 8px;
+    cursor: pointer;
+    font-family: 'Fredoka One', cursive;
+}
+
+.controls a {
+    color: rgba(177, 172, 172, 0.685);
+}
+
+.controlsBtn:hover {
+    font-weight: bold;
+}

@@ -103,6 +103,25 @@ router.post("/podcast", (req, res)=>{
     })
 })
 
+router.get('/thevoid', (req, res) => {
+    if(req.user){
+        console.log(req.user);
+        if(req.user.username === 'chocapec') {
+            console.log('The user is chocapec');
+            Recommendation.find({})
+            .then((allRecommendations) => {
+                res.render('the-void', {allRecommendations:allRecommendations});
+            })
+        } else {
+            console.log('you are not allowed to be here!');
+            res.redirect('/');
+        }
+    } else {
+        console.log('you are not allowed to be here!');
+        res.redirect('/');
+    }
+})
+
 router.post("/nextRecommendationQuery", (req,res) => {
     let answer = {};
     if (req.body.systemStatus === "present") {
@@ -562,6 +581,16 @@ router.post('/addNewCommentToRecommendation', (req, res) => {
         .catch((error) => {
             console.log('There was a problem adding the comment');
             res.json({success:false, message : 'Comment NOT added to the recommendation'})
+        })
+    })
+})
+
+router.post('/sendRecommendationToTheVoid', (req, res) => {
+    Recommendation.findById(req.body.recommendationForVoid)
+    .then((thisRecommendation) => {
+        thisRecommendation.status = 'void';
+        thisRecommendation.save(()=> {
+            res.json({message:'The recommendation '+ thisRecommendation.name + 'was successfully sent to the void'})
         })
     })
 })
