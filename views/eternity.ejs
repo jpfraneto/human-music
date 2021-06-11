@@ -15,9 +15,9 @@
 <div class="headerBanner">
     <h1><a id="headerTitle" href="/">HUMAN-MUSIC</a></h1>
     <% if(!currentUser){ %>
-        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span id="futureSpan"><a id="loginSpan">Login</a></span></p>
+        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span id="contributeSpan">Contribute</span><span id="futureSpan"><a id="loginSpan">Login</a></span></p>
     <% } else { %>
-        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span id="loggedUserSpan">@<%=currentUser.username%></span><span id="logoutSpan">Logout</span></p>
+        <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span id="contributeSpan">Contribute</span><span id="loggedUserSpan">@<%=currentUser.username%></span><span id="logoutSpan">Logout</span></p>
     <% } %> 
 </div>
 

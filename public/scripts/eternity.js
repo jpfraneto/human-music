@@ -186,12 +186,17 @@ presentBtn.addEventListener("click", async ()=>{
 })
 
 let supportBtn = document.getElementById("supportSpan");
-supportBtn.addEventListener("click", ()=>{
+supportBtn.addEventListener("click", () => {
   hidePast();
   hideUser();
   document.getElementById("theSupport").style.display = "block";
   document.getElementById("recommendationFrame").style.display = "none";
 });
+
+let contributeBtn = document.getElementById("contributeSpan");
+contributeBtn.addEventListener("click", ()=>{
+  window.open("https://github.com/jpfraneto/human-music", '_blank')
+})
 
 let loginBtn = document.getElementById("loginSpan");
 if(loginBtn){
