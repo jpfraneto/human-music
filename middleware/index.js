@@ -136,6 +136,7 @@ middlewareObj.sendVerificationEmail = async function (
 };
 
 middlewareObj.sendResetEmail = async function (username, userEmail, resetCode) {
+  console.log('here', username, userEmail, resetCode);
   const verificationUrl =
     'https://www.human-music.com/password_reset/' + resetCode;
   // const verificationUrl = "http://localhost:3000/password_reset/" + resetCode;
@@ -157,6 +158,7 @@ middlewareObj.sendResetEmail = async function (username, userEmail, resetCode) {
         console.log(`Error: ${err}`);
       } else {
         console.log(`Response: ${info}`);
+        console.log(info);
       }
     }
   );
