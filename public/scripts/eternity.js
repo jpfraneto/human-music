@@ -215,7 +215,7 @@ supportBtn.addEventListener('click', () => {
 
 let podcastBtn = document.getElementById('podcastSpan');
 podcastBtn.addEventListener('click', () => {
-  window.open('http://podcast.human-music.com', '_blank');
+  window.open('http://www.jpfraneto.com/podcast', '_blank');
 });
 
 let loginBtn = document.getElementById('loginSpan');
