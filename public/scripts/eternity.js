@@ -183,22 +183,10 @@ async function queryNextRecomendation(displayedID = '') {
   }
 }
 
-let pastBtn = document.getElementById('pastSpan');
-pastBtn.addEventListener('click', async () => {
-  systemStatus = 'past';
-  showSystemDisplay();
-  showPast();
-  hideUser();
-  travelToThePast();
-  hideSupport();
-  document.getElementById('recommendationFrame').style.display = 'none';
-});
-
 let presentBtn = document.getElementById('presentSpan');
 presentBtn.addEventListener('click', async () => {
   systemStatus = 'present';
   showSystemDisplay();
-  hidePast();
   hideUser();
   queryNextRecomendation();
   hideSupport();
@@ -207,28 +195,22 @@ presentBtn.addEventListener('click', async () => {
 
 let supportBtn = document.getElementById('supportSpan');
 supportBtn.addEventListener('click', () => {
-  hidePast();
   hideUser();
   document.getElementById('theSupport').style.display = 'block';
   document.getElementById('recommendationFrame').style.display = 'none';
 });
 
-let podcastBtn = document.getElementById('podcastSpan');
-podcastBtn.addEventListener('click', () => {
-  window.open('http://www.jpfraneto.com/podcast', '_blank');
-});
-
 let loginBtn = document.getElementById('loginSpan');
 if (loginBtn) {
   loginBtn.addEventListener('click', () => {
-    window.location.href = 'https://www.human-music.com/login';
+    window.location.href = 'https://www.humanmusic.xyz/login';
   });
 }
 
 let logoutBtn = document.getElementById('logoutSpan');
 if (logoutBtn) {
   logoutBtn.addEventListener('click', () => {
-    window.location.href = 'https://www.human-music.com/logout';
+    window.location.href = 'https://www.humanmusic.xyz/logout';
   });
 }
 
@@ -240,7 +222,6 @@ if (userBtn) {
     travelToTheUser('favorites');
     document.getElementById('userFavoritesSpan').className = 'activeTense';
     document.getElementById('userRecommendationsSpan').className = '';
-    hidePast();
     hideSupport();
     document.getElementById('recommendationFrame').style.display = 'none';
   });
@@ -308,62 +289,6 @@ function showSystemDisplay() {
 function hideSystemDisplay() {
   let systemDisplay = document.getElementById('systemDisplay');
   systemDisplay.style.display = 'none';
-}
-
-function showPast() {
-  let thePast = document.getElementById('thePast');
-  let pastButtons = document.getElementById('pastButtons');
-  if (thePast.style.display === 'none') {
-    thePast.style.display = 'block';
-    pastButtons.style.display = 'inline';
-  }
-}
-
-function hidePast() {
-  let thePast = document.getElementById('thePast');
-  let pastButtons = document.getElementById('pastButtons');
-  if (thePast.style.display === 'block') {
-    thePast.style.display = 'none';
-    pastButtons.style.display = 'none';
-  }
-}
-
-async function travelToThePast() {
-  let response = await fetch('/pastTimeTravel');
-  let pastData = await response.json();
-  let pastTableBody = document.getElementById('pastTableBody');
-  while (pastTableBody.firstChild) {
-    pastTableBody.removeChild(pastTableBody.lastChild);
-  }
-  for (let i = 0; i < pastData.pastRecommendations.length; i++) {
-    var tr = document.createElement('tr');
-    var indexTd = document.createElement('td');
-    indexTd.innerText = pastData.pastRecommendations[i].index;
-    var userTd = document.createElement('td');
-    userTd.innerText = pastData.pastRecommendations[i].author.country;
-    var nameTd = document.createElement('td');
-    nameTd.innerText = pastData.pastRecommendations[i].name;
-    nameTd.addEventListener('click', () => {
-      getPastRecommendation(pastData.pastRecommendations[i].youtubeID);
-      window.scrollTo(0, 0);
-    });
-    var durationTd = document.createElement('td');
-    durationTd.innerText = durationFormatting(
-      pastData.pastRecommendations[i].duration
-    );
-    tr.appendChild(indexTd);
-    tr.appendChild(userTd);
-    tr.appendChild(nameTd);
-    tr.appendChild(durationTd);
-    pastTableBody.appendChild(tr);
-  }
-  sortTable(0, 'desc');
-  pastTableBody.scrollIntoView();
-  if (document.getElementById('pastLoading')) {
-    document.getElementById('pastLoading').remove();
-  }
-  let pastTableSpan = document.getElementById('pastTableSpan');
-  pastTableSpan.style.display = 'block';
 }
 
 async function getPastRecommendation(youtubeID) {

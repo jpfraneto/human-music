@@ -21,12 +21,11 @@
     <div class="headerBanner">
         <h1><a id="headerTitle" href="/">HUMAN-MUSIC</a></h1>
         <% if(!currentUser){ %>
-            <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span
-                    id="supportSpan">About</span><span id="podcastSpan">Podcast</span><span id="futureSpan"><a
-                        id="loginSpan">Login</a></span></p>
+            <p><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span
+                    id="futureSpan"><a id="loginSpan">Login</a></span></p>
             <% } else { %>
-                <p><span id="pastSpan">History</span><span id="presentSpan" class="activeTense">Radio</span><span
-                        id="supportSpan">About</span><span id="podcastSpan">Podcast</span><span id="loggedUserSpan">@
+                <p><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span
+                        id="loggedUserSpan">@
                         <%=currentUser.username%>
                     </span><span id="logoutSpan">Logout</span></p>
                 <% } %>
@@ -573,8 +572,6 @@
     </div>
 
     <div class="footer">
-        <p id="tosf"><span><a target="_blank" href="http://www.theopensourcefactory.com">The Open Source Factory ™
-                    .</a></span></p>
         <a id="addRecommendationBtn">Add Music Recommendation</a><br>
         <p id="footerMessage">This project is in memory of David Foster Wallace and all of those who had lost the fight
             against their own demons.</p>

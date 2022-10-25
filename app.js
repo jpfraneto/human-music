@@ -20,6 +20,7 @@ let express = require('express'),
 let systemStatus;
 
 const indexRoutes = require('./routes/index');
+const apiRoutes = require('./routes/api');
 
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect(process.env.DATABASE_MONGODB, {
@@ -79,6 +80,7 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use('/api', apiRoutes);
 app.use('/', indexRoutes);
 
 var port = process.env.PORT || 3000;

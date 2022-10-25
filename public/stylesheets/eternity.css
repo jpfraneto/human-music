@@ -29,7 +29,7 @@ a {
 
 .headerBanner span {
   margin: 0 8px;
-  font-family: "Fredoka One", cursive;
+  font-family: 'Fredoka One', cursive;
 }
 
 .headerBanner span:hover {
@@ -52,7 +52,7 @@ a {
 
 .userButtons span {
   margin: 0 8px;
-  font-family: "Fredoka One", cursive;
+  font-family: 'Fredoka One', cursive;
 }
 
 .userButtons span:hover {
@@ -62,7 +62,7 @@ a {
 }
 
 #headerTitle {
-  font-family: "Monoton", cursive;
+  font-family: 'Monoton', cursive;
   color: rgb(39, 95, 160) !important;
 }
 
@@ -75,7 +75,7 @@ a {
 }
 
 .footer {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   width: 100%;
   text-align: center;
   background-color: rgb(39, 95, 160);
@@ -200,6 +200,7 @@ a:hover {
 
 #theSupport {
   font-size: 0.8em;
+  margin-bottom: 50px;
 }
 
 #thePodcast {
@@ -463,7 +464,7 @@ label {
 .controlsBtn {
   margin: 0 8px;
   cursor: pointer;
-  font-family: "Fredoka One", cursive;
+  font-family: 'Fredoka One', cursive;
 }
 
 .controls a {
