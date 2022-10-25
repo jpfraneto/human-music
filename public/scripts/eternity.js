@@ -92,58 +92,6 @@ function updateRecommendation(recommendationInformation) {
   });
 }
 
-favoriteButton.addEventListener('click', async function (e) {
-  let presentID = player.getVideoData()['video_id'];
-
-  const response = await fetch('/favorited', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ recommendationID: presentID }),
-  });
-  const data = await response.json();
-  if (data.user) {
-    toggleButtons(true);
-  } else {
-    alert(
-      'You need to be logged in to add that recommendation to your profile!'
-    );
-  }
-});
-
-unFavoriteButton.addEventListener('click', async function (e) {
-  let presentID = player.getVideoData()['video_id'];
-
-  const response = await fetch('/unfavorited', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ recommendationID: presentID }),
-  });
-  const data = await response.json();
-  if (data.user) {
-    toggleButtons(false);
-  } else {
-    alert(
-      'You need to be logged in to add that recommendation to your profile!'
-    );
-  }
-});
-
-function toggleButtons(isFavorited) {
-  if (isFavorited != null) {
-    if (isFavorited) {
-      favoriteButton.style.display = 'none';
-      unFavoriteButton.style.display = 'inline-block';
-    } else {
-      favoriteButton.style.display = 'inline-block';
-      unFavoriteButton.style.display = 'none';
-    }
-  }
-}
-
 async function checkIfRecommendationIsInDatabase(videoID) {
   const response = await fetch('/checkIfRepeated', {
     method: 'POST',
@@ -226,16 +174,6 @@ if (userBtn) {
     document.getElementById('recommendationFrame').style.display = 'none';
   });
 }
-
-let userFavoritesBtn = document.getElementById('userFavoritesSpan');
-userFavoritesBtn.addEventListener('click', () => {
-  travelToTheUser('favorites');
-});
-
-let userRecommendationsBtn = document.getElementById('userRecommendationsSpan');
-userRecommendationsBtn.addEventListener('click', () => {
-  travelToTheUser('recommendations');
-});
 
 function hideSupport() {
   let theSupport = document.getElementById('theSupport');

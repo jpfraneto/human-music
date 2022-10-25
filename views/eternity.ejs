@@ -20,15 +20,9 @@
 
     <div class="headerBanner">
         <h1><a id="headerTitle" href="/">HUMAN-MUSIC</a></h1>
-        <% if(!currentUser){ %>
-            <p><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span
-                    id="futureSpan"><a id="loginSpan">Login</a></span></p>
-            <% } else { %>
-                <p><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span><span
-                        id="loggedUserSpan">@
-                        <%=currentUser.username%>
-                    </span><span id="logoutSpan">Logout</span></p>
-                <% } %>
+
+        <p><span id="presentSpan" class="activeTense">Radio</span><span id="supportSpan">About</span></p>
+
     </div>
 
     <div class="box" id="systemDisplay">
@@ -42,16 +36,11 @@
                 </div>
 
                 <div class="headerBanner" id="controlsDiv">
-                    <% if(!currentUser){ %>
-                        <a id="favoritesButton" class='controlsBtn'
-                            onclick="alert('Hello, you need to be logged in to add favorites!')">Favorites</a>
-                        <% } %>
-                            <a id="addFavoriteButton" class='controlsBtn' style="display: none;">Add Favorite</a>
-                            <a id="removeFavoriteButton" class='controlsBtn' style="display: none;">Remove Favorite</a>
-                            <a id="recommendationInfoBtn" class='controlsBtn'>Recommendation Info</a>
-                            <div id="pastButtons" style="display: none;">
-                                <a id="randomRecommendationBtn" class='controlsBtn'>Random</a>
-                            </div>
+
+                    <a id="recommendationInfoBtn" class='controlsBtn'>Recommendation Info</a>
+                    <div id="pastButtons" style="display: none;">
+                        <a id="randomRecommendationBtn" class='controlsBtn'>Random</a>
+                    </div>
                 </div>
 
                 <div id="presentRecommendationInformation" style="display:none">
@@ -171,10 +160,7 @@
                 </div>
                 <div id="userTableSpan" style="display:none">
                     <p><strong>This are the recommendations that are connected to you:</strong></p>
-                    <div class="userButtons">
-                        <p><span id="userFavoritesSpan">Your Favorites</span><span id="userRecommendationsSpan">Your
-                                Recommendations</span>
-                    </div>
+
                     <table id="userTable" class="systemTable">
                         <thead>
                             <tr>
